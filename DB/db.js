@@ -49,6 +49,7 @@ const research_projects = `
     CREATE TABLE IF NOT EXISTS "research_projects"(
 	    "id" SERIAL,
         "user_id" int,
+        "nam" VARCHAR(100),
 	    "title" VARCHAR(100),
         "no" VARCHAR(100),
         "amount_sanctioned" int,
@@ -65,6 +66,7 @@ const patents = `
 CREATE TABLE IF NOT EXISTS "patents"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "title" VARCHAR(100),
     "field" VARCHAR(100),
     "fileno" VARCHAR(100),
@@ -81,6 +83,7 @@ const aw = `
 CREATE TABLE IF NOT EXISTS "awards_for_innovation"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "awardee_name" VARCHAR(100),
     "designation" VARCHAR(100),
     "award_category" VARCHAR(100),
@@ -97,6 +100,7 @@ const degree = `
 CREATE TABLE IF NOT EXISTS "degree"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "deg" VARCHAR(100),
     "guide_name" VARCHAR(100),"title" VARCHAR(100),
     "external" VARCHAR(100),
@@ -110,6 +114,7 @@ const fellowship = `
 CREATE TABLE IF NOT EXISTS "fellowship"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "fellowship" VARCHAR(100),
     "date_sanctioned" VARCHAR(100),
     "funding_agency" VARCHAR(100),
@@ -122,8 +127,10 @@ CREATE TABLE IF NOT EXISTS "fellowship"(
 const collab_activ = `
 CREATE TABLE IF NOT EXISTS "collab_activ"(
     "id" SERIAL,
-    "user_id" int,"activity" VARCHAR(100),
-    "participant" VARCHAR(100),
+    "user_id" int,
+    "activity" VARCHAR(100),
+    "n" VARCHAR(100),
+    "pasrticipant" VARCHAR(100),
     "financial_support" VARCHAR(100),
     "period" VARCHAR(100),
     "date" VARCHAR(100),
@@ -135,6 +142,7 @@ const linkages = `
 CREATE TABLE IF NOT EXISTS "linkages"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "title" VARCHAR(100),
     "partnering_agency" VARCHAR(100),
     "period" VARCHAR(100),
@@ -147,6 +155,7 @@ const mou = `
 CREATE TABLE IF NOT EXISTS "mou"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "organization" VARCHAR(100),
     "date_signed" VARCHAR(100),
     "period" VARCHAR(100),
@@ -162,6 +171,7 @@ const conference = `
 CREATE TABLE IF NOT EXISTS "conference"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "con_sem" VARCHAR(100),
     "title" VARCHAR(100),
     "sponsoring_agency" VARCHAR(100),
@@ -180,6 +190,7 @@ const guest_lectures = `
 CREATE TABLE IF NOT EXISTS "guest_lectures"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "resource_person" VARCHAR(100),
     "designation" VARCHAR(100),
     "topic" VARCHAR(100),
@@ -196,6 +207,7 @@ const extension_activities = `
 CREATE TABLE IF NOT EXISTS "extension_activities"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "activities" VARCHAR(100),
     "collaborations" VARCHAR(100),
     "venue" VARCHAR(100),
@@ -209,6 +221,7 @@ const industrial_visits = `
 CREATE TABLE IF NOT EXISTS "industrial_visits"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "classes" VARCHAR(100),
     "date" VARCHAR(100),
     "address" VARCHAR(100),
@@ -222,6 +235,7 @@ const evs = `
 CREATE TABLE IF NOT EXISTS "evs"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "date" VARCHAR(100),
     "place" VARCHAR(100),
     "total" VARCHAR(100),
@@ -234,6 +248,7 @@ const departmental_activities = `
 CREATE TABLE IF NOT EXISTS "departmental_activities"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "activity" VARCHAR(100),
     "guest" VARCHAR(100),
     "topic" VARCHAR(100),
@@ -249,6 +264,7 @@ const projects_services = `
 CREATE TABLE IF NOT EXISTS "projects_services"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "title" VARCHAR(100),
     "no" VARCHAR(100),
     "revenue_generated" VARCHAR(100),
@@ -263,6 +279,7 @@ const honours = `
 CREATE TABLE IF NOT EXISTS "honours"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "award_honour" VARCHAR(100),
     "details" VARCHAR(100),
     "venue" VARCHAR(100),
@@ -276,6 +293,7 @@ const exams = `
 CREATE TABLE IF NOT EXISTS "exams"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "award_honour" VARCHAR(100),
     "details" VARCHAR(100),
     "venue" VARCHAR(100),
@@ -289,6 +307,7 @@ const books_published = `
 CREATE TABLE IF NOT EXISTS "books_published"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "name" VARCHAR(100),
     "publisher" VARCHAR(100),
     "level" VARCHAR(100),
@@ -302,6 +321,7 @@ const chapters_contributed = `
 CREATE TABLE IF NOT EXISTS "chapters_contributed"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "con" VARCHAR(100),
     "publication" VARCHAR(100),
     "level" VARCHAR(100),
@@ -315,6 +335,7 @@ const conference_proceeding = `
 CREATE TABLE IF NOT EXISTS "conference_proceeding"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
     "financial_support" VARCHAR(100),
@@ -329,6 +350,7 @@ const paper_presentation = `
 CREATE TABLE IF NOT EXISTS "paper_presentation"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
     "financial_support" VARCHAR(100),
@@ -343,6 +365,7 @@ const journal_publications = `
 CREATE TABLE IF NOT EXISTS "journal_publications"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "title" VARCHAR(100),
     "jou" VARCHAR(100),
     "issn_no" VARCHAR(100),
@@ -359,6 +382,7 @@ const fconference = `
 CREATE TABLE IF NOT EXISTS "fconference"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
     "venue" VARCHAR(100),
@@ -374,6 +398,7 @@ const resource_person = `
 CREATE TABLE IF NOT EXISTS "resource_person"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "sem" VARCHAR(100),
     "topic" VARCHAR(100),
     "event" VARCHAR(100),
@@ -389,6 +414,7 @@ const financial_support = `
 CREATE TABLE IF NOT EXISTS "financial_support"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "f" VARCHAR(100),
     "amount_support" VARCHAR(100),
     "date" VARCHAR(100),        
@@ -400,6 +426,7 @@ const development_programmes = `
 CREATE TABLE IF NOT EXISTS "development_programmes"(
     "id" SERIAL,
     "user_id" int,
+    "n" VARCHAR(100),
     "training" VARCHAR(100),
     "title" VARCHAR(100),
     "venue" VARCHAR(100),
@@ -413,6 +440,7 @@ CREATE TABLE IF NOT EXISTS "development_programmes"(
 const online_courses = `
 CREATE TABLE IF NOT EXISTS "online_courses"(
     "id" SERIAL,
+    "n" VARCHAR(100),
     "user_id" int,
     "training" VARCHAR(100),
     "title" VARCHAR(100),
@@ -427,6 +455,7 @@ CREATE TABLE IF NOT EXISTS "online_courses"(
 const e_content = `
 CREATE TABLE IF NOT EXISTS "e_content"(
     "id" SERIAL,
+    "n" VARCHAR(100),
     "user_id" int,
     "module" VARCHAR(100),
     "platform" VARCHAR(100),
@@ -447,6 +476,7 @@ CREATE TABLE IF NOT EXISTS "e_content"(
 //     }
 // });
 
+
 // execute(patents).then(result => {
 //     if (result) {
 //         console.log('Table created patents');
@@ -465,11 +495,11 @@ CREATE TABLE IF NOT EXISTS "e_content"(
 //     }
 // });
 
-execute(fellowship).then(result => {
-    if (result) {
-        console.log('Table created fellowship');
-    }
-});
+// execute(fellowship).then(result => {
+//     if (result) {
+//         console.log('Table created fellowship');
+//     }
+// });
 
 // execute(collab_activ).then(result => {
 //     if (result) {
@@ -555,11 +585,11 @@ execute(fellowship).then(result => {
 //     }
 // });
 
-execute(conference_proceeding).then(result => {
-    if (result) {
-        console.log('Table created conference_proceeding');
-    }
-});
+// execute(conference_proceeding).then(result => {
+//     if (result) {
+//         console.log('Table created conference_proceeding');
+//     }
+// });
 
 // execute(paper_presentation).then(result => {
 //     if (result) {
@@ -585,28 +615,28 @@ execute(conference_proceeding).then(result => {
 //     }
 // });
 
-// execute(financial_support).then(result => {
-//     if (result) {
-//         console.log('Table created financial_support');
-//     }
-// });
+execute(financial_support).then(result => {
+    if (result) {
+        console.log('Table created financial_support');
+    }
+});
 
-// execute(development_programmes).then(result => {
-//     if (result) {
-//         console.log('Table created development_programmes');
-//     }
-// });
+execute(development_programmes).then(result => {
+    if (result) {
+        console.log('Table created development_programmes');
+    }
+});
 
-// execute(online_courses).then(result => {
-//     if (result) {
-//         console.log('Table created online_courses');
-//     }
-// });
+execute(online_courses).then(result => {
+    if (result) {
+        console.log('Table created online_courses');
+    }
+});
 
-// execute(e_content).then(result => {
-//     if (result) {
-//         console.log('Table created e_content');
-//     }
-// });
+execute(e_content).then(result => {
+    if (result) {
+        console.log('Table created e_content');
+    }
+});
 
 module.exports = pool

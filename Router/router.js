@@ -772,6 +772,57 @@ router.get('/dashboard',async(req,res) => {
     }
 })
 
+router.get('/dashboard_student',async(req,res) => {
+    let publication,achievement
+    try{
+        if(req.cookies.user_id){
+            pool.query(
+                `SELECT * FROM publications WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        publication = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM achievements WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        achievement = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
+                            user : result.rows,
+                            publication : publication,
+                            achievement : achievement
+                        }
+                    )            
+                }
+            );
+        }
+
+        else{
+            console.log("Not logged")
+        }
+    }
+    catch(er){
+        console.log(er)
+    }
+})
+
 router.get('/dashboard/profile',(req,res) => {
     try{
         pool.query(
@@ -826,11 +877,11 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
 })
 
 router.post('/forms/research/research_projects', async(req,res) => {
-    const {user_id,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date} = req.body
+    const {user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date} = req.body
     console.log(req.body)
     try{
         pool.query(
-            `INSERT INTO research_projects (user_id,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date],
+            `INSERT INTO research_projects (user_id,nam,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date],
             (err, result) => {              
                 res.send({sp : "Saved"})
             }
@@ -889,10 +940,10 @@ router.put('/forms/research/research_projects/delete/:id', async(req,res) => {
 })
 
 router.post('/forms/research/patents', async(req,res) => {
-    const {title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date,user_id} = req.body
+    const {title,n,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date,user_id} = req.body
     try{
         pool.query(
-        `INSERT INTO patents (user_id,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date],
+        `INSERT INTO patents (user_id,n,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date],
         (err, result) => {
           res.send({sp : "Saved"})
         }
@@ -948,10 +999,10 @@ router.put('/forms/research/patents/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/research/awards_for_innovation', async(req,res) => {
-    const {user_id,awardee_name,designation,award_category,title,awarding_agency,venue,level,date} = req.body
+    const {user_id,n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date} = req.body
     try{
         pool.query(
-            `INSERT INTO awards_for_innovation (user_id,awardee_name,designation,award_category,title,awarding_agency,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,awardee_name,designation,award_category,title,awarding_agency,venue,level,date],
+            `INSERT INTO awards_for_innovation (user_id,n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1008,10 +1059,10 @@ router.put('/forms/research/awards_for_innovation/delete/:id/', async(req,res) =
 })
 
 router.post('/forms/research/deg', async(req,res) => {
-    const {user_id,deg,guide_name,title,external,venue,date} = req.body
+    const {user_id,n,deg,guide_name,title,external,venue,date} = req.body
     try{
         pool.query(
-            `INSERT INTO degree (user_id,deg,guide_name,title,external,venue,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,deg,guide_name,title,external,venue,date],
+            `INSERT INTO degree (user_id,n,deg,guide_name,title,external,venue,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,deg,guide_name,title,external,venue,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1066,10 +1117,10 @@ router.put('/forms/research/deg/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/research/fellowship', async(req,res) => {
-    const {user_id,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date} = req.body
+    const {user_id,n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date} = req.body
     try{
         pool.query(
-            `INSERT INTO fellowship (user_id,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date],
+            `INSERT INTO fellowship (user_id,n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1124,10 +1175,10 @@ router.put('/forms/research/fellowship/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/collaborations/collaborative_activities', async(req,res) => {
-    const {user_id,activity,participant,financial_support,period,date} = req.body
+    const {user_id,n,activity,participant,financial_support,period,date} = req.body
     try{
         pool.query(
-            `INSERT INTO collab_activ (user_id,activity,participant,financial_support,period,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,activity,participant,financial_support,period,date],
+            `INSERT INTO collab_activ (user_id,n,activity,participant,financial_support,period,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,activity,participant,financial_support,period,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1182,10 +1233,10 @@ router.put('/forms/collaborations/collaborative_activities/delete/:id/', async(r
 })
 
 router.post('/forms/collaborations/linkages', async(req,res) => {
-    const {user_id,title,partnering_agency,period,date} = req.body
+    const {user_id,n,title,partnering_agency,period,date} = req.body
     try{
         pool.query(
-            `INSERT INTO linkages (user_id,title,partnering_agency,period,date) VALUES($1,$2,$3,$4,$5)`,[user_id,title,partnering_agency,period,date],
+            `INSERT INTO linkages (user_id,n,title,partnering_agency,period,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,n,title,partnering_agency,period,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1240,10 +1291,10 @@ router.put('/forms/collaborations/linkages/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/collaborations/mou', async(req,res) => {
-    const {user_id,organization,date_signed,period,participants,purpose,total,date} = req.body
+    const {user_id,n,organization,date_signed,period,participants,purpose,total,date} = req.body
     try{
         pool.query(
-            `INSERT INTO mou (user_id,organization,date_signed,period,participants,purpose,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,organization,date_signed,period,participants,purpose,total,date],
+            `INSERT INTO mou (user_id,n,organization,date_signed,period,participants,purpose,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,organization,date_signed,period,participants,purpose,total,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1298,10 +1349,10 @@ router.put('/forms/collaborations/mou/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/events/conference', async(req,res) => {
-    const {user_id,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date} = req.body
+    const {user_id,n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date} = req.body
     try{
         pool.query(
-            `INSERT INTO conference (user_id,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[user_id,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date],
+            `INSERT INTO conference (user_id,n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,[user_id,n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1356,10 +1407,10 @@ router.put('/forms/events/conference/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/events/guest_lectures', async(req,res) => {
-    const {user_id,resource_person,designation,topic,venue,objective,outcome,total,date} = req.body
+    const {user_id,n,resource_person,designation,topic,venue,objective,outcome,total,date} = req.body
     try{
         pool.query(
-            `INSERT INTO guest_lectures (user_id,resource_person,designation,topic,venue,objective,outcome,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,resource_person,designation,topic,venue,objective,outcome,total,date],
+            `INSERT INTO guest_lectures (user_id,n,resource_person,designation,topic,venue,objective,outcome,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,resource_person,designation,topic,venue,objective,outcome,total,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1415,10 +1466,10 @@ router.put('/forms/events/guest_lectures/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/events/extension_activities', async(req,res) => {
-    const {user_id,activities,collaborations,venue,total,date} = req.body
+    const {user_id,n,activities,collaborations,venue,total,date} = req.body
     try{
         pool.query(
-            `INSERT INTO extension_activities(user_id,activities,collaborations,venue,total,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,activities,collaborations,venue,total,date],
+            `INSERT INTO extension_activities(user_id,n,activities,collaborations,venue,total,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,activities,collaborations,venue,total,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1474,10 +1525,10 @@ router.put('/forms/events/extension_activities/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/events/industrial_visits', async(req,res) => {
-    const {user_id,classes,date,address,total,outcome} = req.body
+    const {user_id,n,classes,date,address,total,outcome} = req.body
     try{
         pool.query(
-            `INSERT INTO industrial_visits(user_id,classes,date,address,total,outcome) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,classes,date,address,total,outcome],
+            `INSERT INTO industrial_visits(user_id,n,classes,date,address,total,outcome) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,classes,date,address,total,outcome],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1535,7 +1586,7 @@ router.post('/forms/events/evs', async(req,res) => {
     const {user_id,date,place,total,activity} = req.body
     try{
         pool.query(
-            `INSERT INTO evs(user_id,date,place,total,activity) VALUES($1,$2,$3,$4,$5)`,[user_id,date,place,total,activity],
+            `INSERT INTO evs(user_id,n,date,place,total,activity) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,n,date,place,total,activity],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1590,10 +1641,10 @@ router.put('/forms/events/evs/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/events/departmental_activities', async(req,res) => {
-    const {user_id,activity,guest,topic,total,venue,filled,date} = req.body
+    const {user_id,n,activity,guest,topic,total,venue,filled,date} = req.body
     try{
         pool.query(
-            `INSERT INTO departmental_activities(user_id,activity,guest,topic,total,venue,filled,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,activity,guest,topic,total,venue,filled,date],
+            `INSERT INTO departmental_activities(user_id,n,activity,guest,topic,total,venue,filled,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,activity,guest,topic,total,venue,filled,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1648,10 +1699,10 @@ router.put('/forms/events/departmental_activities/delete/:id/', async(req,res) =
 })
 
 router.post('/forms/consultancy/projects_services', async(req,res) => {
-    const {user_id,title,no,revenue_generated,date_sanction,sponsor,date} = req.body
+    const {user_id,n,title,no,revenue_generated,date_sanction,sponsor,date} = req.body
     try{
         pool.query(
-            `INSERT INTO projects_services(user_id,title,no,revenue_generated,date_sanction,sponsor,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,title,no,revenue_generated,date_sanction,sponsor,date],
+            `INSERT INTO projects_services(user_id,n,title,no,revenue_generated,date_sanction,sponsor,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,title,no,revenue_generated,date_sanction,sponsor,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1706,10 +1757,10 @@ router.put('/forms/consultancy/projects_services/delete/:id/', async(req,res) =>
 })
 
 router.post('/forms/faculty/honours', async(req,res) => {
-    const {user_id,award_honour,details,venue,level,date} = req.body
+    const {user_id,n,award_honour,details,venue,level,date} = req.body
     try{
         pool.query(
-            `INSERT INTO honours(user_id,award_honour,details,venue,level,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,award_honour,details,venue,level,date],
+            `INSERT INTO honours(user_id,n,award_honour,details,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,award_honour,details,venue,level,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1767,7 +1818,7 @@ router.post('/forms/faculty/exams', async(req,res) => {
     const {user_id,exam,exam_rollno,date} = req.body
     try{
         pool.query(
-            `INSERT INTO exams(user_id,exam,exam_rollno,date) VALUES($1,$2,$3,$4)`,[user_id,exam,exam_rollno,date],
+            `INSERT INTO exams(user_id,n,exam,exam_rollno,date) VALUES($1,$2,$3,$4,$5)`,[user_id,n,exam,exam_rollno,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1822,10 +1873,10 @@ router.put('/forms/faculty/exams/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/faculty/books_published', async(req,res) => {
-    const {user_id,name,publisher,level,isbn_no,date} = req.body
+    const {user_id,n,name,publisher,level,isbn_no,date} = req.body
     try{
         pool.query(
-            `INSERT INTO books_published(user_id,name,publisher,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,name,publisher,level,isbn_no,date],
+            `INSERT INTO books_published(user_id,n,name,publisher,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,name,publisher,level,isbn_no,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1880,10 +1931,10 @@ router.put('/forms/faculty/books_published/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/faculty/chapters_contributed', async(req,res) => {
-    const {user_id,title,chapter,editor,publisher,level,isbn_no,date} = req.body
+    const {user_id,n,title,chapter,editor,publisher,level,isbn_no,date} = req.body
     try{
         pool.query(
-            `INSERT INTO chapters_contributed(user_id,title,chapter,editor,publisher,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,title,chapter,editor,publisher,level,isbn_no,date],
+            `INSERT INTO chapters_contributed(user_id,n,title,chapter,editor,publisher,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,title,chapter,editor,publisher,level,isbn_no,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1938,10 +1989,10 @@ router.put('/forms/faculty/chapters_contributed/delete/:id/', async(req,res) => 
 })
 
 router.post('/forms/faculty/conference_proceeding', async(req,res) => {
-    const {user_id,con,publication,level,isbn_no,date} = req.body
+    const {user_id,n,con,publication,level,isbn_no,date} = req.body
     try{
         pool.query(
-            `INSERT INTO conference_proceeding(user_id,con,publication,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,con,publication,level,isbn_no,date],
+            `INSERT INTO conference_proceeding(user_id,n,con,publication,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,con,publication,level,isbn_no,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -1996,10 +2047,10 @@ router.put('/forms/faculty/conference_proceeding/delete/:id/', async(req,res) =>
 })
 
 router.post('/forms/faculty/paper_presentation', async(req,res) => {
-    const {user_id,con,title,financial_support,venue,level,date} = req.body
+    const {user_id,n,con,title,financial_support,venue,level,date} = req.body
     try{
         pool.query(
-            `INSERT INTO paper_presentation(user_id,con,title,financial_support,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,con,title,financial_support,venue,level,date],
+            `INSERT INTO paper_presentation(user_id,n,con,title,financial_support,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,con,title,financial_support,venue,level,date],
             (err, result) => {
               res.send({sp : "Saved"})
             }
@@ -2054,10 +2105,10 @@ router.put('/forms/faculty/paper_presentation/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/faculty/journal_publications', async(req,res) => {
-    const {user_id,title,jou,issn_no,volume,sci,impact,level,date} = req.body
+    const {user_id,n,title,jou,issn_no,volume,sci,impact,level,date} = req.body
     try{
         pool.query(
-            `INSERT INTO journal_publications(user_id,title,jou,issn_no,volume,sci,impact,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,title,jou,issn_no,volume,sci,impact,level,date],
+            `INSERT INTO journal_publications(user_id,n,title,jou,issn_no,volume,sci,impact,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,jou,issn_no,volume,sci,impact,level,date],
             (err, result) => {
                 res.send({sp : "Saved"})
             }
@@ -2113,10 +2164,10 @@ router.put('/forms/faculty/journal_publications/delete/:id/', async(req,res) => 
 })
 
 router.post('/forms/faculty/conference', async(req,res) => {
-    const {user_id,con,title,venue,level,financial_support,programme_outcome,date} = req.body
+    const {user_id,n,con,title,venue,level,financial_support,programme_outcome,date} = req.body
     try{
         pool.query(
-            `INSERT INTO fconference(user_id,con,title,venue,level,financial_support,programme_outcome,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,con,title,venue,level,financial_support,programme_outcome,date],
+            `INSERT INTO fconference(user_id,n,con,title,venue,level,financial_support,programme_outcome,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,con,title,venue,level,financial_support,programme_outcome,date],
             (err, result) => {
                 res.send({sp : "Saved"})
             }
@@ -2171,10 +2222,10 @@ router.put('/forms/faculty/conference/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/faculty/resource_person', async(req,res) => {
-    const {user_id,sem,topic,event,venue,level,filled,date} = req.body
+    const {user_id,n,topic,event,venue,level,filled,date} = req.body
     try{
         pool.query(
-            `INSERT INTO resource_person(user_id,sem,topic,event,venue,level,filled,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,sem,topic,event,venue,level,filled,date],
+            `INSERT INTO resource_person(user_id,n,sem,topic,event,venue,level,filled,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,sem,topic,event,venue,level,filled,date],
             (err, result) => {
                 res.send({sp : "Saved"})
             }
@@ -2229,10 +2280,10 @@ router.put('/forms/faculty/resource_person/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/faculty/financial_support', async(req,res) => {
-    const {user_id,f,amount_support,date} = req.body
+    const {user_id,n,f,amount_support,date} = req.body
     try{
         pool.query(
-            `INSERT INTO financial_support(user_id,f,amount_support,date) VALUES($1,$2,$3,$4)`,[user_id,f,amount_support,date],
+            `INSERT INTO financial_support(user_id,n,f,amount_support,date) VALUES($1,$2,$3,$4,$5)`,[user_id,n,f,amount_support,date],
             (err, result) => {
                 res.send({sp : "Saved"})
             }
@@ -2287,10 +2338,10 @@ router.put('/forms/faculty/financial_support/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/faculty/development_programmes', async(req,res) => {
-    const {user_id,training,title,venue,financial_support,level,date} = req.body
+    const {user_id,n,training,title,venue,financial_support,level,date} = req.body
     try{
         pool.query(
-            `INSERT INTO development_programmes(user_id,training,title,venue,financial_support,level,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,training,title,venue,financial_support,level,date],
+            `INSERT INTO development_programmes(user_id,n,training,title,venue,financial_support,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,training,title,venue,financial_support,level,date],
             (err, result) => {
                 res.send({sp : "Saved"})
             }
@@ -2345,10 +2396,10 @@ router.put('/forms/faculty/development_programmes/delete/:id/', async(req,res) =
 })
 
 router.post('/forms/faculty/online_courses', async(req,res) => {
-    const {user_id,training,title,duration,date,financial_support,level} = req.body
+    const {user_id,n,training,title,duration,date,financial_support,level} = req.body
     try{
         pool.query(
-            `INSERT INTO online_courses(user_id,training,title,duration,date,financial_support,level) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,training,title,duration,date,financial_support,level],
+            `INSERT INTO online_courses(user_id,n,training,title,duration,date,financial_support,level) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,training,title,duration,date,financial_support,level],
             (err, result) => {
                 res.send({sp : "Saved"})
             }
@@ -2403,10 +2454,10 @@ router.put('/forms/faculty/online_courses/delete/:id/', async(req,res) => {
 })
 
 router.post('/forms/faculty/e_content', async(req,res) => {
-    const {user_id,module,platform,date} = req.body
+    const {user_id,n,module,platform,date} = req.body
     try{
         pool.query(
-            `INSERT INTO e_content(user_id,module,platform,date) VALUES($1,$2,$3,$4)`,[user_id,module,platform,date],
+            `INSERT INTO e_content(user_id,n,module,platform,date) VALUES($1,$2,$3,$4,$5)`,[user_id,n,module,platform,date],
             (err, result) => {
                 res.send({sp : "Saved"})
             }
@@ -2451,6 +2502,124 @@ router.put('/forms/faculty/e_content/delete/:id/', async(req,res) => {
     try{
         pool.query(
             `DELETE FROM e_content WHERE id = ${req.params.id} `,
+            function (err, result) {
+                res.send({sp : "Delete"})
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+})
+
+// Stundets
+
+router.post('/forms/publication/publications', async(req,res) => {
+    const {user_id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date} = req.body
+    try{
+        pool.query(
+            `INSERT INTO publications(user_id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date],
+            (err, result) => {
+                res.send({sp : "Saved"})
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/publication/publications/edit', async(req,res) => {
+    const {id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date} = req.body
+    try{
+        pool.query(
+            `UPDATE publications set department=$1,namej=$2,roll_no=$3,title=$4,journal=$5,issn=$6,volume_no=$7,sci=$8,link=$9,impact=$10,level=$11,date=$12  WHERE id=$13)`,[department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date,id],
+            (err, result) => {
+                res.send({sp : "Saved"})
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/publication/publications/edit/:id', async(req,res) => {
+    const {id} = req.params.id
+    try{
+        pool.query(
+            `SELECT * FROM publications WHERE id = ${req.params.id}`,
+            function (err, result) {
+                console.log(result.rows)
+                res.json(result.rows)
+            }
+        );
+
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/publication/publications/delete/:id/', async(req,res) => {
+    const {id} = req.params.id
+    try{
+        pool.query(
+            `DELETE FROM publications WHERE id = ${req.params.id} `,
+            function (err, result) {
+                res.send({sp : "Delete"})
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/achievement/achievements', async(req,res) => {
+    const {user_id,department,name,roll_no,achievement,event,date,venue,level} = req.body
+    try{
+        pool.query(
+            `INSERT INTO achievements (user_id,department,name,roll_no,achievement,event,date,venue,level) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,department,name,roll_no,achievement,event,date,venue,level],
+            (err, result) => {
+                res.send({sp : "Saved"})
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/achievement/achievements/edit', async(req,res) => {
+    const {id,department,name,roll_no,achievement,event,date,venue,level} = req.body
+    try{
+        pool.query(
+            `UPDATE achievements set department=$1,name=$2,roll_no=$3,achievement=$4,event=$5,date=$6,venue=$7,level=$8  WHERE id=$10)`,[department,name,roll_no,achievement,event,date,venue,level,id],
+            (err, result) => {
+                res.send({sp : "Saved"})
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/achievement/achievements/edit/:id', async(req,res) => {
+    const {id} = req.params.id
+    try{
+        pool.query(
+            `SELECT * FROM achievements WHERE id = ${req.params.id}`,
+            function (err, result) {
+                console.log(result.rows)
+                res.json(result.rows)
+            }
+        );
+
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/achievement/achievements/delete/:id/', async(req,res) => {
+    const {id} = req.params.id
+    try{
+        pool.query(
+            `DELETE FROM achievements WHERE id = ${req.params.id} `,
             function (err, result) {
                 res.send({sp : "Delete"})
             }
