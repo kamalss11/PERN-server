@@ -13,9 +13,9 @@ const Pool = require('pg').Pool
 
 const pool = new Pool({
     host: 'localhost',
-    port: '4000',
+    port: '5432',
     user: 'postgres',
-    password: 'kamal',
+    password: 'mnk',
     database: 'iqac'
 })
 
@@ -38,8 +38,8 @@ const user = `
     CREATE TABLE IF NOT EXISTS "users"(
 	    "user_id" SERIAL,
 	    "name" VARCHAR(100) NOT NULL,
-	    "email" VARCHAR(15) NOT NULL,
-        "password" VARCHAR(15) NOT NULL,
+	    "email" VARCHAR(100) NOT NULL,
+        "password" VARCHAR(100) NOT NULL,
         "department" VARCHAR(100) NOT NULL,
         "roll" VARCHAR(100) NOT NULL,
 	    PRIMARY KEY ("user_id")
@@ -464,11 +464,11 @@ CREATE TABLE IF NOT EXISTS "e_content"(
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );`;
 
-// execute(user).then(result => {
-//     if (result) {
-//         console.log('Table created user');
-//     }
-// });
+execute(user).then(result => {
+    if (result) {
+        console.log('Table created user');
+    }
+});
 
 // execute(research_projects).then(result => {
 //     if (result) {
