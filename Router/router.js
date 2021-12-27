@@ -2,6 +2,20 @@ const express = require('express')
 const bcrypt = require('bcryptjs')
 const router = express.Router()
 const cors = require('cors')
+const multer = require('multer')
+
+// const bodyParser = require("body-parser");
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+const storage = multer.diskStorage({
+    destination: '../client/public/Uploads/',
+    filename:(req, file, cb) => {
+        return cb(null, Date.now()+file.originalname);
+    }
+})
+
+const upload = multer({storage:storage})
 
 const authenticate = require('../Middleware/authenticate')
 
@@ -876,20 +890,41 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
     }
 })
 
-router.post('/forms/research/research_projects', async(req,res) => {
-    const {user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date} = req.body
-    console.log(req.body)
+router.post('/forms/research/research_projects',upload.single('image'),async(req,res) => {
+    // const {dat} = req.file
+    // const file = req.file
+    console.log(req.file,req.body)
+    console.log(req.file.filename)
+    // const {user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date} = req.body
     try{
         pool.query(
-            `INSERT INTO research_projects (user_id,nam,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date],
+            `INSERT INTO research_projects (user_id,nam,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,image) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.user_id,req.body.n,req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename],
             (err, result) => {              
-                res.send({sp : "Saved"})
+                if(result){
+                res.send({sp : "Saved"})}
+                console.log(err)
+
             }
-        );
+        )
     }catch(err){
         console.log(err+'22')
     }
 })
+
+// router.post('/forms/research/research_projects', async(req,res) => {
+//     const {user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date} = req.body
+//     console.log(req.body)
+//     try{
+//         pool.query(
+//             `INSERT INTO research_projects (user_id,nam,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date],
+//             (err, result) => {              
+//                 res.send({sp : "Saved"})
+//             }
+//         );
+//     }catch(err){
+//         console.log(err+'22')
+//     }
+// })
 
 router.put('/forms/research/research_projects/edit', async(req,res) => {
     const {title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,id} = req.body

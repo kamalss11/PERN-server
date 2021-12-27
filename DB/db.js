@@ -13,9 +13,9 @@ const Pool = require('pg').Pool
 
 const pool = new Pool({
     host: 'localhost',
-    port: '5432',
+    port: '4000',
     user: 'postgres',
-    password: 'mnk',
+    password: 'kamal',
     database: 'iqac'
 })
 
@@ -38,12 +38,42 @@ const user = `
     CREATE TABLE IF NOT EXISTS "users"(
 	    "user_id" SERIAL,
 	    "name" VARCHAR(100) NOT NULL,
-	    "email" VARCHAR(100) NOT NULL,
-        "password" VARCHAR(100) NOT NULL,
+	    "email" VARCHAR(15) NOT NULL,
+        "password" VARCHAR(15) NOT NULL,
         "department" VARCHAR(100) NOT NULL,
         "roll" VARCHAR(100) NOT NULL,
 	    PRIMARY KEY ("user_id")
     );`;
+
+    // const storage = multer.diskStorage({
+    //     destination: './client/public/Uploads/',
+    //     filename: function(req, file, cb) {
+    //         const mimeExtension = {
+    //             'image/jpeg' : '.jpeg',
+    //             'image/jpg' : '.jpg',
+    //             'image/png' : '.png',
+    //             'image/gif' : '.gif',
+    //             'image/pdf' : '.pdf'
+    //         }
+    //         return cb(null, Date.now()+mimeExtension[file.mimetype]);
+    //     }
+    // })
+    
+    // const upload = multer({storage:storage,
+    //     fileFilter: (req,file,cb)=>{
+    //         if(file.mimetype === 'image/jpeg' ||
+    //         file.mimetype === 'image/jpg' ||
+    //         file.mimetype === 'image/png' ||
+    //         file.mimetype === 'image/gif' ||
+    //         file.mimetype === 'image/pdf'){
+    //             return cb(null,true)
+    //         }
+    //         else{
+    //             return cb(null,false)
+    //         }
+    //     }
+    // })
+    
 
 const research_projects = `
     CREATE TABLE IF NOT EXISTS "research_projects"(
@@ -57,7 +87,8 @@ const research_projects = `
         "amount_received" int,
         "date_sanctioned" VARCHAR(100),
         "funding_agency" VARCHAR(15),
-        "date" VARCHAR(100),
+        "date" DATE,
+        "image" VARCHAR(100),
 	    PRIMARY KEY ("id"),
         FOREIGN KEY (user_id) REFERENCES users(user_id)
     );`;
@@ -464,17 +495,17 @@ CREATE TABLE IF NOT EXISTS "e_content"(
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );`;
 
-execute(user).then(result => {
-    if (result) {
-        console.log('Table created user');
-    }
-});
-
-// execute(research_projects).then(result => {
+// execute(user).then(result => {
 //     if (result) {
-//         console.log('Table created rp');
+//         console.log('Table created user');
 //     }
 // });
+
+execute(research_projects).then(result => {
+    if (result) {
+        console.log('Table created rp');
+    }
+});
 
 
 // execute(patents).then(result => {
