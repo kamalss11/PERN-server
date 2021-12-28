@@ -9,7 +9,7 @@ const multer = require('multer')
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 const storage = multer.diskStorage({
-    destination: '../client/public/Uploads/',
+    destination: '../PERN-Client-main/public/Uploads/',
     filename:(req, file, cb) => {
         return cb(null, Date.now()+file.originalname);
     }
@@ -389,6 +389,403 @@ router.get('/admin/:id', async(req,res) => {
     }
     catch(er){
         console.log(er)
+    }
+})
+
+router.get('/period/:prd',async(req,res) =>{
+    console.log(req.params.prd)
+    // pool.query(
+    //     `SELECT * FROM research_projects WHERE date between ${req.params.prd}`,
+    //     function (err, result) {
+    //         console.log(result)
+    //         return res.json(result.rows)
+    //     }
+    // );
+    let research_projects,patents,awards_for_innovation,degree,fellowship,
+    collab_activ,linkages,mou,
+    conference,guest_lectures,extension_activities,industrial_visits,evs,departmental_activities,
+    projects_services,
+    honours,exams,books_published,chapters_contributed,conference_proceeding,paper_presentation,journal_publications,fconference,resource_person,
+        financial_support,development_programmes,online_courses,e_content
+    try{
+            pool.query(
+                `SELECT * FROM research_projects WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        research_projects = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM patents WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        patents = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM awards_for_innovation WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        awards_for_innovation = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM degree WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        degree = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM fellowship WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        fellowship = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM collab_activ WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        collab_activ = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM linkages WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        linkages = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }              
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM mou WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        mou = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM conference WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        conference = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM guest_lectures WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        guest_lectures = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM extension_activities WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        extension_activities = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM industrial_visits WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        industrial_visits = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM evs WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        evs = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM departmental_activities WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        departmental_activities = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM projects_services WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        projects_services = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM honours WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        honours = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM exams WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        exams = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM books_published WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        books_published = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }                
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM chapters_contributed WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        chapters_contributed = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }                           
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM conference_proceeding WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        conference_proceeding = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM paper_presentation WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        paper_presentation = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }    
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM journal_publications WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        journal_publications = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }              
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM fconference WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        fconference = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM resource_person WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        resource_person = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM financial_support WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        financial_support = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM development_programmes WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        development_programmes = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM online_courses WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        online_courses = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM e_content WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        e_content = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
+                            user : result.rows,
+                            research_projects : research_projects,
+                            patents : patents,
+                            awards_for_innovation : awards_for_innovation,
+                            degree : degree,
+                            fellowship : fellowship,
+                            collab_activ : collab_activ,
+                            linkages : linkages,
+                            mou : mou,
+                            conference : conference,
+                            guest_lectures : guest_lectures,
+                            extension_activities : extension_activities,
+                            industrial_visits : industrial_visits,
+                            evs : evs,
+                            departmental_activities : departmental_activities,
+                            projects_services : projects_services,
+                            honours : honours,
+                            exams : exams,
+                            books_published : books_published,
+                            chapters_contributed : chapters_contributed,
+                            conference_proceeding : conference_proceeding,
+                            paper_presentation : paper_presentation,
+                            journal_publications : journal_publications,
+                            fconference : fconference,
+                            resource_person : resource_person,
+                            financial_support : financial_support,
+                            development_programmes : development_programmes,
+                            online_courses : online_courses,
+                            e_content : e_content
+                        }
+                    )            
+                }
+            );
+
+    }
+    catch(err){
+        console.log(err)
     }
 })
 
