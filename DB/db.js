@@ -13,7 +13,7 @@ const Pool = require('pg').Pool
 
 const pool = new Pool({
     host: 'localhost',
-    port: '4000',
+    port: '5432',
     user: 'postgres',
     password: 'kamal',
     database: 'iqac'
@@ -25,7 +25,7 @@ const execute = async (query) => {
         await pool.query(query);  // sends queries
         return true;
     } catch (error) {
-        console.error(error.stack);
+        console.error(error.stack+'28');
         return false;
     }
 };
@@ -33,7 +33,8 @@ const execute = async (query) => {
 // const add = `ALTER TABLE users
 // ADD COLUMN department VARCHAR(100) NOT NULL,
 // ADD COLUMN roll VARCHAR(100) NOT NULL`;
-// 
+const alter = `alter table research_projects add image VARCHAR(100)`
+
 const user = `
     CREATE TABLE IF NOT EXISTS "users"(
 	    "user_id" SERIAL,
@@ -43,37 +44,15 @@ const user = `
         "department" VARCHAR(100) NOT NULL,
         "roll" VARCHAR(100) NOT NULL,
 	    PRIMARY KEY ("user_id")
-    );`;
+    );`;    
 
-    // const storage = multer.diskStorage({
-    //     destination: './client/public/Uploads/',
-    //     filename: function(req, file, cb) {
-    //         const mimeExtension = {
-    //             'image/jpeg' : '.jpeg',
-    //             'image/jpg' : '.jpg',
-    //             'image/png' : '.png',
-    //             'image/gif' : '.gif',
-    //             'image/pdf' : '.pdf'
-    //         }
-    //         return cb(null, Date.now()+mimeExtension[file.mimetype]);
-    //     }
-    // })
-    
-    // const upload = multer({storage:storage,
-    //     fileFilter: (req,file,cb)=>{
-    //         if(file.mimetype === 'image/jpeg' ||
-    //         file.mimetype === 'image/jpg' ||
-    //         file.mimetype === 'image/png' ||
-    //         file.mimetype === 'image/gif' ||
-    //         file.mimetype === 'image/pdf'){
-    //             return cb(null,true)
-    //         }
-    //         else{
-    //             return cb(null,false)
-    //         }
-    //     }
-    // })
-    
+const reset_password = `
+    CREATE TABLE IF NOT EXISTS "reset_password"(
+	    "email" VARCHAR(25) NOT NULL,
+        "createdat" VARCHAR(100) NOT NULL,
+        "expiresat" VARCHAR(100) NOT NULL,
+        "token" VARCHAR(100) NOT NULL
+    );`;  
 
 const research_projects = `
     CREATE TABLE IF NOT EXISTS "research_projects"(
@@ -507,6 +486,18 @@ execute(research_projects).then(result => {
     }
 });
 
+execute(reset_password).then(result => {
+    if (result) {
+        console.log('Table created rp');
+    }
+});
+
+// execute(alter).then(result => {
+//     if (result) {
+//         console.log('Table altered rp');
+//     }
+// });
+
 
 // execute(patents).then(result => {
 //     if (result) {
@@ -646,28 +637,28 @@ execute(research_projects).then(result => {
 //     }
 // });
 
-execute(financial_support).then(result => {
-    if (result) {
-        console.log('Table created financial_support');
-    }
-});
+// execute(financial_support).then(result => {
+//     if (result) {
+//         console.log('Table created financial_support');
+//     }
+// });
 
-execute(development_programmes).then(result => {
-    if (result) {
-        console.log('Table created development_programmes');
-    }
-});
+// execute(development_programmes).then(result => {
+//     if (result) {
+//         console.log('Table created development_programmes');
+//     }
+// });
 
-execute(online_courses).then(result => {
-    if (result) {
-        console.log('Table created online_courses');
-    }
-});
+// execute(online_courses).then(result => {
+//     if (result) {
+//         console.log('Table created online_courses');
+//     }
+// });
 
-execute(e_content).then(result => {
-    if (result) {
-        console.log('Table created e_content');
-    }
-});
+// execute(e_content).then(result => {
+//     if (result) {
+//         console.log('Table created e_content');
+//     }
+// });
 
 module.exports = pool
