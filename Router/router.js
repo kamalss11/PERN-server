@@ -69,7 +69,10 @@ router.post('/signin', async(req,res) => {
             `SELECT * FROM users WHERE email = '${email}'`,
             async (err, result) => {
                 if(result.rows != ''){
-                    res.cookie("user_id",result.rows[0].user_id) 
+                    res.cookie("user_id",result.rows[0].user_id,{
+                        expires: new Date(Date.now() + 25892000000),
+                        httpOnly: true
+                    })
 
                     let token = jwt.sign(result.rows[0].user_id,process.env.SECRET_KEY)
                     console.log(token)
@@ -124,7 +127,7 @@ router.post('/forget_password',async (req,res)=>{
             (err, result) => {
                 console.log(result.rows)
                 if(result.rows.length == 0){
-                    return res.status(201).json({sp : 'No Account found with this mail'})
+                    return res.status(201).json({msg : 'No Account found with this mail'})
                 }
                 // return res.status(422).json({ data: "Mail" })
             }
@@ -133,13 +136,16 @@ router.post('/forget_password',async (req,res)=>{
         pool.query(
             `SELECT email FROM reset_password WHERE email = '${email}'`,
             async (err, result) => {
+                if (err) {
+                    console.log(err)
+                }
+
                 let create = Date.now()
                 let expire = Date.now() + 300000
                 if (result.rows != '') {
                     pool.query(
                         `UPDATE reset_password set createdat=$1,expiresat=$2,token=$3 WHERE email = $4`, [create, expire, tkn, email],(err,result)=>{
                             console.log(result.rows[0])
-                            res.status(201).json({sp : 'Token Inserted'})
                         }
                     )
                 }
@@ -147,7 +153,6 @@ router.post('/forget_password',async (req,res)=>{
                     pool.query(
                         `INSERT INTO reset_password (email,createdat,expiresat,token) VALUES($1,$2,$3,$4)`, [email, create, expire, tkn],(err,result)=>{
                             console.log(result.rows[0])
-                            res.status(201).json({sp : 'Token Inserted'})
                         }
                     )
                 }
@@ -170,13 +175,12 @@ router.post('/forget_password',async (req,res)=>{
                         console.log(error + '3115')
                     } else {
                         console.log('Email sent: ' + info.response)
+                        return res.status(201).json({msg: 'Check your mail'})
                     }
                 })
-                if (err) {
-                    console.log(err)
-                }
             }
         );
+
 
     }catch(err){
         console.log(err,"169")
@@ -528,19 +532,14 @@ router.get('/admin/:id', async(req,res) => {
 
 router.get('/period/:prd',async(req,res) =>{
     console.log(req.params.prd)
-    // pool.query(
-    //     `SELECT * FROM research_projects WHERE date between ${req.params.prd}`,
-    //     function (err, result) {
-    //         console.log(result)
-    //         return res.json(result.rows)
-    //     }
-    // );
+
     let research_projects,patents,awards_for_innovation,degree,fellowship,
     collab_activ,linkages,mou,
     conference,guest_lectures,extension_activities,industrial_visits,evs,departmental_activities,
     projects_services,
     honours,exams,books_published,chapters_contributed,conference_proceeding,paper_presentation,journal_publications,fconference,resource_person,
         financial_support,development_programmes,online_courses,e_content
+        
     try{
             pool.query(
                 `SELECT * FROM research_projects WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
@@ -926,7 +925,7 @@ router.get('/period/:prd',async(req,res) =>{
 router.get('/dashboard',async(req,res) => {                    
     const vtoken = req.cookies.jwtoken
     const verifyToken = jwt.verify(vtoken,process.env.SECRET_KEY)
-    console.log(`${verifyToken}dashboard`)
+    console.log(`${verifyToken}`)
 
     if(verifyToken){
         let research_projects,patents,awards_for_innovation,degree,fellowship,
@@ -936,386 +935,380 @@ router.get('/dashboard',async(req,res) => {
         honours,exams,books_published,chapters_contributed,conference_proceeding,paper_presentation,journal_publications,fconference,resource_person,
             financial_support,development_programmes,online_courses,e_content
         try{
-            if(req.cookies.user_id){
-                pool.query(
-                    `SELECT * FROM research_projects WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            research_projects = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
+            pool.query(
+                `SELECT * FROM research_projects WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        research_projects = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM patents WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        patents = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM awards_for_innovation WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        awards_for_innovation = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM degree WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        degree = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM fellowship WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        fellowship = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM collab_activ WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        collab_activ = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM linkages WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        linkages = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }              
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM mou WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        mou = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM conference WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        conference = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM guest_lectures WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        guest_lectures = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM extension_activities WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        extension_activities = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM industrial_visits WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        industrial_visits = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM evs WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        evs = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM departmental_activities WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        departmental_activities = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM projects_services WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        projects_services = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM honours WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        honours = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM exams WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        exams = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM books_published WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        books_published = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }                
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM chapters_contributed WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        chapters_contributed = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }                           
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM conference_proceeding WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        conference_proceeding = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM paper_presentation WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        paper_presentation = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }    
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM journal_publications WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        journal_publications = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }              
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM fconference WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        fconference = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }            
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM resource_person WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        resource_person = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM financial_support WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        financial_support = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM development_programmes WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        development_programmes = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }           
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM online_courses WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        online_courses = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM e_content WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        e_content = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }             
+                }
+            );
+        
+            pool.query(
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
+                            user : result.rows,
+                            research_projects : research_projects,
+                            patents : patents,
+                            awards_for_innovation : awards_for_innovation,
+                            degree : degree,
+                            fellowship : fellowship,
+                            collab_activ : collab_activ,
+                            linkages : linkages,
+                            mou : mou,
+                            conference : conference,
+                            guest_lectures : guest_lectures,
+                            extension_activities : extension_activities,
+                            industrial_visits : industrial_visits,
+                            evs : evs,
+                            departmental_activities : departmental_activities,
+                            projects_services : projects_services,
+                            honours : honours,
+                            exams : exams,
+                            books_published : books_published,
+                            chapters_contributed : chapters_contributed,
+                            conference_proceeding : conference_proceeding,
+                            paper_presentation : paper_presentation,
+                            journal_publications : journal_publications,
+                            fconference : fconference,
+                            resource_person : resource_person,
+                            financial_support : financial_support,
+                            development_programmes : development_programmes,
+                            online_courses : online_courses,
+                            e_content : e_content
                         }
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM patents WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            patents = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }           
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM awards_for_innovation WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            awards_for_innovation = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }            
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM degree WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            degree = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }           
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM fellowship WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            fellowship = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM collab_activ WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            collab_activ = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }            
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM linkages WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            linkages = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }              
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM mou WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            mou = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }            
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM conference WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            conference = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM guest_lectures WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            guest_lectures = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }            
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM extension_activities WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            extension_activities = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM industrial_visits WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            industrial_visits = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM evs WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            evs = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }           
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM departmental_activities WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            departmental_activities = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }            
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM projects_services WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            projects_services = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM honours WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            honours = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM exams WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            exams = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM books_published WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            books_published = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }                
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM chapters_contributed WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            chapters_contributed = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }                           
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM conference_proceeding WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            conference_proceeding = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM paper_presentation WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            paper_presentation = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }    
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM journal_publications WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            journal_publications = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }              
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM fconference WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            fconference = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }            
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM resource_person WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            resource_person = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM financial_support WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            financial_support = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM development_programmes WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            development_programmes = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }           
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM online_courses WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            online_courses = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM e_content WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        if(result.rows != ''){
-                            e_content = result.rows 
-                        }          
-                        else{
-                            console.log("no values")
-                        }             
-                    }
-                );
-        
-                pool.query(
-                    `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
-                    (err, result) => {
-                        return res.send(
-                            {
-                                user : result.rows,
-                                research_projects : research_projects,
-                                patents : patents,
-                                awards_for_innovation : awards_for_innovation,
-                                degree : degree,
-                                fellowship : fellowship,
-                                collab_activ : collab_activ,
-                                linkages : linkages,
-                                mou : mou,
-                                conference : conference,
-                                guest_lectures : guest_lectures,
-                                extension_activities : extension_activities,
-                                industrial_visits : industrial_visits,
-                                evs : evs,
-                                departmental_activities : departmental_activities,
-                                projects_services : projects_services,
-                                honours : honours,
-                                exams : exams,
-                                books_published : books_published,
-                                chapters_contributed : chapters_contributed,
-                                conference_proceeding : conference_proceeding,
-                                paper_presentation : paper_presentation,
-                                journal_publications : journal_publications,
-                                fconference : fconference,
-                                resource_person : resource_person,
-                                financial_support : financial_support,
-                                development_programmes : development_programmes,
-                                online_courses : online_courses,
-                                e_content : e_content
-                            }
-                        )            
-                    }
-                );
-            }
-    
-            else{
-                console.log("Not logged")
-            }
+                    )            
+                }
+            );
         }
         catch(er){
             console.log(er)
@@ -1329,11 +1322,26 @@ router.get('/dashboard',async(req,res) => {
 })
 
 router.get('/dashboard_student',async(req,res) => {
-    let publication,achievement
+    const vtoken = req.cookies.jwtoken
+    const verifyToken = jwt.verify(vtoken,process.env.SECRET_KEY)
+    console.log(`${verifyToken}`)
     try{
-        if(req.cookies.user_id){
+        if(verifyToken){
+            let placements,paper_presentation,seminar,competition,training,exams,online_courses,projectwork,publication,achievement
             pool.query(
-                `SELECT * FROM publications WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM placements WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        placements = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_publications WHERE user_id = ${req.cookies.user_id}`,
                 (err, result) => {
                     if(result.rows != ''){
                         publication = result.rows 
@@ -1343,9 +1351,105 @@ router.get('/dashboard_student',async(req,res) => {
                     }
                 }
             );
+
+            pool.query(
+                `SELECT * FROM s_paper_presentation WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        paper_presentation = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_conference WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        seminar = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_conference WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        conference = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_competition WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        competition = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_training WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        training = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_projectwork WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        projectwork = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_exams WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        exams = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM s_onlinecourses WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    if(result.rows != ''){
+                        online_courses = result.rows 
+                    }          
+                    else{
+                        console.log("no values")
+                    }
+                }
+            );
     
             pool.query(
-                `SELECT * FROM achievements WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM s_achievements WHERE user_id = ${req.cookies.user_id}`,
                 (err, result) => {
                     if(result.rows != ''){
                         achievement = result.rows 
@@ -1362,6 +1466,14 @@ router.get('/dashboard_student',async(req,res) => {
                     return res.send(
                         {
                             user : result.rows,
+                            placements : placements,
+                            paper_presentation : paper_presentation,
+                            seminar : seminar,
+                            competition : competition,
+                            training : training,
+                            exams : exams,
+                            online_courses : online_courses,
+                            projectwork : projectwork,
                             publication : publication,
                             achievement : achievement
                         }
@@ -1433,11 +1545,8 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
 })
 
 router.post('/forms/research/research_projects',upload.single('image'),async(req,res) => {
-    // const {dat} = req.file
-    // const file = req.file
     console.log(req.file,req.body)
     console.log(req.file.filename)
-    // const {user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date} = req.body
     try{
         pool.query(
             `INSERT INTO research_projects (user_id,nam,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,image) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.user_id,req.body.n,req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename],
@@ -1445,28 +1554,12 @@ router.post('/forms/research/research_projects',upload.single('image'),async(req
                 if(result){
                 res.send({sp : "Saved"})}
                 console.log(err)
-
             }
         )
     }catch(err){
         console.log(err+'22')
     }
 })
-
-// router.post('/forms/research/research_projects', async(req,res) => {
-//     const {user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date} = req.body
-//     console.log(req.body)
-//     try{
-//         pool.query(
-//             `INSERT INTO research_projects (user_id,nam,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date],
-//             (err, result) => {              
-//                 res.send({sp : "Saved"})
-//             }
-//         );
-//     }catch(err){
-//         console.log(err+'22')
-//     }
-// })
 
 router.put('/forms/research/research_projects/edit', async(req,res) => {
     const {title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,id} = req.body
@@ -3090,7 +3183,7 @@ router.put('/forms/faculty/e_content/delete/:id/', async(req,res) => {
 
 // Stundets
 
-router.post('/forms/publication/publications', async(req,res) => {
+router.post('/forms/student/publications', async(req,res) => {
     const {user_id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date} = req.body
     try{
         pool.query(
@@ -3104,7 +3197,7 @@ router.post('/forms/publication/publications', async(req,res) => {
     }
 })
 
-router.post('/forms/publication/publications/edit', async(req,res) => {
+router.post('/forms/student/publications/edit', async(req,res) => {
     const {id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date} = req.body
     try{
         pool.query(
@@ -3118,7 +3211,7 @@ router.post('/forms/publication/publications/edit', async(req,res) => {
     }
 })
 
-router.get('/forms/publication/publications/edit/:id', async(req,res) => {
+router.get('/forms/student/publications/edit/:id', async(req,res) => {
     const {id} = req.params.id
     try{
         pool.query(
@@ -3134,7 +3227,7 @@ router.get('/forms/publication/publications/edit/:id', async(req,res) => {
     }
 })
 
-router.put('/forms/publication/publications/delete/:id/', async(req,res) => {
+router.put('/forms/student/publications/delete/:id/', async(req,res) => {
     const {id} = req.params.id
     try{
         pool.query(
@@ -3148,7 +3241,7 @@ router.put('/forms/publication/publications/delete/:id/', async(req,res) => {
     }
 })
 
-router.post('/forms/achievement/achievements', async(req,res) => {
+router.post('/forms/student/achievements', async(req,res) => {
     const {user_id,department,name,roll_no,achievement,event,date,venue,level} = req.body
     try{
         pool.query(
@@ -3162,7 +3255,7 @@ router.post('/forms/achievement/achievements', async(req,res) => {
     }
 })
 
-router.post('/forms/achievement/achievements/edit', async(req,res) => {
+router.post('/forms/student/achievements/edit', async(req,res) => {
     const {id,department,name,roll_no,achievement,event,date,venue,level} = req.body
     try{
         pool.query(
@@ -3176,7 +3269,7 @@ router.post('/forms/achievement/achievements/edit', async(req,res) => {
     }
 })
 
-router.get('/forms/achievement/achievements/edit/:id', async(req,res) => {
+router.get('/forms/student/achievements/edit/:id', async(req,res) => {
     const {id} = req.params.id
     try{
         pool.query(
@@ -3192,7 +3285,7 @@ router.get('/forms/achievement/achievements/edit/:id', async(req,res) => {
     }
 })
 
-router.put('/forms/achievement/achievements/delete/:id/', async(req,res) => {
+router.put('/forms/student/achievements/delete/:id/', async(req,res) => {
     const {id} = req.params.id
     try{
         pool.query(
@@ -3206,10 +3299,9 @@ router.put('/forms/achievement/achievements/delete/:id/', async(req,res) => {
     }
 })
 
-
-
 router.get('/logout',(req,res) => {
     res.clearCookie('user_id',{ path: '/'})
+    res.clearCookie('jwtoken',{path: '/'})
     res.status(200).send('User Logout')
 })
 

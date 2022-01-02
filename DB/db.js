@@ -33,7 +33,7 @@ const execute = async (query) => {
 // const add = `ALTER TABLE users
 // ADD COLUMN department VARCHAR(100) NOT NULL,
 // ADD COLUMN roll VARCHAR(100) NOT NULL`;
-const alter = `alter table research_projects add image VARCHAR(100)`
+const alter = `alter table users add column roll_no VARCHAR(100)`
 
 const user = `
     CREATE TABLE IF NOT EXISTS "users"(
@@ -474,6 +474,161 @@ CREATE TABLE IF NOT EXISTS "e_content"(
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );`;
 
+const placements = `
+CREATE TABLE IF NOT EXISTS "placements"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "company_placed" VARCHAR(100),
+    "annual_package" VARCHAR(100),
+    "date" VARCHAR(100),    
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_publications = `
+CREATE TABLE IF NOT EXISTS "s_publications"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "title" VARCHAR(100),
+    "n_journal" VARCHAR(100),
+    "issn" VARCHAR(100),
+    "volume" VARCHAR(100),
+    "sci" VARCHAR(100),
+    "impact" VARCHAR(100),
+    "level" VARCHAR(100),  
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_paper_presentation = `
+CREATE TABLE IF NOT EXISTS "s_paper_presentation"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "con" VARCHAR(100),
+    "title" VARCHAR(100),
+    "financial_support" VARCHAR(100),
+    "date" VARCHAR(100),    
+    "venue" VARCHAR(100),  
+    "level" VARCHAR(100),  
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_conference = `
+CREATE TABLE IF NOT EXISTS "s_conference"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "con" VARCHAR(100),
+    "n_con" VARCHAR(100),
+    "sponsoring_agency" VARCHAR(100),
+    "poster" VARCHAR(100),
+    "award" VARCHAR(100),
+    "date" VARCHAR(100),    
+    "venue" VARCHAR(100),  
+    "level" VARCHAR(100),  
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_competition = `
+CREATE TABLE IF NOT EXISTS "s_competition"(
+    "id" SERIAL,
+    "n_event" VARCHAR(100),
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "con" VARCHAR(100),
+    "n_con" VARCHAR(100),
+    "award" VARCHAR(100),
+    "sponsoring_agency" VARCHAR(100),
+    "date" VARCHAR(100),    
+    "venue" VARCHAR(100),  
+    "level" VARCHAR(100),  
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_training = `
+CREATE TABLE IF NOT EXISTS "s_training"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "training" VARCHAR(100),
+    "company" VARCHAR(100),
+    "period" VARCHAR(100),
+    "date" VARCHAR(100),
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_projectwork = `
+CREATE TABLE IF NOT EXISTS "s_projectwork"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "guide" VARCHAR(100),
+    "company" VARCHAR(100),
+    "certificate" VARCHAR(100),
+    "period" VARCHAR(100),
+    "date" VARCHAR(100),
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_exams = `
+CREATE TABLE IF NOT EXISTS "s_exams"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "exam_qualified" VARCHAR(100),
+    "e_roll" VARCHAR(100),
+    "date" VARCHAR(100), 
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_onlinecourses = `
+CREATE TABLE IF NOT EXISTS "s_onlinecourses"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "portal" VARCHAR(100),
+    "n_course" VARCHAR(100),
+    "duration" VARCHAR(100),
+    "financial_support" VARCHAR(100),
+    "date" VARCHAR(100),
+    "level" VARCHAR(100), 
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
+const s_achievements = `
+CREATE TABLE IF NOT EXISTS "s_achievements"(
+    "id" SERIAL,
+    "n" VARCHAR(100),
+    "user_id" int,
+    "roll_no" VARCHAR(100),
+    "prize" VARCHAR(100),
+    "event" VARCHAR(100),
+    "date" VARCHAR(100),
+    "venue" VARCHAR(100),
+    "level" VARCHAR(100), 
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);`;
+
 // execute(user).then(result => {
 //     if (result) {
 //         console.log('Table created user');
@@ -492,11 +647,11 @@ execute(reset_password).then(result => {
     }
 });
 
-// execute(alter).then(result => {
-//     if (result) {
-//         console.log('Table altered rp');
-//     }
-// });
+execute(alter).then(result => {
+    if (result) {
+        console.log('Table altered rp');
+    }
+});
 
 
 // execute(patents).then(result => {
@@ -660,5 +815,65 @@ execute(reset_password).then(result => {
 //         console.log('Table created e_content');
 //     }
 // });
+
+// execute(placements).then(result => {
+//     if (result) {
+//         console.log('Table created placements');
+//     }
+// });
+
+// execute(s_publications).then(result => {
+//     if (result) {
+//         console.log('Table created s_publications');
+//     }
+// });
+
+// execute(s_conference).then(result => {
+//     if (result) {
+//         console.log('Table created s_conference');
+//     }
+// });
+
+// execute(s_competition).then(result => {
+//     if (result) {
+//         console.log('Table created s_competition');
+//     }
+// });
+
+// execute(s_paper_presentation).then(result => {
+//     if (result) {
+//         console.log('Table created s_paper_presentation');
+//     }
+// });
+
+// execute(s_training).then(result => {
+//     if (result) {
+//         console.log('Table created s_training');
+//     }
+// });
+
+execute(s_projectwork).then(result => {
+    if (result) {
+        console.log('Table created s_projectwork');
+    }
+});
+
+execute(s_exams).then(result => {
+    if (result) {
+        console.log('Table created s_exams');
+    }
+});
+
+execute(s_onlinecourses).then(result => {
+    if (result) {
+        console.log('Table created s_onlinecourses');
+    }
+});
+
+execute(s_achievements).then(result => {
+    if (result) {
+        console.log('Table created s_achievements');
+    }
+});
 
 module.exports = pool
