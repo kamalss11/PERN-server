@@ -33,16 +33,17 @@ const execute = async (query) => {
 // const add = `ALTER TABLE users
 // ADD COLUMN department VARCHAR(100) NOT NULL,
 // ADD COLUMN roll VARCHAR(100) NOT NULL`;
-const alter = `alter table users add column roll_no VARCHAR(100)`
+// const alter = `alter table users alter column admission DATE;`
 
 const user = `
     CREATE TABLE IF NOT EXISTS "users"(
 	    "user_id" SERIAL,
 	    "name" VARCHAR(100) NOT NULL,
-	    "email" VARCHAR(15) NOT NULL,
-        "password" VARCHAR(15) NOT NULL,
+	    "email" VARCHAR(100) NOT NULL,
+        "password" VARCHAR(100) NOT NULL,
+        "roll_no" VARCHAR(100),
+        "admissiom" VARCHAR(100),
         "department" VARCHAR(100) NOT NULL,
-        "roll" VARCHAR(100) NOT NULL,
 	    PRIMARY KEY ("user_id")
     );`;    
 
@@ -647,11 +648,11 @@ execute(reset_password).then(result => {
     }
 });
 
-execute(alter).then(result => {
-    if (result) {
-        console.log('Table altered rp');
-    }
-});
+// execute(alter).then(result => {
+//     if (result) {
+//         console.log('Table altered rp');
+//     }
+// });
 
 
 // execute(patents).then(result => {
