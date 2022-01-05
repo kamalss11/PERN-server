@@ -41,8 +41,7 @@ const user = `
 	    "name" VARCHAR(100) NOT NULL,
 	    "email" VARCHAR(100) NOT NULL,
         "password" VARCHAR(100) NOT NULL,
-        "roll_no" VARCHAR(100),
-        "admissiom" VARCHAR(100),
+        "roll" VARCHAR(100),
         "department" VARCHAR(100) NOT NULL,
 	    PRIMARY KEY ("user_id")
     );`;    
@@ -58,42 +57,39 @@ const reset_password = `
 const research_projects = `
     CREATE TABLE IF NOT EXISTS "research_projects"(
 	    "id" SERIAL,
-        "user_id" int,
-        "nam" VARCHAR(100),
+        "n" VARCHAR(100),
 	    "title" VARCHAR(100),
         "no" VARCHAR(100),
-        "amount_sanctioned" int,
+        "amount_sanctioned" decimal(10,5),
 	    "fileno" VARCHAR(15),
-        "amount_received" int,
+        "amount_received" decimal(10,5),
         "date_sanctioned" VARCHAR(100),
-        "funding_agency" VARCHAR(15),
+        "funding_agency" VARCHAR(100),
         "date" DATE,
-        "image" VARCHAR(100),
-	    PRIMARY KEY ("id"),
-        FOREIGN KEY (user_id) REFERENCES users(user_id)
+        "file" VARCHAR(100),
+        "department" VARCHAR(100),
+	    PRIMARY KEY ("id")
     );`;
 
 const patents = `
 CREATE TABLE IF NOT EXISTS "patents"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "title" VARCHAR(100),
     "field" VARCHAR(100),
     "fileno" VARCHAR(100),
     "date_awarded_patent" VARCHAR(100),
-    "royalty_received" VARCHAR(100),
+    "royalty_received" decimal(10,5),
     "providing_agency" VARCHAR(100),
     "country" VARCHAR(100),
-    "date" VARCHAR(100),
-    PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "date" DATE,
+    "department" VARCHAR(100),
+    PRIMARY KEY ("id")
 );`;
 
 const aw = `
 CREATE TABLE IF NOT EXISTS "awards_for_innovation"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "awardee_name" VARCHAR(100),
     "designation" VARCHAR(100),
@@ -102,70 +98,66 @@ CREATE TABLE IF NOT EXISTS "awards_for_innovation"(
     "awarding_agency" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const degree = `
 CREATE TABLE IF NOT EXISTS "degree"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "deg" VARCHAR(100),
-    "guide_name" VARCHAR(100),"title" VARCHAR(100),
+    "guide_name" VARCHAR(100),
+    "title" VARCHAR(100),
     "external" VARCHAR(100),
     "venue" VARCHAR(100),
-    "date" VARCHAR(100),
-    PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "date" DATE,
+    "department" VARCHAR(100),
+    PRIMARY KEY ("id")
 );`;
 
 const fellowship = `
 CREATE TABLE IF NOT EXISTS "fellowship"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "fellowship" VARCHAR(100),
     "date_sanctioned" VARCHAR(100),
     "funding_agency" VARCHAR(100),
-    "sanctioned_amount" VARCHAR(100),
-    "date" VARCHAR(100),
+    "sanctioned_amount" decimal(10,5),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const collab_activ = `
 CREATE TABLE IF NOT EXISTS "collab_activ"(
     "id" SERIAL,
-    "user_id" int,
     "activity" VARCHAR(100),
     "n" VARCHAR(100),
     "pasrticipant" VARCHAR(100),
     "financial_support" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const linkages = `
 CREATE TABLE IF NOT EXISTS "linkages"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "title" VARCHAR(100),
     "partnering_agency" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const mou = `
 CREATE TABLE IF NOT EXISTS "mou"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "organization" VARCHAR(100),
     "date_signed" VARCHAR(100),
@@ -173,15 +165,14 @@ CREATE TABLE IF NOT EXISTS "mou"(
     "participants" VARCHAR(100),
     "purpose" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const conference = `
 CREATE TABLE IF NOT EXISTS "conference"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "con_sem" VARCHAR(100),
     "title" VARCHAR(100),
@@ -192,15 +183,14 @@ CREATE TABLE IF NOT EXISTS "conference"(
     "outcome" VARCHAR(100),
     "level" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const guest_lectures = `
 CREATE TABLE IF NOT EXISTS "guest_lectures"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "resource_person" VARCHAR(100),
     "designation" VARCHAR(100),
@@ -209,56 +199,52 @@ CREATE TABLE IF NOT EXISTS "guest_lectures"(
     "objective" VARCHAR(100),
     "outcome" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const extension_activities = `
 CREATE TABLE IF NOT EXISTS "extension_activities"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "activities" VARCHAR(100),
     "collaborations" VARCHAR(100),
     "venue" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "date" DATE,    
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const industrial_visits = `
 CREATE TABLE IF NOT EXISTS "industrial_visits"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "classes" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     "address" VARCHAR(100),
     "total" VARCHAR(100),
     "outcome" VARCHAR(100),
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const evs = `
 CREATE TABLE IF NOT EXISTS "evs"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     "place" VARCHAR(100),
     "total" VARCHAR(100),
     "activity" VARCHAR(100),
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const departmental_activities = `
 CREATE TABLE IF NOT EXISTS "departmental_activities"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "activity" VARCHAR(100),
     "guest" VARCHAR(100),
@@ -266,116 +252,108 @@ CREATE TABLE IF NOT EXISTS "departmental_activities"(
     "total" VARCHAR(100),
     "venue" VARCHAR(100),
     "filled" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const projects_services = `
 CREATE TABLE IF NOT EXISTS "projects_services"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "title" VARCHAR(100),
     "no" VARCHAR(100),
     "revenue_generated" VARCHAR(100),
     "date_sanction" VARCHAR(100),
     "sponsor" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const honours = `
 CREATE TABLE IF NOT EXISTS "honours"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "award_honour" VARCHAR(100),
     "details" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const exams = `
 CREATE TABLE IF NOT EXISTS "exams"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "award_honour" VARCHAR(100),
     "details" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const books_published = `
 CREATE TABLE IF NOT EXISTS "books_published"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "name" VARCHAR(100),
     "publisher" VARCHAR(100),
     "level" VARCHAR(100),
     "isbn_no" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "date" DATE,    
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const chapters_contributed = `
 CREATE TABLE IF NOT EXISTS "chapters_contributed"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "con" VARCHAR(100),
     "publication" VARCHAR(100),
     "level" VARCHAR(100),
     "isbn_no" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const conference_proceeding = `
 CREATE TABLE IF NOT EXISTS "conference_proceeding"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
-    "financial_support" VARCHAR(100),
+    "financial_support" decimal(10,5),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const paper_presentation = `
 CREATE TABLE IF NOT EXISTS "paper_presentation"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
-    "financial_support" VARCHAR(100),
+    "financial_support" decimal(10,5),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const journal_publications = `
 CREATE TABLE IF NOT EXISTS "journal_publications"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "title" VARCHAR(100),
     "jou" VARCHAR(100),
@@ -384,115 +362,106 @@ CREATE TABLE IF NOT EXISTS "journal_publications"(
     "sci" VARCHAR(100),
     "impact" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const fconference = `
 CREATE TABLE IF NOT EXISTS "fconference"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "financial_support" VARCHAR(100),
+    "financial_support" decimal(10,5),
     "programme_outcome" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const resource_person = `
 CREATE TABLE IF NOT EXISTS "resource_person"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "sem" VARCHAR(100),
     "topic" VARCHAR(100),
     "event" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "filled" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "date" DATE,    
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const financial_support = `
 CREATE TABLE IF NOT EXISTS "financial_support"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "f" VARCHAR(100),
-    "amount_support" VARCHAR(100),
-    "date" VARCHAR(100),        
+    "amount_support" decimal(10,5),
+    "date" DATE,        
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const development_programmes = `
 CREATE TABLE IF NOT EXISTS "development_programmes"(
     "id" SERIAL,
-    "user_id" int,
     "n" VARCHAR(100),
     "training" VARCHAR(100),
     "title" VARCHAR(100),
     "venue" VARCHAR(100),
-    "financial_support" VARCHAR(100),
+    "financial_support" decimal(10,5),
     "level" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const online_courses = `
 CREATE TABLE IF NOT EXISTS "online_courses"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "training" VARCHAR(100),
     "title" VARCHAR(100),
     "duration" VARCHAR(100),
-    "date" VARCHAR(100),
-    "financial_support" VARCHAR(100),
+    "date" DATE,
+    "financial_support" decimal(10,5),
     "level" VARCHAR(100),
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const e_content = `
 CREATE TABLE IF NOT EXISTS "e_content"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "module" VARCHAR(100),
     "platform" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "date" DATE,    
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const placements = `
 CREATE TABLE IF NOT EXISTS "placements"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "company_placed" VARCHAR(100),
-    "annual_package" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "annual_package" decimal(10,5),
+    "date" DATE,    
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_publications = `
 CREATE TABLE IF NOT EXISTS "s_publications"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "title" VARCHAR(100),
     "n_journal" VARCHAR(100),
@@ -501,42 +470,41 @@ CREATE TABLE IF NOT EXISTS "s_publications"(
     "sci" VARCHAR(100),
     "impact" VARCHAR(100),
     "level" VARCHAR(100),  
+    "date" DATE,  
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_paper_presentation = `
 CREATE TABLE IF NOT EXISTS "s_paper_presentation"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
-    "financial_support" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "financial_support" decimal(10,5),
+    "date" DATE,    
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_conference = `
 CREATE TABLE IF NOT EXISTS "s_conference"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "con" VARCHAR(100),
     "n_con" VARCHAR(100),
     "sponsoring_agency" VARCHAR(100),
     "poster" VARCHAR(100),
     "award" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "date" DATE,    
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_competition = `
@@ -544,109 +512,103 @@ CREATE TABLE IF NOT EXISTS "s_competition"(
     "id" SERIAL,
     "n_event" VARCHAR(100),
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "con" VARCHAR(100),
     "n_con" VARCHAR(100),
     "award" VARCHAR(100),
     "sponsoring_agency" VARCHAR(100),
-    "date" VARCHAR(100),    
+    "date" DATE,    
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_training = `
 CREATE TABLE IF NOT EXISTS "s_training"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "training" VARCHAR(100),
     "company" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_projectwork = `
 CREATE TABLE IF NOT EXISTS "s_projectwork"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "guide" VARCHAR(100),
     "company" VARCHAR(100),
     "certificate" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_exams = `
 CREATE TABLE IF NOT EXISTS "s_exams"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "exam_qualified" VARCHAR(100),
     "e_roll" VARCHAR(100),
-    "date" VARCHAR(100), 
+    "date" DATE, 
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_onlinecourses = `
 CREATE TABLE IF NOT EXISTS "s_onlinecourses"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "portal" VARCHAR(100),
     "n_course" VARCHAR(100),
     "duration" VARCHAR(100),
-    "financial_support" VARCHAR(100),
-    "date" VARCHAR(100),
+    "financial_support" decimal(10,5),
+    "date" DATE,
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
 const s_achievements = `
 CREATE TABLE IF NOT EXISTS "s_achievements"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "user_id" int,
     "roll_no" VARCHAR(100),
     "prize" VARCHAR(100),
     "event" VARCHAR(100),
-    "date" VARCHAR(100),
+    "date" DATE,
     "venue" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    "department" VARCHAR(100)
 );`;
 
-// execute(user).then(result => {
+execute(user).then(result => {
+    if (result) {
+        console.log('Table created user');
+    }
+});
+
+// execute(research_projects).then(result => {
 //     if (result) {
-//         console.log('Table created user');
+//         console.log('Table created rp');
 //     }
 // });
 
-execute(research_projects).then(result => {
-    if (result) {
-        console.log('Table created rp');
-    }
-});
-
-execute(reset_password).then(result => {
-    if (result) {
-        console.log('Table created rp');
-    }
-});
+// execute(reset_password).then(result => {
+//     if (result) {
+//         console.log('Table created rp');
+//     }
+// });
 
 // execute(alter).then(result => {
 //     if (result) {

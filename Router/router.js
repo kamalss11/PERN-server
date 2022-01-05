@@ -69,6 +69,11 @@ router.post('/signin', async(req,res) => {
             `SELECT * FROM users WHERE email = '${email}'`,
             async (err, result) => {
                 if(result.rows != ''){
+                    res.cookie("department",result.rows[0].department,{
+                        expires: new Date(Date.now() + 25892000000),
+                        httpOnly: true
+                    })
+
                     res.cookie("user_id",result.rows[0].user_id,{
                         expires: new Date(Date.now() + 25892000000),
                         httpOnly: true
@@ -226,308 +231,553 @@ router.put('/reset_password',async (req,res)=>{
     }
 })
 
-router.get('/admin/:id', async(req,res) => {
-    let research_projects = [],patents = [],awards_for_innovation = [],degree = [],fellowship = [],
-    collab_activ = [],linkages = [],mou = [],
-    conference = [],guest_lectures = [],extension_activities = [],industrial_visits = [],evs = [],departmental_activities = [],
-    projects_services = [],
-    honours = [],exams = [],books_published = [],chapters_contributed = [],conference_proceeding = [],paper_presentation = [],journal_publications = [],fconference = [],resource_person = [],
-        financial_support = [],development_programmes = [],online_courses = [],e_content = []
+router.get('/admin/:dprt', async(req,res) => {
+    let research_projects ,patents ,awards_for_innovation ,degree ,fellowship ,collab_activ ,linkages ,mou ,conference ,guest_lectures ,extension_activities ,industrial_visits ,evs,departmental_activities ,projects_services ,honours ,exams ,books_published ,chapters_contributed ,conference_proceeding ,paper_presentation ,journal_publications ,fconference,resource_person ,financial_support ,development_programmes ,online_courses ,e_content 
     let length
     try{
         pool.query(
-            `SELECT user_id FROM users WHERE department = '${req.params.id}'`,
+            `SELECT * FROM research_projects WHERE department = '${req.params.dprt}'`,
             (err, result) => {
-                usr = result.rows
-                console.log(usr)  
-                length = usr.length 
-                console.log(length)  
-
-                for(let i=0;i<length;i++){
-                    let val = usr[i].user_id
-                    console.log(val)
-                    pool.query(
-                        `SELECT * FROM research_projects WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                research_projects.push(result.rows)
-                            }
-                        }
-                    );   
-                    
-                    pool.query(
-                        `SELECT * FROM patents WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                patents.push(result.rows)
-                            }          
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM awards_for_innovation WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                awards_for_innovation.push(result.rows)
-                            }  
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM degree WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                degree.push(result.rows)
-                            }            
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM fellowship WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                fellowship.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM collab_activ WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                collab_activ.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM linkages WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                linkages.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM mou WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                mou.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM conference WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                conference.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM guest_lectures WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                guest_lectures.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM extension_activities WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                extension_activities.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                    pool.query(
-                        `SELECT * FROM industrial_visits WHERE user_id = ${val}`,
-                        (err, result) => {
-                            if(result.rows!=''){
-                                industrial_visits.push(result.rows)
-                            }                       
-                        }
-                    );
-
-                pool.query(
-                    `SELECT * FROM evs WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            evs.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM departmental_activities WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            departmental_activities.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM projects_services WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            projects_services.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM honours WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            honours.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM exams WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            exams.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM books_published WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            books_published.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM chapters_contributed WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            chapters_contributed.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM paper_presentation WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            paper_presentation.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM journal_publications WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            journal_publications.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM fconference WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            fconference.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM resource_person WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            resource_person.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM financial_support WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            financial_support.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM development_programmes WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            development_programmes.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM online_courses WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            online_courses.push(result.rows)
-                        }                       
-                    }
-                );
-
-                pool.query(
-                    `SELECT * FROM e_content WHERE user_id = ${val}`,
-                    (err, result) => {
-                        if(result.rows!=''){
-                            e_content.push(result.rows)
-                        }   
-        
-                        if(i+1 === length){               
-                            return res.send({
-                                research_projects : research_projects,
-                                patents : patents,
-                                awards_for_innovation : awards_for_innovation,
-                                degree : degree,
-                                fellowship : fellowship,
-                                collab_activ : collab_activ,
-                                linkages : linkages,
-                                mou : mou,
-                                conference : conference,
-                                guest_lectures : guest_lectures,
-                                extension_activities : extension_activities,
-                                industrial_visits : industrial_visits,
-                                evs : evs,
-                                departmental_activities : departmental_activities,
-                                projects_services : projects_services,
-                                honours : honours,
-                                exams : exams,
-                                books_published : books_published,
-                                chapters_contributed : chapters_contributed,
-                                conference_proceeding : conference_proceeding,
-                                paper_presentation : paper_presentation,
-                                journal_publications : journal_publications,
-                                fconference : fconference,
-                                resource_person : resource_person,
-                                financial_support : financial_support,
-                                development_programmes : development_programmes,
-                                online_courses : online_courses,
-                                e_content : e_content
-                            })                                    
-                        }
-                    }
-                );
-                }     
+                if(result.rows!=''){
+                    research_projects = result.rows
+                }
             }
-        );     
+        );   
+        
+        pool.query(
+            `SELECT * FROM patents WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    patents = result.rows
+                }          
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM awards_for_innovation WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    awards_for_innovation = result.rows
+                }  
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM degree WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    degree = result.rows
+                }            
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM fellowship WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    fellowship = result.rows
+                }                       
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM collab_activ WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    collab_activ = result.rows
+                }                       
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM linkages WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    linkages = result.rows
+                }                       
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM mou WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    mou = result.rows
+                }                       
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM conference WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    conference = result.rows
+                }                       
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM guest_lectures WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    guest_lectures = result.rows
+                }                       
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM extension_activities WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    extension_activities = result.rows
+                }                       
+            }
+        );
+        
+        pool.query(
+            `SELECT * FROM industrial_visits WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    industrial_visits = result.rows
+                }                       
+            }
+        );
+
+        pool.query(
+            `SELECT * FROM evs WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    evs = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM departmental_activities WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    departmental_activities = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM projects_services WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    projects_services = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM honours WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    honours = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM exams WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    exams = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM books_published WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    books_published = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM chapters_contributed WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    chapters_contributed = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM paper_presentation WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    paper_presentation = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM journal_publications WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    journal_publications = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM fconference WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    fconference = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM resource_person WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    resource_person = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM financial_support WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    financial_support = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM development_programmes WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    development_programmes = result.rows
+                }                       
+            }
+        )
+        pool.query(
+            `SELECT * FROM online_courses WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    online_courses = result.rows
+                }                       
+            }
+        );
+
+        pool.query(
+            `SELECT * FROM e_content WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows!=''){
+                    e_content = result.rows
+                }  
+            }
+        );  
+        
+        pool.query(
+            `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+            (err, result) => {
+                return res.send(
+                    {
+                        user : result.rows,
+                        research_projects : research_projects,
+                        patents : patents,
+                        awards_for_innovation : awards_for_innovation,
+                        degree : degree,
+                        fellowship : fellowship,
+                        collab_activ : collab_activ,
+                        linkages : linkages,
+                        mou : mou,
+                        conference : conference,
+                        guest_lectures : guest_lectures,
+                        extension_activities : extension_activities,
+                        industrial_visits : industrial_visits,
+                        evs : evs,
+                        departmental_activities : departmental_activities,
+                        projects_services : projects_services,
+                        honours : honours,
+                        exams : exams,
+                        books_published : books_published,
+                        chapters_contributed : chapters_contributed,
+                        conference_proceeding : conference_proceeding,
+                        paper_presentation : paper_presentation,
+                        journal_publications : journal_publications,
+                        fconference : fconference,
+                        resource_person : resource_person,
+                        financial_support : financial_support,
+                        development_programmes : development_programmes,
+                        online_courses : online_courses,
+                        e_content : e_content
+                    }
+                )            
+            }
+        );
     }
     catch(er){
         console.log(er)
     }
+})
+
+router.get('/super_admin/departments/staffs/:dprt', async(req,res) => {
+    let research_projects ,patents ,awards_for_innovation ,degree ,fellowship ,collab_activ ,linkages ,mou ,conference ,guest_lectures ,extension_activities ,industrial_visits ,evs,departmental_activities ,projects_services ,honours ,exams ,books_published ,chapters_contributed ,conference_proceeding ,paper_presentation ,journal_publications ,fconference,resource_person ,financial_support ,development_programmes ,online_courses ,e_content 
+    let length
+        try{
+            pool.query(
+                `SELECT * FROM research_projects WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        research_projects = result.rows
+                    }
+                }
+            );   
+            
+            pool.query(
+                `SELECT * FROM patents WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        patents = result.rows
+                    }          
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM awards_for_innovation WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        awards_for_innovation = result.rows
+                    }  
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM degree WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        degree = result.rows
+                    }            
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM fellowship WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        fellowship = result.rows
+                    }                       
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM collab_activ WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        collab_activ = result.rows
+                    }                       
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM linkages WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        linkages = result.rows
+                    }                       
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM mou WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        mou = result.rows
+                    }                       
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM conference WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        conference = result.rows
+                    }                       
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM guest_lectures WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        guest_lectures = result.rows
+                    }                       
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM extension_activities WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        extension_activities = result.rows
+                    }                       
+                }
+            );
+            
+            pool.query(
+                `SELECT * FROM industrial_visits WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        industrial_visits = result.rows
+                    }                       
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM evs WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        evs = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM departmental_activities WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        departmental_activities = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM projects_services WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        projects_services = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM honours WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        honours = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM exams WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        exams = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM books_published WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        books_published = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM chapters_contributed WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        chapters_contributed = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM paper_presentation WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        paper_presentation = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM journal_publications WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        journal_publications = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM fconference WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        fconference = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM resource_person WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        resource_person = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM financial_support WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        financial_support = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM development_programmes WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        development_programmes = result.rows
+                    }                       
+                }
+            )
+            pool.query(
+                `SELECT * FROM online_courses WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        online_courses = result.rows
+                    }                       
+                }
+            );
+    
+            pool.query(
+                `SELECT * FROM e_content WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!='')
+                    {
+                        e_content = result.rows
+                        return res.send({
+                            user : result.rows,
+                            research_projects : research_projects,
+                            patents : patents,
+                            awards_for_innovation : awards_for_innovation,
+                            degree : degree,
+                            fellowship : fellowship,
+                            collab_activ : collab_activ,
+                            linkages : linkages,
+                            mou : mou,
+                            conference : conference,
+                            guest_lectures : guest_lectures,
+                            extension_activities : extension_activities,
+                            industrial_visits : industrial_visits,
+                            evs : evs,
+                            departmental_activities : departmental_activities,
+                            projects_services : projects_services,
+                            honours : honours,
+                            exams : exams,
+                            books_published : books_published,
+                            chapters_contributed : chapters_contributed,
+                            conference_proceeding : conference_proceeding,
+                            paper_presentation : paper_presentation,
+                            journal_publications : journal_publications,
+                            fconference : fconference,
+                            resource_person : resource_person,
+                            financial_support : financial_support,
+                            development_programmes : development_programmes,
+                            online_courses : online_courses,
+                            e_content : e_content
+                        })  
+                    }  
+                }
+            );  
+        }
+        catch(er){
+            console.log(er)
+        }
 })
 
 router.get('/period/:prd',async(req,res) =>{
@@ -542,7 +792,7 @@ router.get('/period/:prd',async(req,res) =>{
         
     try{
             pool.query(
-                `SELECT * FROM research_projects WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM research_projects WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         research_projects = result.rows 
@@ -554,7 +804,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM patents WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM patents WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         patents = result.rows 
@@ -566,7 +816,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM awards_for_innovation WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM awards_for_innovation WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         awards_for_innovation = result.rows 
@@ -578,7 +828,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM degree WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM degree WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         degree = result.rows 
@@ -590,7 +840,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM fellowship WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM fellowship WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         fellowship = result.rows 
@@ -602,7 +852,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM collab_activ WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM collab_activ WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         collab_activ = result.rows 
@@ -614,7 +864,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM linkages WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM linkages WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         linkages = result.rows 
@@ -626,7 +876,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM mou WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM mou WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         mou = result.rows 
@@ -638,7 +888,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM conference WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM conference WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         conference = result.rows 
@@ -650,7 +900,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM guest_lectures WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM guest_lectures WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         guest_lectures = result.rows 
@@ -662,7 +912,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM extension_activities WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM extension_activities WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         extension_activities = result.rows 
@@ -674,7 +924,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM industrial_visits WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM industrial_visits WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         industrial_visits = result.rows 
@@ -686,7 +936,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM evs WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM evs WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         evs = result.rows 
@@ -698,7 +948,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM departmental_activities WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM departmental_activities WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         departmental_activities = result.rows 
@@ -710,7 +960,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM projects_services WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM projects_services WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         projects_services = result.rows 
@@ -722,7 +972,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM honours WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM honours WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         honours = result.rows 
@@ -734,7 +984,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM exams WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM exams WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         exams = result.rows 
@@ -746,7 +996,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM books_published WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM books_published WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         books_published = result.rows 
@@ -758,7 +1008,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM chapters_contributed WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM chapters_contributed WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         chapters_contributed = result.rows 
@@ -770,7 +1020,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM conference_proceeding WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM conference_proceeding WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         conference_proceeding = result.rows 
@@ -782,7 +1032,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM paper_presentation WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM paper_presentation WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         paper_presentation = result.rows 
@@ -794,7 +1044,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM journal_publications WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM journal_publications WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         journal_publications = result.rows 
@@ -806,7 +1056,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM fconference WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM fconference WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         fconference = result.rows 
@@ -818,7 +1068,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM resource_person WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM resource_person WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         resource_person = result.rows 
@@ -830,7 +1080,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM financial_support WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM financial_support WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         financial_support = result.rows 
@@ -842,7 +1092,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM development_programmes WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM development_programmes WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         development_programmes = result.rows 
@@ -854,7 +1104,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM online_courses WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM online_courses WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         online_courses = result.rows 
@@ -866,7 +1116,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM e_content WHERE date between ${req.params.prd} AND user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM e_content WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         e_content = result.rows 
@@ -936,8 +1186,9 @@ router.get('/dashboard',async(req,res) => {
             financial_support,development_programmes,online_courses,e_content
         try{
             pool.query(
-                `SELECT * FROM research_projects WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM research_projects WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
+                    console.log(result)
                     if(result.rows != ''){
                         research_projects = result.rows 
                     }          
@@ -948,7 +1199,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM patents WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM patents WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         patents = result.rows 
@@ -960,7 +1211,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM awards_for_innovation WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM awards_for_innovation WHERE department = '${req.cookies.user_id}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         awards_for_innovation = result.rows 
@@ -972,7 +1223,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM degree WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM degree WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         degree = result.rows 
@@ -984,7 +1235,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM fellowship WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM fellowship WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         fellowship = result.rows 
@@ -996,7 +1247,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM collab_activ WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM collab_activ WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         collab_activ = result.rows 
@@ -1008,7 +1259,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM linkages WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM linkages WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         linkages = result.rows 
@@ -1020,7 +1271,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM mou WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM mou WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         mou = result.rows 
@@ -1032,7 +1283,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM conference WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM conference WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         conference = result.rows 
@@ -1044,7 +1295,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM guest_lectures WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM guest_lectures WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         guest_lectures = result.rows 
@@ -1056,7 +1307,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM extension_activities WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM extension_activities WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         extension_activities = result.rows 
@@ -1068,7 +1319,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM industrial_visits WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM industrial_visits WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         industrial_visits = result.rows 
@@ -1080,7 +1331,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM evs WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM evs WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         evs = result.rows 
@@ -1092,7 +1343,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM departmental_activities WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM departmental_activities WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         departmental_activities = result.rows 
@@ -1104,7 +1355,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM projects_services WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM projects_services WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         projects_services = result.rows 
@@ -1116,7 +1367,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM honours WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM honours WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         honours = result.rows 
@@ -1128,7 +1379,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM exams WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM exams WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         exams = result.rows 
@@ -1140,7 +1391,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM books_published WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM books_published WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         books_published = result.rows 
@@ -1152,7 +1403,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM chapters_contributed WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM chapters_contributed WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         chapters_contributed = result.rows 
@@ -1164,7 +1415,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM conference_proceeding WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM conference_proceeding WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         conference_proceeding = result.rows 
@@ -1176,7 +1427,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM paper_presentation WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM paper_presentation WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         paper_presentation = result.rows 
@@ -1188,7 +1439,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM journal_publications WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM journal_publications WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         journal_publications = result.rows 
@@ -1200,7 +1451,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM fconference WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM fconference WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         fconference = result.rows 
@@ -1212,7 +1463,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM resource_person WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM resource_person WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         resource_person = result.rows 
@@ -1224,7 +1475,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM financial_support WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM financial_support WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         financial_support = result.rows 
@@ -1236,7 +1487,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM development_programmes WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM development_programmes WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         development_programmes = result.rows 
@@ -1248,7 +1499,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM online_courses WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM online_courses WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         online_courses = result.rows 
@@ -1260,7 +1511,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM e_content WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM e_content WHERE department = '${req.cookies.department}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         e_content = result.rows 
@@ -1272,7 +1523,7 @@ router.get('/dashboard',async(req,res) => {
             );
         
             pool.query(
-                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                `SELECT * FROM users WHERE user_id = '${req.cookies.user_id}'`,
                 (err, result) => {
                     return res.send(
                         {
@@ -1549,7 +1800,7 @@ router.post('/forms/research/research_projects',upload.single('image'),async(req
     console.log(req.file.filename)
     try{
         pool.query(
-            `INSERT INTO research_projects (user_id,nam,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,image) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.user_id,req.body.n,req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename],
+            `INSERT INTO research_projects (n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,file,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename,req.body.department],
             (err, result) => {              
                 if(result){
                 res.send({sp : "Saved"})}
@@ -3300,6 +3551,7 @@ router.put('/forms/student/achievements/delete/:id/', async(req,res) => {
 })
 
 router.get('/logout',(req,res) => {
+    res.clearCookie('department',{path: '/'})
     res.clearCookie('user_id',{ path: '/'})
     res.clearCookie('jwtoken',{path: '/'})
     res.status(200).send('User Logout')
