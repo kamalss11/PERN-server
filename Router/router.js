@@ -25,6 +25,7 @@ router.use(cors())
 router.use(express.json())
 
 const pool = require('../Db/db')
+const e = require('express')
 
 router.post('/', async (req,res) => {
     const {name,email,password,cpassword,department,roll} = req.body
@@ -231,288 +232,9 @@ router.put('/reset_password',async (req,res)=>{
     }
 })
 
-router.get('/admin/:dprt', async(req,res) => {
-    let research_projects ,patents ,awards_for_innovation ,degree ,fellowship ,collab_activ ,linkages ,mou ,conference ,guest_lectures ,extension_activities ,industrial_visits ,evs,departmental_activities ,projects_services ,honours ,exams ,books_published ,chapters_contributed ,conference_proceeding ,paper_presentation ,journal_publications ,fconference,resource_person ,financial_support ,development_programmes ,online_courses ,e_content 
-    let length
-    try{
-        pool.query(
-            `SELECT * FROM research_projects WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    research_projects = result.rows
-                }
-            }
-        );   
-        
-        pool.query(
-            `SELECT * FROM patents WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    patents = result.rows
-                }          
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM awards_for_innovation WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    awards_for_innovation = result.rows
-                }  
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM degree WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    degree = result.rows
-                }            
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM fellowship WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    fellowship = result.rows
-                }                       
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM collab_activ WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    collab_activ = result.rows
-                }                       
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM linkages WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    linkages = result.rows
-                }                       
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM mou WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    mou = result.rows
-                }                       
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM conference WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    conference = result.rows
-                }                       
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM guest_lectures WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    guest_lectures = result.rows
-                }                       
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM extension_activities WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    extension_activities = result.rows
-                }                       
-            }
-        );
-        
-        pool.query(
-            `SELECT * FROM industrial_visits WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    industrial_visits = result.rows
-                }                       
-            }
-        );
-
-        pool.query(
-            `SELECT * FROM evs WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    evs = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM departmental_activities WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    departmental_activities = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM projects_services WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    projects_services = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM honours WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    honours = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM exams WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    exams = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM books_published WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    books_published = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM chapters_contributed WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    chapters_contributed = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM paper_presentation WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    paper_presentation = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM journal_publications WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    journal_publications = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM fconference WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    fconference = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM resource_person WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    resource_person = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM financial_support WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    financial_support = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM development_programmes WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    development_programmes = result.rows
-                }                       
-            }
-        )
-        pool.query(
-            `SELECT * FROM online_courses WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    online_courses = result.rows
-                }                       
-            }
-        );
-
-        pool.query(
-            `SELECT * FROM e_content WHERE department = '${req.params.dprt}'`,
-            (err, result) => {
-                if(result.rows!=''){
-                    e_content = result.rows
-                }  
-            }
-        );  
-        
-        pool.query(
-            `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
-            (err, result) => {
-                return res.send(
-                    {
-                        user : result.rows,
-                        research_projects : research_projects,
-                        patents : patents,
-                        awards_for_innovation : awards_for_innovation,
-                        degree : degree,
-                        fellowship : fellowship,
-                        collab_activ : collab_activ,
-                        linkages : linkages,
-                        mou : mou,
-                        conference : conference,
-                        guest_lectures : guest_lectures,
-                        extension_activities : extension_activities,
-                        industrial_visits : industrial_visits,
-                        evs : evs,
-                        departmental_activities : departmental_activities,
-                        projects_services : projects_services,
-                        honours : honours,
-                        exams : exams,
-                        books_published : books_published,
-                        chapters_contributed : chapters_contributed,
-                        conference_proceeding : conference_proceeding,
-                        paper_presentation : paper_presentation,
-                        journal_publications : journal_publications,
-                        fconference : fconference,
-                        resource_person : resource_person,
-                        financial_support : financial_support,
-                        development_programmes : development_programmes,
-                        online_courses : online_courses,
-                        e_content : e_content
-                    }
-                )            
-            }
-        );
-    }
-    catch(er){
-        console.log(er)
-    }
-})
-
 router.get('/super_admin/departments/staffs/:dprt', async(req,res) => {
-    let research_projects ,patents ,awards_for_innovation ,degree ,fellowship ,collab_activ ,linkages ,mou ,conference ,guest_lectures ,extension_activities ,industrial_visits ,evs,departmental_activities ,projects_services ,honours ,exams ,books_published ,chapters_contributed ,conference_proceeding ,paper_presentation ,journal_publications ,fconference,resource_person ,financial_support ,development_programmes ,online_courses ,e_content 
-    let length
-        try{
+    try{
+            let research_projects ,patents ,awards_for_innovation ,degree ,fellowship ,collab_activ ,linkages ,mou ,conference ,guest_lectures ,extension_activities ,industrial_visits ,evs,departmental_activities ,projects_services ,honours ,exams ,books_published ,chapters_contributed ,conference_proceeding ,paper_presentation ,journal_publications ,fconference,resource_person ,financial_support ,development_programmes ,online_courses ,e_content 
             pool.query(
                 `SELECT * FROM research_projects WHERE department = '${req.params.dprt}'`,
                 (err, result) => {
@@ -678,6 +400,14 @@ router.get('/super_admin/departments/staffs/:dprt', async(req,res) => {
                 }
             )
             pool.query(
+                `SELECT * FROM conference_proceeding WHERE department = '${req.params.dprt}'`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        conference_proceeding = result.rows
+                    }                       
+                }
+            )
+            pool.query(
                 `SELECT * FROM paper_presentation WHERE department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows!=''){
@@ -737,10 +467,17 @@ router.get('/super_admin/departments/staffs/:dprt', async(req,res) => {
             pool.query(
                 `SELECT * FROM e_content WHERE department = '${req.params.dprt}'`,
                 (err, result) => {
-                    if(result.rows!='')
-                    {
+                    if(result.rows!=''){
                         e_content = result.rows
-                        return res.send({
+                    } 
+                } 
+            );  
+
+            pool.query(
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
                             user : result.rows,
                             research_projects : research_projects,
                             patents : patents,
@@ -770,17 +507,172 @@ router.get('/super_admin/departments/staffs/:dprt', async(req,res) => {
                             development_programmes : development_programmes,
                             online_courses : online_courses,
                             e_content : e_content
-                        })  
-                    }  
+                        }
+                    )            
                 }
-            );  
-        }
+            );
+    }
+    catch(er){
+        console.log(er)
+    }
+})
+
+router.get('/super_admin/departments/students/:dprt', async(req,res) => {
+    console.log(req.params.prd)
+
+    let placements,publications,paper_presentation,conference,competition,training,projectwork,exams,online_courses,achievements
+        
+    try{
+        pool.query(
+            `SELECT * FROM placements WHERE department ='${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    placements = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_publications WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    publications = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }           
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_paper_presentation WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    paper_presentation = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }            
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_conference WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    conference = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }           
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_competition WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    fellowship = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }             
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_training WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    collab_activ = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }            
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_projectwork WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    linkages = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }              
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_exams WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    mou = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }            
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_onlinecourses WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    conference = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }             
+            }
+        );
+    
+        pool.query(
+            `SELECT * FROM s_achievements WHERE department = '${req.params.dprt}'`,
+            (err, result) => {
+                if(result.rows != ''){
+                    guest_lectures = result.rows 
+                }          
+                else{
+                    console.log("no values")
+                }            
+            }
+        );
+
+        console.log(publications)
+    
+        pool.query(
+            `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+            (err, result) => {
+                return res.send(
+                    {
+                        user : result.rows,
+                        placements : placements,
+                        publications : publications,
+                        paper_presentation : paper_presentation,
+                        conference : conference,
+                        competition : competition,
+                        training : training,
+                        projectwork : projectwork,
+                        exams : exams,
+                        online_courses : online_courses,
+                        achievements : achievements
+                    }
+                )            
+            }
+        );
+
+    }
         catch(er){
             console.log(er)
         }
 })
 
-router.get('/period/:prd',async(req,res) =>{
+router.get('/period/:prd/:dprt',async(req,res) =>{
     console.log(req.params.prd)
 
     let research_projects,patents,awards_for_innovation,degree,fellowship,
@@ -792,7 +684,7 @@ router.get('/period/:prd',async(req,res) =>{
         
     try{
             pool.query(
-                `SELECT * FROM research_projects WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM research_projects WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         research_projects = result.rows 
@@ -804,7 +696,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM patents WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM patents WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         patents = result.rows 
@@ -816,7 +708,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM awards_for_innovation WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM awards_for_innovation WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         awards_for_innovation = result.rows 
@@ -828,7 +720,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM degree WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM degree WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         degree = result.rows 
@@ -840,7 +732,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM fellowship WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM fellowship WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         fellowship = result.rows 
@@ -852,7 +744,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM collab_activ WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM collab_activ WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         collab_activ = result.rows 
@@ -864,7 +756,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM linkages WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM linkages WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         linkages = result.rows 
@@ -876,7 +768,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM mou WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM mou WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         mou = result.rows 
@@ -888,7 +780,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM conference WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM conference WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         conference = result.rows 
@@ -900,7 +792,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM guest_lectures WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM guest_lectures WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         guest_lectures = result.rows 
@@ -912,7 +804,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM extension_activities WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM extension_activities WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         extension_activities = result.rows 
@@ -924,7 +816,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM industrial_visits WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM industrial_visits WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         industrial_visits = result.rows 
@@ -936,7 +828,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM evs WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM evs WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         evs = result.rows 
@@ -948,7 +840,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM departmental_activities WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM departmental_activities WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         departmental_activities = result.rows 
@@ -960,7 +852,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM projects_services WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM projects_services WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         projects_services = result.rows 
@@ -972,7 +864,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM honours WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM honours WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         honours = result.rows 
@@ -984,7 +876,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM exams WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM exams WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         exams = result.rows 
@@ -996,7 +888,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM books_published WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM books_published WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         books_published = result.rows 
@@ -1008,7 +900,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM chapters_contributed WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM chapters_contributed WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         chapters_contributed = result.rows 
@@ -1020,7 +912,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM conference_proceeding WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM conference_proceeding WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         conference_proceeding = result.rows 
@@ -1032,7 +924,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM paper_presentation WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM paper_presentation WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         paper_presentation = result.rows 
@@ -1044,7 +936,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM journal_publications WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM journal_publications WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         journal_publications = result.rows 
@@ -1056,7 +948,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM fconference WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM fconference WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         fconference = result.rows 
@@ -1068,7 +960,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM resource_person WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM resource_person WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         resource_person = result.rows 
@@ -1080,7 +972,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM financial_support WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM financial_support WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         financial_support = result.rows 
@@ -1092,7 +984,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM development_programmes WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM development_programmes WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         development_programmes = result.rows 
@@ -1104,7 +996,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM online_courses WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM online_courses WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         online_courses = result.rows 
@@ -1116,7 +1008,7 @@ router.get('/period/:prd',async(req,res) =>{
             );
     
             pool.query(
-                `SELECT * FROM e_content WHERE date between ${req.params.prd} AND department = '${req.cookies.department}'`,
+                `SELECT * FROM e_content WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         e_content = result.rows 
@@ -1172,70 +1064,62 @@ router.get('/period/:prd',async(req,res) =>{
     }
 })
 
-router.get('/dashboard',async(req,res) => {                    
-    const vtoken = req.cookies.jwtoken
-    const verifyToken = jwt.verify(vtoken,process.env.SECRET_KEY)
-    console.log(`${verifyToken}`)
+router.get('/period/students/:prd/:dprt',async(req,res) =>{
+    console.log(req.params.prd)
 
-    if(verifyToken){
-        let research_projects,patents,awards_for_innovation,degree,fellowship,
-        collab_activ,linkages,mou,
-        conference,guest_lectures,extension_activities,industrial_visits,evs,departmental_activities,
-        projects_services,
-        honours,exams,books_published,chapters_contributed,conference_proceeding,paper_presentation,journal_publications,fconference,resource_person,
-            financial_support,development_programmes,online_courses,e_content
-        try{
+    let placements,publications,paper_presentation,conference,competition,training,projectwork,exams,online_courses,achievements
+        
+    try{
             pool.query(
-                `SELECT * FROM research_projects WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM placements WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
-                    console.log(result)
                     if(result.rows != ''){
-                        research_projects = result.rows 
+                        placements = result.rows 
                     }          
                     else{
                         console.log("no values")
                     }
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM patents WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_publications WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
-                        patents = result.rows 
+                        publications = result.rows 
                     }          
                     else{
                         console.log("no values")
                     }           
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM awards_for_innovation WHERE department = '${req.cookies.user_id}'`,
+                `SELECT * FROM s_paper_presentation WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
-                        awards_for_innovation = result.rows 
+                        paper_presentation = result.rows 
                     }          
                     else{
                         console.log("no values")
                     }            
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM degree WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_conference WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
-                        degree = result.rows 
+                        conference = result.rows 
                     }          
                     else{
                         console.log("no values")
                     }           
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM fellowship WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_competition WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         fellowship = result.rows 
@@ -1245,9 +1129,9 @@ router.get('/dashboard',async(req,res) => {
                     }             
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM collab_activ WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_training WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         collab_activ = result.rows 
@@ -1257,9 +1141,9 @@ router.get('/dashboard',async(req,res) => {
                     }            
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM linkages WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_projectwork WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         linkages = result.rows 
@@ -1269,9 +1153,9 @@ router.get('/dashboard',async(req,res) => {
                     }              
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM mou WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_exams WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         mou = result.rows 
@@ -1281,9 +1165,9 @@ router.get('/dashboard',async(req,res) => {
                     }            
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM conference WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_onlinecourses WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         conference = result.rows 
@@ -1293,9 +1177,9 @@ router.get('/dashboard',async(req,res) => {
                     }             
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM guest_lectures WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM s_achievements WHERE date between ${req.params.prd} AND department = '${req.params.dprt}'`,
                 (err, result) => {
                     if(result.rows != ''){
                         guest_lectures = result.rows 
@@ -1305,257 +1189,175 @@ router.get('/dashboard',async(req,res) => {
                     }            
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM extension_activities WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
+                            user : result.rows,
+                            placements : placements,
+                            publications : publications,
+                            paper_presentation : paper_presentation,
+                            conference : conference,
+                            competition : competition,
+                            training : training,
+                            projectwork : projectwork,
+                            exams : exams,
+                            online_courses : online_courses,
+                            achievements : achievements
+                        }
+                    )            
+                }
+            );
+
+    }
+    catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/super_admin/overall/staffs/:table', async(req,res) => {
+    let datas
+    let length
+        try{
+            pool.query(
+                `SELECT * FROM ${req.params.table}`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        datas = result.rows
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
+                            user : result.rows,
+                            table : datas
+                        }
+                    )            
+                }
+            );
+        }
+        catch(er){
+            console.log(er)
+        }
+})
+
+router.get('/period/overall/staffs/:prd/:table',async(req,res) =>{
+    console.log(req.params.table)
+    let datas        
+    try{
+            pool.query(
+                `SELECT * FROM ${req.params.table} WHERE date between ${req.params.prd}`,
                 (err, result) => {
                     if(result.rows != ''){
-                        extension_activities = result.rows 
+                        datas = result.rows 
                     }          
                     else{
                         console.log("no values")
-                    }             
+                    }
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM industrial_visits WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
+                            user : result.rows,
+                            table : datas,
+                        }
+                    )            
+                }
+            );
+
+    }
+    catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/super_admin/overall/students/:table', async(req,res) => {
+    let datas
+    let length
+        try{
+            pool.query(
+                `SELECT * FROM ${req.params.table}`,
+                (err, result) => {
+                    if(result.rows!=''){
+                        datas = result.rows
+                    }
+                }
+            );
+
+            pool.query(
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
+                (err, result) => {
+                    return res.send(
+                        {
+                            user : result.rows,
+                            table : datas
+                        }
+                    )            
+                }
+            );
+        }
+        catch(er){
+            console.log(er)
+        }
+})
+
+router.get('/period/overall/students/:prd/:table',async(req,res) =>{
+    console.log(req.params.table)
+    let datas        
+    try{
+            pool.query(
+                `SELECT * FROM ${req.params.table} WHERE date between ${req.params.prd}`,
                 (err, result) => {
                     if(result.rows != ''){
-                        industrial_visits = result.rows 
+                        datas = result.rows 
                     }          
                     else{
                         console.log("no values")
-                    }             
+                    }
                 }
             );
-        
+    
             pool.query(
-                `SELECT * FROM evs WHERE department = '${req.cookies.department}'`,
+                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
                 (err, result) => {
-                    if(result.rows != ''){
-                        evs = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }           
+                    return res.send(
+                        {
+                            user : result.rows,
+                            table : datas,
+                        }
+                    )            
                 }
             );
-        
-            pool.query(
-                `SELECT * FROM departmental_activities WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        departmental_activities = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }            
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM projects_services WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        projects_services = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM honours WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        honours = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM exams WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        exams = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM books_published WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        books_published = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }                
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM chapters_contributed WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        chapters_contributed = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }                           
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM conference_proceeding WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        conference_proceeding = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM paper_presentation WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        paper_presentation = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }    
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM journal_publications WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        journal_publications = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }              
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM fconference WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        fconference = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }            
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM resource_person WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        resource_person = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM financial_support WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        financial_support = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM development_programmes WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        development_programmes = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }           
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM online_courses WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        online_courses = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
-            pool.query(
-                `SELECT * FROM e_content WHERE department = '${req.cookies.department}'`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        e_content = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }             
-                }
-            );
-        
+
+    }
+    catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/dashboard',async(req,res) => {                    
+    const vtoken = req.cookies.jwtoken
+    const verifyToken = jwt.verify(vtoken,process.env.SECRET_KEY)
+    console.log(`${verifyToken}`)
+
+    if(verifyToken){
+        try{                    
             pool.query(
                 `SELECT * FROM users WHERE user_id = '${req.cookies.user_id}'`,
                 (err, result) => {
                     return res.send(
                         {
-                            user : result.rows,
-                            research_projects : research_projects,
-                            patents : patents,
-                            awards_for_innovation : awards_for_innovation,
-                            degree : degree,
-                            fellowship : fellowship,
-                            collab_activ : collab_activ,
-                            linkages : linkages,
-                            mou : mou,
-                            conference : conference,
-                            guest_lectures : guest_lectures,
-                            extension_activities : extension_activities,
-                            industrial_visits : industrial_visits,
-                            evs : evs,
-                            departmental_activities : departmental_activities,
-                            projects_services : projects_services,
-                            honours : honours,
-                            exams : exams,
-                            books_published : books_published,
-                            chapters_contributed : chapters_contributed,
-                            conference_proceeding : conference_proceeding,
-                            paper_presentation : paper_presentation,
-                            journal_publications : journal_publications,
-                            fconference : fconference,
-                            resource_person : resource_person,
-                            financial_support : financial_support,
-                            development_programmes : development_programmes,
-                            online_courses : online_courses,
-                            e_content : e_content
+                            user : result.rows
                         }
                     )            
                 }
@@ -1570,176 +1372,6 @@ router.get('/dashboard',async(req,res) => {
     }
 
     
-})
-
-router.get('/dashboard_student',async(req,res) => {
-    const vtoken = req.cookies.jwtoken
-    const verifyToken = jwt.verify(vtoken,process.env.SECRET_KEY)
-    console.log(`${verifyToken}`)
-    try{
-        if(verifyToken){
-            let placements,paper_presentation,seminar,competition,training,exams,online_courses,projectwork,publication,achievement
-            pool.query(
-                `SELECT * FROM placements WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        placements = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_publications WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        publication = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_paper_presentation WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        paper_presentation = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_conference WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        seminar = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_conference WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        conference = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_competition WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        competition = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_training WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        training = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_projectwork WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        projectwork = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_exams WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        exams = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-
-            pool.query(
-                `SELECT * FROM s_onlinecourses WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        online_courses = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }
-                }
-            );
-    
-            pool.query(
-                `SELECT * FROM s_achievements WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    if(result.rows != ''){
-                        achievement = result.rows 
-                    }          
-                    else{
-                        console.log("no values")
-                    }           
-                }
-            );
-    
-            pool.query(
-                `SELECT * FROM users WHERE user_id = ${req.cookies.user_id}`,
-                (err, result) => {
-                    return res.send(
-                        {
-                            user : result.rows,
-                            placements : placements,
-                            paper_presentation : paper_presentation,
-                            seminar : seminar,
-                            competition : competition,
-                            training : training,
-                            exams : exams,
-                            online_courses : online_courses,
-                            projectwork : projectwork,
-                            publication : publication,
-                            achievement : achievement
-                        }
-                    )            
-                }
-            );
-        }
-
-        else{
-            console.log("Not logged")
-        }
-    }
-    catch(er){
-        console.log(er)
-    }
 })
 
 router.get('/dashboard/profile',(req,res) => {
@@ -1796,46 +1428,74 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
 })
 
 router.post('/forms/research/research_projects',upload.single('image'),async(req,res) => {
-    console.log(req.file,req.body)
-    console.log(req.file.filename)
     try{
-        pool.query(
-            `INSERT INTO research_projects (n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,file,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename,req.body.department],
-            (err, result) => {              
-                if(result){
-                res.send({sp : "Saved"})}
-                console.log(err)
-            }
-        )
+        if(req.file){
+            console.log(req.file,req.body)
+            console.log(req.file.filename)
+            pool.query(
+                `INSERT INTO research_projects (n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,file,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename,req.body.department],
+                (err, result) => {              
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            )
+        }
+        else{
+            pool.query(
+                `INSERT INTO research_projects (n,title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.body.department],
+                (err, result) => {              
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            )
+        }
     }catch(err){
         console.log(err+'22')
     }
 })
 
-router.put('/forms/research/research_projects/edit', async(req,res) => {
-    const {title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,id} = req.body
+router.put('/forms/research/research_projects/edit',upload.single('image'), async(req,res) => {
+    console.log(req.file,'1608')
     try{
-        const rp = pool.query(
-            `UPDATE research_projects SET title=$1, no=$2, amount_sanctioned=$3, fileno=$4, amount_received=$5, date_sanctioned=$6, funding_agency=$7, date=$8 WHERE id=$9`,[title,no,amount_sanctioned,fileno,amount_received,date_sanctioned,funding_agency,date,id],
-            function (err, result) {
-                console.log(err, result)
-                res.send({sc : "Suceess"})
-            }
-        );
+        if(req.file){
+            pool.query(
+                `UPDATE research_projects SET title=$1, no=$2, amount_sanctioned=$3, fileno=$4, amount_received=$5, date_sanctioned=$6, funding_agency=$7, date=$8,file=$9 WHERE id=$10`,[req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                        res.send({sp : "Saved"})}
+                        console.log(err)
+                }
+            );
+        }
+        else{
+            console.log(req.body.date,req.body.id)
+            pool.query(
+                `UPDATE research_projects SET title=$1, no=$2, amount_sanctioned=$3, fileno=$4, amount_received=$5, date_sanctioned=$6, funding_agency=$7, date=$8 WHERE id=$9`,[req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                        res.send({sp : "Saved"})}
+                        console.log(err)
+                }
+            );
+        }
 
     }catch(err){
         console.log(err)
     }
 })
 
-router.get('/forms/research/research_projects/edit/:id', async(req,res) => {
+router.get('/forms/research/:table/edit/:id', async(req,res) => {
     const {id} = req.params.id
     try{
         pool.query(
-            `SELECT * FROM research_projects WHERE id = ${req.params.id}`,
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
             function (err, result) {
-                console.log(result)
-                res.json(result.rows)
+                if(result){
+                    res.json(result.rows)
+                }
+                console.log(err)
             }
         );
 
@@ -1844,11 +1504,11 @@ router.get('/forms/research/research_projects/edit/:id', async(req,res) => {
     }
 })
 
-router.put('/forms/research/research_projects/delete/:id', async(req,res) => {
+router.put('/forms/research/:table/delete/:id', async(req,res) => {
     console.log(req.params.id)
     try{
         pool.query(
-            `DELETE FROM research_projects WHERE id = ${req.params.id} `,
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
             function (err, result) {
                 console.log("Deleted")
                 return res.status(201).json({message: "Deleted"})
@@ -1860,43 +1520,290 @@ router.put('/forms/research/research_projects/delete/:id', async(req,res) => {
     }
 })
 
-router.post('/forms/research/patents', async(req,res) => {
-    const {title,n,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date,user_id} = req.body
+router.post('/forms/research/patents',upload.single('image'), async(req,res) => {
     try{
-        pool.query(
-        `INSERT INTO patents (user_id,n,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date],
-        (err, result) => {
-          res.send({sp : "Saved"})
+        if(req.file){
+            pool.query(
+            `INSERT INTO patents (n,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.title,req.body.field,req.body.fileno,req.body.date_awarded_patent,req.body.royalty_received,req.body.providing_agency,req.body.country,req.body.date,req.body.department,req.file.filename],
+            (err, result) => {          
+                if(result){
+                res.send({sp : "Saved"})}
+                console.log(err)
+            }
+            );
         }
-        );
+        else{
+            pool.query(
+                `INSERT INTO patents (n,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.title,req.body.field,req.body.fileno,req.body.date_awarded_patent,req.body.royalty_received,req.body.providing_agency,req.body.country,req.body.date,req.body.department],
+                (err, result) => {          
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+                );
+        }
 
     }catch(err){
         console.log(err)
     }
 })
 
-router.put('/forms/research/patents/edit', async(req,res) => {
-    const {id,title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date} = req.body
+router.put('/forms/research/patents/edit',upload.single('image'), async(req,res) => {
     try{
-        pool.query(
-            `UPDATE patents SET title=$1,field=$2,fileno=$3,date_awarded_patent=$4,royalty_received=$5,providing_agency=$6,country=$7,date=$8 WHERE id=$9`,[title,field,fileno,date_awarded_patent,royalty_received,providing_agency,country,date,id],
-            function (err, result) {
-                res.send({sp : "updated"})
-            }   
-        );
+        console.log(req.file)
+        if(req.file){
+            pool.query(
+                `UPDATE patents SET title=$1,field=$2,fileno=$3,date_awarded_patent=$4,royalty_received=$5,providing_agency=$6,country=$7,date=$8,file=$9 WHERE id=$10`,[req.body.title,req.body.field,req.body.fileno,req.body.date_awarded_patent,req.body.royalty_received,req.body.providing_agency,req.body.country,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {         
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }   
+            );
+        }
+        else{
+            console.log(req.body)
+            pool.query(
+                `UPDATE patents SET title=$1,field=$2,fileno=$3,date_awarded_patent=$4,royalty_received=$5,providing_agency=$6,country=$7,date=$8 WHERE id=$9`,[req.body.title,req.body.field,req.body.fileno,req.body.date_awarded_patent,req.body.royalty_received,req.body.providing_agency,req.body.country,req.body.date,req.body.id],
+                function (err, result) {         
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }   
+            );
+        }
     }catch(err){
         console.log(err)
     }
 })
 
-router.get('/forms/research/patents/edit/:id', async(req,res) => {
-    const {id} = req.params.id
+router.post('/forms/research/awards_for_innovation',upload.single('image'), async(req,res) => {
+    try{
+        console.log(req.body,req.file)
+        if(req.file){
+            pool.query(
+                `INSERT INTO awards_for_innovation (n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.awardee_name,req.body.designation,req.body.award_category,req.body.title,req.body.awarding_agency,req.body.venue,req.body.level,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {      
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO awards_for_innovation (n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.awardee_name,req.body.designation,req.body.award_category,req.body.title,req.body.awarding_agency,req.body.venue,req.body.level,req.body.date,req.body.department],
+                (err, result) => {      
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/research/awards_for_innovation/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE awards_for_innovation SET awardee_name=$1,designation=$2,award_category=$3,title=$4,awarding_agency=$5,venue=$6,level=$7,date=$8,file=$9 WHERE id=$10`,[req.body.awardee_name,req.body.designation,req.body.award_category,req.body.title,req.body.awarding_agency,req.body.venue,req.body.level,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {    
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE awards_for_innovation SET awardee_name=$1,designation=$2,award_category=$3,title=$4,awarding_agency=$5,venue=$6,level=$7,date=$8 WHERE id=$9`,[req.body.awardee_name,req.body.designation,req.body.award_category,req.body.title,req.body.awarding_agency,req.body.venue,req.body.level,req.body.date,req.body.id],
+                function (err, result) {    
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/research/deg',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file.filename){
+            pool.query(
+                `INSERT INTO degree (n,deg,guide_name,title,external,venue,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.deg,req.body.guide_name,req.body.title,req.body.external,req.body.venue,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {   
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO degree (n,deg,guide_name,title,external,venue,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.deg,req.body.guide_name,req.body.title,req.body.external,req.body.venue,req.body.date],
+                (err, result) => {   
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/research/deg/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE degree SET deg=$1,guide_name=$2,title=$3,external=$4,venue=$5,date=$6,file=$7 WHERE id=$8`,[req.body.deg,req.body.guide_name,req.body.title,req.body.external,req.body.venue,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE degree SET deg=$1,guide_name=$2,title=$3,external=$4,venue=$5,date=$6 WHERE id=$7`,[req.body.deg,req.body.guide_name,req.body.title,req.body.external,req.body.venue,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/research/fellowship',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO fellowship (n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.fellowship,req.body.date_sanctioned,req.body.funding_agency,req.body.sanctioned_amount,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO fellowship (n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.fellowship,req.body.date_sanctioned,req.body.funding_agency,req.body.sanctioned_amount,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/research/fellowship/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE fellowship SET fellowship=$1,date_sanctioned=$2,funding_agency=$3,sanctioned_amount=$4,date=$5, file=$6 WHERE id=$7`,[req.body.fellowship,req.body.date_sanctioned,req.body.funding_agency,req.body.sanctioned_amount,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE fellowship SET fellowship=$1,date_sanctioned=$2,funding_agency=$3,sanctioned_amount=$4,date=$5 WHERE id=$6`,[req.body.fellowship,req.body.date_sanctioned,req.body.funding_agency,req.body.sanctioned_amount,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/collaborations/collaborative_activities',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO collab_activ (n,activity,participant,financial_support,period,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.activity,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO collab_activ (activity,n,participant,financial_support,period,date) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.activity,req.body.n,req.body.participant,req.body.financial_support,req.body.period,req.body.date],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/collaborations/collaborative_activities/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE collab_activ SET activity=$1,participant=$2,financial_support=$3,period=$4,date=$5,department=$6,file=$7 WHERE id=$8`,[req.body.activity,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.body.department,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE collab_activ SET activity=$1,participant=$2,financial_support=$3,period=$4,date=$5,department=$6 WHERE id=$7`,[req.body.activity,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.body.department,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/collaborations/:table/edit/:id', async(req,res) => {
     try{
         pool.query(
-            `SELECT * FROM patents WHERE id = ${req.params.id}`,
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
             function (err, result) {
-                console.log(result.rows)
+                if(result){
                 res.json(result.rows)
+                }
+            console.log(err)
             }
         );
 
@@ -1905,217 +1812,14 @@ router.get('/forms/research/patents/edit/:id', async(req,res) => {
     }
 })
 
-router.put('/forms/research/patents/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
+router.put('/forms/collaborations/:table/delete/:id/', async(req,res) => {
     try{
         pool.query(
-            `DELETE FROM patents WHERE id = ${req.params.id} `,
-            function (err, result) {                
-                return res.status(201).json({message: "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/research/awards_for_innovation', async(req,res) => {
-    const {user_id,n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO awards_for_innovation (user_id,n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,awardee_name,designation,award_category,title,awarding_agency,venue,level,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/research/awards_for_innovation/edit', async(req,res) => {
-    const {id,awardee_name,designation,award_category,title,awarding_agency,venue,level,date} = req.body
-    try{
-        pool.query(
-            `UPDATE awards_for_innovation SET awardee_name=$1,designation=$2,award_category=$3,title=$4,awarding_agency=$5,venue=$6,level=$7,date=$8 WHERE id=$9`,[awardee_name,designation,award_category,title,awarding_agency,venue,level,date,id],
-            function (err, result) {
-                res.send({sp : "updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/research/awards_for_innovation/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM awards_for_innovation WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/research/awards_for_innovation/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM awards_for_innovation WHERE id = ${req.params.id} `,
-            function (err, result) {
-                console.log("Deleted")
-                return res.status(201).json({message: "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/research/deg', async(req,res) => {
-    const {user_id,n,deg,guide_name,title,external,venue,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO degree (user_id,n,deg,guide_name,title,external,venue,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,deg,guide_name,title,external,venue,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/research/deg/edit', async(req,res) => {
-    const {id,deg,guide_name,title,external,venue,date} = req.body
-    try{
-        pool.query(
-            `UPDATE deg SET deg=$1,guide_name=$2,title=$3,external=$4,venue=$5,date=$6 WHERE id=$7`,[deg,guide_name,title,external,venue,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/research/deg/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM deg WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/research/deg/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM deg WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({message : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/research/fellowship', async(req,res) => {
-    const {user_id,n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO fellowship (user_id,n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/research/fellowship/edit', async(req,res) => {
-    const {id,fellowship,date_sanctioned,funding_agency,sanctioned_amount,date} = req.body
-    try{
-        pool.query(
-            `UPDATE fellowship SET fellowship=$1,date_sanctioned=$2,funding_agency=$3,sanctioned_amount=$4,date=$5 WHERE id=$6`,[fellowship,date_sanctioned,funding_agency,sanctioned_amount,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/research/fellowship/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM fellowship WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/research/fellowship/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM fellowship WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/collaborations/collaborative_activities', async(req,res) => {
-    const {user_id,n,activity,participant,financial_support,period,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO collab_activ (user_id,n,activity,participant,financial_support,period,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,activity,participant,financial_support,period,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/collaborations/collaborative_activities/edit', async(req,res) => {
-    const {id,activity,participant,financial_support,period,date} = req.body
-    try{
-        pool.query(
-            `UPDATE collaborative_activities SET activity=$1,participant=$2,financial_support=$3,period=$4,date=$5} WHERE id=$6`,[activity,participant,financial_support,period,date,id],
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
             function (err, res) {
-                res.send({sp : "Updated"})
+                if(result){
+                res.send({sp : "Saved"})}
+                console.log(err)
             }
         );
     }catch(err){
@@ -2123,14 +1827,561 @@ router.put('/forms/collaborations/collaborative_activities/edit', async(req,res)
     }
 })
 
-router.get('/forms/collaborations/collaborative_activities/edit/:id', async(req,res) => {
-    const {id} = req.params.id
+router.post('/forms/collaborations/linkages',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO linkages (n,title,partnering_agency,period,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.title,req.body.partnering_agency,req.body.period,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO linkages (n,title,partnering_agency,period,date) VALUES($1,$2,$3,$4,$5)`,[req.body.n,req.body.title,req.body.partnering_agency,req.body.period,req.body.date],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/collaborations/linkages/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE linkages SET title=$1,partnering_agency=$2,period=$3,date=$4,file=$5 WHERE id=$6`,[req.body.title,req.body.partnering_agency,req.body.period,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE linkages SET title=$1,partnering_agency=$2,period=$3,date=$4 WHERE id=$5`,[req.body.title,req.body.partnering_agency,req.body.period,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/collaborations/mou',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO mou (n,organization,date_signed,period,participants,purpose,total,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.organization,req.body.date_signed,req.body.period,req.body.participants,req.body.purpose,req.body.total,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO mou (n,organization,date_signed,period,participants,purpose,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.organization,req.body.date_signed,req.body.period,req.body.participants,req.body.purpose,req.body.total,req.body.date],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/collaborations/mou/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE mou SET organization=$1,date_signed=$2,period=$3,participants=$4,purpose=$5,total=$6,date=$7,department=$8,file=$9 WHERE id=$10`,[req.body.organization,req.body.date_signed,req.body.period,req.body.participants,req.body.purpose,req.body.total,req.body.date,req.body.department,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{            
+            pool.query(
+                `UPDATE mou SET organization=$1,date_signed=$2,period=$3,participants=$4,purpose=$5,total=$6,date=$7 WHERE id=$8`,[req.body.organization,req.body.date_signed,req.body.period,req.body.participants,req.body.purpose,req.body.total,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/events/conference',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO conference (n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,[req.body.n,req.body.con_sem,req.body.title,req.body.sponsoring_agency,req.body.resource_person,req.body.venue,req.body.objective,req.body.outcome,req.body.level,req.body.total,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO conference (n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.con_sem,req.body.title,req.body.sponsoring_agency,req.body.resource_person,req.body.venue,req.body.objective,req.body.outcome,req.body.level,req.body.total,req.body.date],
+                (err, result) => {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/events/conference/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE conference SET con_sem=$1,title=$2,sponsoring_agency=$3,resource_person=$4,venue=$5,objective=$6,outcome=$7,level=$8,total=$9,date=$10,file=$11 WHERE id=$12`,[req.body.con_sem,req.body.title,req.body.sponsoring_agency,req.body.resource_person,req.body.venue,req.body.objective,req.body.outcome,req.body.level,req.body.total,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );  
+        }      
+        else{
+            pool.query(
+                `UPDATE conference SET con_sem=$1,title=$2,sponsoring_agency=$3,resource_person=$4,venue=$5,objective=$6,outcome=$7,level=$8,total=$9,date=$10 WHERE id=$11`,[req.body.con_sem,req.body.title,req.body.sponsoring_agency,req.body.resource_person,req.body.venue,req.body.objective,req.body.outcome,req.body.level,req.body.total,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.send({sp : "Saved"})}
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/events/:table/edit/:id', async(req,res) => {
     try{
         pool.query(
-            `SELECT * FROM collab_activ WHERE id = ${req.params.id}`,
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
+            function (err, result) {
+                if(result){
+                res.json(result.rows)
+                }
+            console.log(err)
+            }
+        );
+
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/events/:table/delete/:id/', async(req,res) => {
+    try{
+        pool.query(
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
+            function (err, result) {
+                if(result){
+                res.json(result.rows)
+                }
+            console.log(err)
+            }
+        );
+
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/events/guest_lectures',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO guest_lectures (n,resource_person,designation,topic,venue,objective,outcome,total,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.resource_person,req.body.designation,req.body.topic,req.body.venue,req.body.objective,req.body.outcome,req.body.total,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO guest_lectures (n,resource_person,designation,topic,venue,objective,outcome,total,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.resource_person,req.body.designation,req.body.topic,req.body.venue,req.body.objective,req.body.outcome,req.body.total,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/events/guest_lectures/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE guest_lectures SET resource_person=$1,designation=$2,topic=$3,date=$4,objective=$5,outcome=$6,total=$7,file=$8,venue=$9 WHERE id=$10`,[req.body.resource_person,req.body.designation,req.body.topic,req.body.date,req.body.objective,req.body.outcome,req.body.total,req.file.filename,req.body.venue,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }      
+        else{
+            pool.query(
+                `UPDATE guest_lectures SET resource_person=$1,designation=$2,topic=$3,date=$4,objective=$5,outcome=$6,total=$7,venue=$8 WHERE id=$9`,[req.body.resource_person,req.body.designation,req.body.topic,req.body.date,req.body.objective,req.body.outcome,req.body.total,req.body.venue,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        } 
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/events/extension_activities',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO extension_activities(n,activities,collaborations,venue,total,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.activities,req.body.collaborations,req.body.venue,req.body.total,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO extension_activities(n,activities,collaborations,venue,total,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.activities,req.body.collaborations,req.body.venue,req.body.total,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/events/extension_activities/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE extension_activities SET activities=$1,collaborations=$2,venue=$3,total=$4,date=$5,file=$6 WHERE id=$7`,[req.body.activities,req.body.collaborations,req.body.venue,req.body.total,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }    
+        else{
+            pool.query(
+                `UPDATE extension_activities SET activities=$1,collaborations=$2,venue=$3,total=$4,date=$5 WHERE id=$6`,[req.body.activities,req.body.collaborations,req.body.venue,req.body.total,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/events/industrial_visits',upload.single('image'), async(req,res) => {
+    try{
+        console.log(req.body.date)
+        if(req.file){
+            pool.query(
+                `INSERT INTO industrial_visits(n,classes,date,address,total,outcome,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.classes,req.body.date,req.body.address,req.body.total,req.body.outcome,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );            
+        }
+        else{
+            pool.query(
+                `INSERT INTO industrial_visits(n,classes,date,address,total,outcome,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.classes,req.body.date,req.body.address,req.body.total,req.body.outcome,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/events/industrial_visits/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE industrial_visits SET classes=$1,date=$2,address=$3,total=$4,outcome=$5,file=$6 WHERE id=$7`,[req.body.classes,req.body.date,req.body.address,req.body.total,req.body.outcome,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );  
+        }   
+        else{
+            pool.query(
+                `UPDATE industrial_visits SET classes=$1,date=$2,address=$3,total=$4,outcome=$5 WHERE id=$6`,[req.body.classes,req.body.date,req.body.address,req.body.total,req.body.outcome,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/events/evs',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO evs(n,date,place,total,activity,department,file) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.date,req.body.place,req.body.total,req.body.activity,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO evs(n,date,place,total,activity,department) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.n,req.body.date,req.body.place,req.body.total,req.body.activity,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/events/evs/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE evs SET date=$1,place=$2,total=$3,activity=$4,file=$5 WHERE id=$6`,[req.body.date,req.body.place,req.body.total,req.body.activity,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        } 
+        else{
+            pool.query(
+                `UPDATE evs SET date=$1,place=$2,total=$3,activity=$4 WHERE id=$5`,[req.body.date,req.body.place,req.body.total,req.body.activity,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/events/departmental_activities',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO departmental_activities(n,activity,guest,topic,total,venue,filled,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.activity,req.body.guest,req.body.topic,req.body.total,req.body.venue,req.body.filled,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{            
+            pool.query(
+                `INSERT INTO departmental_activities(n,activity,guest,topic,total,venue,filled,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.activity,req.body.guest,req.body.topic,req.body.total,req.body.venue,req.body.filled,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/events/departmental_activities/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE departmental_activities SET activity=$1,guest=$2,topic=$3,total=$4,venue=$5,date=$6,file=$7 WHERE id=$8`,[req.body.activity,req.body.guest,req.body.topic,req.body.total,req.body.venue,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+        else{
+            pool.query(
+                `UPDATE departmental_activities SET activity=$1,guest=$2,topic=$3,total=$4,venue=$5,date=$6 WHERE id=$7`,[req.body.activity,req.body.guest,req.body.topic,req.body.total,req.body.venue,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/consultancy/projects_services',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO projects_services(n,title,no,revenue_generated,date_sanction,sponsor,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.title,req.body.no,req.body.revenue_generated,req.body.date_sanction,req.body.sponsor,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{            
+            pool.query(
+                `INSERT INTO projects_services(n,title,no,revenue_generated,date_sanction,sponsor,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.title,req.body.no,req.body.revenue_generated,req.body.date_sanction,req.body.sponsor,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/consultancy/projects_services/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE projects_services SET title=$1,no=$2,revenue_generated=$3,date_sanction=$4,sponsor=$5,date=$6,file=$7 WHERE id=$8`,[req.body.title,req.body.no,req.body.revenue_generated,req.body.date_sanction,req.body.sponsor,req.body.date,req.body.id,req.file.filename],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        } 
+        else{
+            pool.query(
+                `UPDATE projects_services SET title=$1,no=$2,revenue_generated=$3,date_sanction=$4,sponsor=$5,date=$6 WHERE id=$7`,[req.body.title,req.body.no,req.body.revenue_generated,req.body.date_sanction,req.body.sponsor,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/consultancy/:table/edit/:id', async(req,res) => {
+    try{
+        pool.query(
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
             function (err, result) {
                 console.log(result.rows)
+                if(result){
                 res.json(result.rows)
+                }
+                console.log(err)
             }
         );
 
@@ -2139,114 +2390,89 @@ router.get('/forms/collaborations/collaborative_activities/edit/:id', async(req,
     }
 })
 
-router.put('/forms/collaborations/collaborative_activities/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
+router.put('/forms/consultancy/:table/delete/:id/', async(req,res) => {
     try{
         pool.query(
-            `DELETE FROM collab_activ WHERE id = ${req.params.id} `,
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
             function (err, res) {
-                console.log(err, res)
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/collaborations/linkages', async(req,res) => {
-    const {user_id,n,title,partnering_agency,period,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO linkages (user_id,n,title,partnering_agency,period,date) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,n,title,partnering_agency,period,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/collaborations/linkages/edit', async(req,res) => {
-    const {id,title,partnering_agency,period,date} = req.body
-    try{
-        pool.query(
-            `UPDATE linkages SET title=$1,partnering_agency=$2,period=$3,date=$4 WHERE id=$5`,[title,partnering_agency,period,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/collaborations/linkages/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM linkages WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
+                if(result){
                 res.json(result.rows)
+                }
+                console.log(err)
             }
         );
-
     }catch(err){
         console.log(err)
     }
 })
 
-router.put('/forms/collaborations/linkages/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
+router.post('/forms/faculty/honours',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO honours(n,award_honour,details,venue,level,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.award_honour,req.body.details,req.body.venue,req.body.level,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO honours(n,award_honour,details,venue,level,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.award_honour,req.body.details,req.body.venue,req.body.level,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/honours/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE honours SET award_honour=$1,details=$2,venue=$3,level=$4,date=$5,file=$6 WHERE id=$7`,[req.body.award_honour,req.body.details,req.body.venue,req.body.level,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE honours SET award_honour=$1,details=$2,venue=$3,level=$4,date=$5 WHERE id=$6`,[req.body.award_honour,req.body.details,req.body.venue,req.body.level,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        } 
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/faculty/:table/edit/:id', async(req,res) => {
     try{
         pool.query(
-            `DELETE FROM linkages WHERE id = ${req.params.id} `,
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
             function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/collaborations/mou', async(req,res) => {
-    const {user_id,n,organization,date_signed,period,participants,purpose,total,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO mou (user_id,n,organization,date_signed,period,participants,purpose,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,organization,date_signed,period,participants,purpose,total,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/collaborations/mou/edit', async(req,res) => {
-    const {id,organization,date_signed,period,participants,purpose,total,date} = req.body
-    try{
-        pool.query(
-            `UPDATE mou SET organization=$1,date_signed=$2,period=$3,participants=$4,purpose=$5,total=$6,date=$7 WHERE id=$8`,[organization,date_signed,period,participants,purpose,total,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/collaborations/mou/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM mou WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
+                if(result){
                 res.json(result.rows)
+                }
+                console.log(err)
             }
         );
 
@@ -2255,1178 +2481,713 @@ router.get('/forms/collaborations/mou/edit/:id', async(req,res) => {
     }
 })
 
-router.put('/forms/collaborations/mou/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
+router.put('/forms/faculty/:table/delete/:id/', async(req,res) => {
     try{
         pool.query(
-            `DELETE FROM mou WHERE id = ${req.params.id} `,
-            function (err, res) {
-                console.log(err, res)
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/events/conference', async(req,res) => {
-    const {user_id,n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO conference (user_id,n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,[user_id,n,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/conference/edit', async(req,res) => {
-    const {id,con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date} = req.body
-    try{
-        pool.query(
-            `UPDATE conference SET con_sem=$1,title=$2,sponsoring_agency=$3,resource_person=$4,venue=$5,objective=$6,outcome=$7,level=$8,total=$9,date=$10 WHERE id=$11`,[con_sem,title,sponsoring_agency,resource_person,venue,objective,outcome,level,total,date,id],
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
             function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );        
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/events/conference/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM conference WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
+                if(result){
                 res.json(result.rows)
+                }
+                console.log(err)
             }
         );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/conference/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM conference WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/events/guest_lectures', async(req,res) => {
-    const {user_id,n,resource_person,designation,topic,venue,objective,outcome,total,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO guest_lectures (user_id,n,resource_person,designation,topic,venue,objective,outcome,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,resource_person,designation,topic,venue,objective,outcome,total,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/guest_lectures/edit', async(req,res) => {
-    const {id,resource_person,designation,topic,date_venue,objective,outcome,total,date} = req.body
-    try{
-        pool.query(
-            `UPDATE guest_lectures SET resource_person=$1,designation=$2,topic=$3,date_venue=$4,objective=$5,outcome=$6,total=$7,date=$8 WHERE id=$9`,[resource_person,designation,topic,date_venue,objective,outcome,total,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );        
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/events/guest_lectures/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM guest_lectures WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/guest_lectures/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM guest_lectures WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/events/extension_activities', async(req,res) => {
-    const {user_id,n,activities,collaborations,venue,total,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO extension_activities(user_id,n,activities,collaborations,venue,total,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,activities,collaborations,venue,total,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/extension_activities/edit', async(req,res) => {
-    const {id,activities,collaborations,venue,total,date} = req.body
-    try{
-        pool.query(
-            `UPDATE extension_activities SET activities=$1,collaborations=$2,venue=$3,total=$4,date=$5 WHERE id=$6`,[activities,collaborations,venue,total,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );     
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/events/extension_activities/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM extension_activities WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/extension_activities/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM extension_activities WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/events/industrial_visits', async(req,res) => {
-    const {user_id,n,classes,date,address,total,outcome} = req.body
-    try{
-        pool.query(
-            `INSERT INTO industrial_visits(user_id,n,classes,date,address,total,outcome) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,classes,date,address,total,outcome],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/industrial_visits/edit', async(req,res) => {
-    const {id,classes,date,address,total,outcome} = req.body
-    try{
-        pool.query(
-            `UPDATE industrial_visits SET classes=$1,date=$2,address=$3,total=$4,outcome=$5 WHERE id=$6`,[classes,date,address,total,outcome,id],
-            function (err, result) {
-               res.send({sp : "Updated"})
-            }
-        );     
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/events/industrial_visits/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM industrial_visits WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/industrial_visits/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM industrial_visits WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/events/evs', async(req,res) => {
-    const {user_id,date,place,total,activity} = req.body
-    try{
-        pool.query(
-            `INSERT INTO evs(user_id,n,date,place,total,activity) VALUES($1,$2,$3,$4,$5,$6)`,[user_id,n,date,place,total,activity],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/evs/edit', async(req,res) => {
-    const {id,date,place,total,activity} = req.body
-    try{
-        pool.query(
-            `UPDATE evs SET date=$1,place=$2,total=$3,activity=$4 WHERE id=$5`,[date,place,total,activity,id],
-            function (err, result) {
-                res.send({sp : "updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/events/evs/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM evs WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/evs/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM evs WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/events/departmental_activities', async(req,res) => {
-    const {user_id,n,activity,guest,topic,total,venue,filled,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO departmental_activities(user_id,n,activity,guest,topic,total,venue,filled,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,activity,guest,topic,total,venue,filled,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/departmental_activities/edit', async(req,res) => {
-    const {id,activity,guest,topic,total,venue,date} = req.body
-    try{
-        pool.query(
-            `UPDATE departmental_activities SET activity=$1,guest=$2,topic=$3,total=$4,venue=$5,date=$6 WHERE id=$7`,[activity,guest,topic,total,venue,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/events/departmental_activities/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM departmental_activities WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/departmental_activities/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM departmental_activities WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/consultancy/projects_services', async(req,res) => {
-    const {user_id,n,title,no,revenue_generated,date_sanction,sponsor,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO projects_services(user_id,n,title,no,revenue_generated,date_sanction,sponsor,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,title,no,revenue_generated,date_sanction,sponsor,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/consultancy/projects_services/edit', async(req,res) => {
-    const {id,title,no,revenue_generated,date_sanction,sponsor,date} = req.body
-    try{
-        pool.query(
-            `UPDATE projects_services SET title=$1,no=$2,revenue_generated=$3,date_sanction=$4,sponsor=$5,date=$6 WHERE id=$7`,[title,no,revenue_generated,date_sanction,sponsor,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/consultancy/projects_services/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM projects_services WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/consultancy/projects_services/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM projects_services WHERE id = ${req.params.id} `,
-            function (err, res) {
-                console.log(err, res)
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/honours', async(req,res) => {
-    const {user_id,n,award_honour,details,venue,level,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO honours(user_id,n,award_honour,details,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,award_honour,details,venue,level,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/honours/edit', async(req,res) => {
-    const {id,award_honour,details,venue,level,date} = req.body
-    try{
-        pool.query(
-            `UPDATE honours SET award_honour=$1,details=$2,venue=$3,level=$4,date=$5 WHERE id=$6`,[award_honour,details,venue,level,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/honours/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM honours WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/honours/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM honours WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/exams', async(req,res) => {
-    const {user_id,exam,exam_rollno,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO exams(user_id,n,exam,exam_rollno,date) VALUES($1,$2,$3,$4,$5)`,[user_id,n,exam,exam_rollno,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/exams/edit', async(req,res) => {
-    const {id,exam,exam_rollno,date} = req.body
-    try{
-        pool.query(
-            `UPDATE exams SET exam=$1,exam_rollno=$2,date=$3 WHERE id=$4`,[exam,exam_rollno,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/exams/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM exams WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/exams/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM exams WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/books_published', async(req,res) => {
-    const {user_id,n,name,publisher,level,isbn_no,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO books_published(user_id,n,name,publisher,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,name,publisher,level,isbn_no,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/books_published/edit', async(req,res) => {
-    const {id,name,publisher,level,isbn_no,date} = req.body
-    try{
-        pool.query(
-            `UPDATE books_published SET name=$1,publisher=$2,level=$3,isbn_no=$4,date=$5 WHERE id=$6`,[name,publisher,level,isbn_no,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/books_published/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM books_published WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/books_published/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM books_published WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/chapters_contributed', async(req,res) => {
-    const {user_id,n,title,chapter,editor,publisher,level,isbn_no,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO chapters_contributed(user_id,n,title,chapter,editor,publisher,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,title,chapter,editor,publisher,level,isbn_no,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/chapters_contributed/edit', async(req,res) => {
-    const {id,title,chapter,editor,publisher,level,isbn_no,date} = req.body
-    try{
-        pool.query(
-            `UPDATE chapters_contributed SET title=$1,chapter=$2,editor=$3,publisher=$4,level=$5,isbn_no=$6,date=$7 WHERE id=$8`,[title,chapter,editor,publisher,level,isbn_no,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/chapters_contributed/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM chapters_contributed WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/chapters_contributed/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM chapters_contributed WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/conference_proceeding', async(req,res) => {
-    const {user_id,n,con,publication,level,isbn_no,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO conference_proceeding(user_id,n,con,publication,level,isbn_no,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[user_id,n,con,publication,level,isbn_no,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/conference_proceeding/edit', async(req,res) => {
-    const {id,con,publication,level,isbn_no,date} = req.body
-    try{
-        pool.query(
-            `UPDATE conference_proceeding SET con=$1,publication=$2,level=$3,isbn_no=$4,date=$5 WHERE id=$6`,[con,publication,level,isbn_no,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );    
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/conference_proceeding/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM conference_proceeding WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/conference_proceeding/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM conference_proceeding WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/paper_presentation', async(req,res) => {
-    const {user_id,n,con,title,financial_support,venue,level,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO paper_presentation(user_id,n,con,title,financial_support,venue,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,con,title,financial_support,venue,level,date],
-            (err, result) => {
-              res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/paper_presentation/edit', async(req,res) => {
-    const {id,con,title,financial_support,venue,level,date} = req.body
-    try{
-        pool.query(
-            `UPDATE paper_presentation SET con=$1,title=$2,financial_support=$3,venue=$4,level=$5,date=$6 WHERE id=$7`,[con,title,financial_support,venue,level,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        ); 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/paper_presentation/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM paper_presentation WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/paper_presentation/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM paper_presentation WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/journal_publications', async(req,res) => {
-    const {user_id,n,title,jou,issn_no,volume,sci,impact,level,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO journal_publications(user_id,n,title,jou,issn_no,volume,sci,impact,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,n,title,jou,issn_no,volume,sci,impact,level,date],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/journal_publications/edit', async(req,res) => {
-    const {id,title,jou,issn_no,volume,sci,impact,level,date} = req.body
-    try{
-        pool.query(
-            `UPDATE journal_publications SET title=$1,jou=$2,issn_no=$3,volume=$4,sci=$5,impact=$6,level=$7,date=$8 WHERE id=$9`,[title,jou,issn_no,volume,sci,impact,level,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/journal_publications/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM journal_publications WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/journal_publications/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM journal_publications WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/conference', async(req,res) => {
-    const {user_id,n,con,title,venue,level,financial_support,programme_outcome,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO fconference(user_id,n,con,title,venue,level,financial_support,programme_outcome,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,con,title,venue,level,financial_support,programme_outcome,date],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/conference/edit', async(req,res) => {
-    const {id,con,title,venue,level,financial_support,programme_outcome,date} = req.body
-    try{
-        pool.query(
-            `UPDATE fconference SET con=$1,title=$2,venue=$3,level=$4,financial_support=$5,programme_outcome=$6,date=$7 WHERE id=$8`,[con,title,venue,level,financial_support,programme_outcome,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/conference/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM conference WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/conference/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM fconference WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/resource_person', async(req,res) => {
-    const {user_id,n,topic,event,venue,level,filled,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO resource_person(user_id,n,sem,topic,event,venue,level,filled,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,n,sem,topic,event,venue,level,filled,date],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/resource_person/edit', async(req,res) => {
-    const {id,sem,topic,event,venue,level,date} = req.body
-    try{
-        pool.query(
-            `UPDATE resource_person SET sem=$1,topic=$2,event=$3,venue=$4,level=$5,date=$6 WHERE id=$7`,[sem,topic,event,venue,level,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/resource_person/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM resource_person WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/resource_person/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM resource_person WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/financial_support', async(req,res) => {
-    const {user_id,n,f,amount_support,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO financial_support(user_id,n,f,amount_support,date) VALUES($1,$2,$3,$4,$5)`,[user_id,n,f,amount_support,date],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/financial_support/edit', async(req,res) => {
-    const {id,f,amount_support,date} = req.body
-    try{
-        pool.query(
-            `UPDATE financial_support SET f=$1,amount_support=$2,date=$3 WHERE id=$4`,[f,amount_support,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/financial_support/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM financial_support WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/financial_support/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM financial_support WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/development_programmes', async(req,res) => {
-    const {user_id,n,training,title,venue,financial_support,level,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO development_programmes(user_id,n,training,title,venue,financial_support,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,training,title,venue,financial_support,level,date],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/development_programmes/edit', async(req,res) => {
-    const {id,training,title,venue,financial_support,level,date} = req.body
-    try{
-        pool.query(
-            `UPDATE development_programmes SET training=$1,title=$2,venue=$3,financial_support=$4,level=$5,date=$6 WHERE id=$7`,[training,title,venue,financial_support,level,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/development_programmes/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM development_programmes WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/development_programmes/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM development_programmes WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
     }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/online_courses', async(req,res) => {
-    const {user_id,n,training,title,duration,date,financial_support,level} = req.body
-    try{
-        pool.query(
-            `INSERT INTO online_courses(user_id,n,training,title,duration,date,financial_support,level) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[user_id,n,training,title,duration,date,financial_support,level],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/online_courses/edit', async(req,res) => {
-    const {id,training,title,duration,date,financial_support,level} = req.body
-    try{
-        pool.query(
-            `UPDATE online_courses SET training=$1,title=$2,duration=$3,date=$4,financial_support=$5,level=$6 WHERE id=$7`,[training,title,duration,date,financial_support,level,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/online_courses/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM online_courses WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/online_courses/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM online_courses WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Deleted"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/faculty/e_content', async(req,res) => {
-    const {user_id,n,module,platform,date} = req.body
-    try{
-        pool.query(
-            `INSERT INTO e_content(user_id,n,module,platform,date) VALUES($1,$2,$3,$4,$5)`,[user_id,n,module,platform,date],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/e_content/edit', async(req,res) => {
-    const {id,module,platform,date} = req.body
-    try{
-        pool.query(
-            `UPDATE e_content SET module=$1,platform=$2,date=$3 WHERE id=$4`,[module,platform,date,id],
-            function (err, result) {
-                res.send({sp : "Updated"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/e_content/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM e_content WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/e_content/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM e_content WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Delete"})
-            }
-        );
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/exams',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO exams(n,exam,exam_rollno,date,department,file) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.n,req.body.exam,req.body.exam_rollno,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO exams(n,exam,exam_rollno,date,department) VALUES($1,$2,$3,$4,$5)`,[req.body.n,req.body.exam,req.body.exam_rollno,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/exams/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE exams SET exam=$1,exam_rollno=$2,date=$3,file=$4 WHERE id=$5`,[req.body.exam,req.body.exam_rollno,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE exams SET exam=$1,exam_rollno=$2,date=$3 WHERE id=$4`,[req.body.exam,req.body.exam_rollno,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }         
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/books_published',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO books_published(n,name,publisher,level,isbn_no,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.name,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO books_published(n,name,publisher,level,isbn_no,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.name,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/books_published/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE books_published SET name=$1,publisher=$2,level=$3,isbn_no=$4,date=$5,file=$6 WHERE id=$7`,[req.body.name,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+        else{
+            pool.query(
+                `UPDATE books_published SET name=$1,publisher=$2,level=$3,isbn_no=$4,date=$5 WHERE id=$6`,[req.body.name,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/chapters_contributed',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO chapters_contributed(n,title,chapter,editor,publisher,level,isbn_no,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.title,req.body.chapter,req.body.editor,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO chapters_contributed(n,title,chapter,editor,publisher,level,isbn_no,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.title,req.body.chapter,req.body.editor,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/chapters_contributed/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE chapters_contributed SET title=$1,chapter=$2,editor=$3,publisher=$4,level=$5,isbn_no=$6,date=$7,file=$8 WHERE id=$9`,[req.body.title,req.body.chapter,req.body.editor,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+        else{
+            pool.query(
+                `UPDATE chapters_contributed SET title=$1,chapter=$2,editor=$3,publisher=$4,level=$5,isbn_no=$6,date=$7 WHERE id=$8`,[req.body.title,req.body.chapter,req.body.editor,req.body.publisher,req.body.level,req.body.isbn_no,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/conference_proceeding',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO conference_proceeding(n,con,publication,level,isbn_no,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.con,req.body.publication,req.body.level,req.body.isbn_no,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO conference_proceeding(n,con,publication,level,isbn_no,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.con,req.body.publication,req.body.level,req.body.isbn_no,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/conference_proceeding/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE conference_proceeding SET con=$1,publication=$2,level=$3,isbn_no=$4,date=$5,file=$6 WHERE id=$7`,[req.body.con,req.body.publication,req.body.level,req.body.isbn_no,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );    
+        }
+        else{
+            pool.query(
+                `UPDATE conference_proceeding SET con=$1,publication=$2,level=$3,isbn_no=$4,date=$5 WHERE id=$6`,[req.body.con,req.body.publication,req.body.level,req.body.isbn_no,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/paper_presentation',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO paper_presentation(n,con,title,financial_support,venue,level,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.con,req.body.title,req.body.financial_support,req.body.venue,req.body.level,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO paper_presentation(n,con,title,financial_support,venue,level,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.con,req.body.title,req.body.financial_support,req.body.venue,req.body.level,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/paper_presentation/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE paper_presentation SET con=$1,title=$2,financial_support=$3,venue=$4,level=$5,date=$6,file=$7 WHERE id=$8`,[req.body.con,req.body.title,req.body.financial_support,req.body.venue,req.body.level,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+        else{
+            pool.query(
+                `UPDATE paper_presentation SET con=$1,title=$2,financial_support=$3,venue=$4,level=$5,date=$6 WHERE id=$7`,[req.body.con,req.body.title,req.body.financial_support,req.body.venue,req.body.level,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/journal_publications',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO journal_publications(n,title,jou,issn_no,volume,sci,impact,level,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.title,req.body.jou,req.body.issn_no,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO journal_publications(n,title,jou,issn_no,volume,sci,impact,level,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.title,req.body.jou,req.body.issn_no,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/journal_publications/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE journal_publications SET title=$1,jou=$2,issn_no=$3,volume=$4,sci=$5,impact=$6,level=$7,date=$8,file=$9 WHERE id=$10`,[req.body.title,req.body.jou,req.body.issn_no,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE journal_publications SET title=$1,jou=$2,issn_no=$3,volume=$4,sci=$5,impact=$6,level=$7,date=$8 WHERE id=$9`,[req.body.title,req.body.jou,req.body.issn_no,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/conference',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO fconference(n,con,title,venue,level,financial_support,programme_outcome,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.con,req.body.title,req.body.venue,req.body.level,req.body.financial_support,req.body.programme_outcome,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO fconference(n,con,title,venue,level,financial_support,programme_outcome,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.con,req.body.title,req.body.venue,req.body.level,req.body.financial_support,req.body.programme_outcome,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/conference/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE fconference SET con=$1,title=$2,venue=$3,level=$4,financial_support=$5,programme_outcome=$6,date=$7,file=$8 WHERE id=$9`,[req.body.con,req.body.title,req.body.venue,req.body.level,req.body.financial_support,req.body.programme_outcome,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE fconference SET con=$1,title=$2,venue=$3,level=$4,financial_support=$5,programme_outcome=$6,date=$7 WHERE id=$8`,[req.body.con,req.body.title,req.body.venue,req.body.level,req.body.financial_support,req.body.programme_outcome,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/resource_person',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO resource_person(n,sem,topic,event,venue,level,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.sem,req.body.topic,req.body.event,req.body.venue,req.body.level,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+        else{
+            pool.query(
+                `INSERT INTO resource_person(n,sem,topic,event,venue,leveldate,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.sem,req.body.topic,req.body.event,req.body.venue,req.body.level,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/resource_person/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE resource_person SET sem=$1,topic=$2,event=$3,venue=$4,level=$5,date=$6,file=$7 WHERE id=$8`,[req.body.sem,req.body.topic,req.body.event,req.body.venue,req.body.level,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE resource_person SET sem=$1,topic=$2,event=$3,venue=$4,level=$5,date=$6 WHERE id=$7`,[req.body.sem,req.body.topic,req.body.event,req.body.venue,req.body.level,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/financial_support',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO financial_support(n,f,amount_support,date,department,file) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.n,req.body.f,req.body.amount_support,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO financial_support(n,f,amount_support,date,department) VALUES($1,$2,$3,$4,$5)`,[req.body.n,req.body.f,req.body.amount_support,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/financial_support/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE financial_support SET f=$1,amount_support=$2,date=$3,file=$4 WHERE id=$5`,[req.body.f,req.body.amount_support,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE financial_support SET f=$1,amount_support=$2,date=$3 WHERE id=$4`,[req.body.f,req.body.amount_support,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/development_programmes',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO development_programmes(n,training,title,venue,financial_support,level,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.training,req.body.title,req.body.venue,req.body.financial_support,req.body.level,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO development_programmes(n,training,title,venue,financial_support,level,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.training,req.body.title,req.body.venue,req.body.financial_support,req.body.level,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/development_programmes/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE development_programmes SET training=$1,title=$2,venue=$3,financial_support=$4,level=$5,date=$6,file=$7 WHERE id=$8`,[req.body.training,req.body.title,req.body.venue,req.body.financial_support,req.body.level,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE development_programmes SET training=$1,title=$2,venue=$3,financial_support=$4,level=$5,date=$6 WHERE id=$7`,[req.body.training,req.body.title,req.body.venue,req.body.financial_support,req.body.level,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/online_courses',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO online_courses(n,training,title,duration,date,financial_support,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.training,req.body.title,req.body.duration,req.body.date,req.body.financial_support,req.body.level,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO online_courses(n,training,title,duration,date,financial_support,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.training,req.body.title,req.body.duration,req.body.date,req.body.financial_support,req.body.level,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/online_courses/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE online_courses SET training=$1,title=$2,duration=$3,date=$4,financial_support=$5,level=$6,file=$7 WHERE id=$8`,[req.body.training,req.body.title,req.body.duration,req.body.date,req.body.financial_support,req.body.level,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE online_courses SET training=$1,title=$2,duration=$3,date=$4,financial_support=$5,level=$6 WHERE id=$7`,[req.body.training,req.body.title,req.body.duration,req.body.date,req.body.financial_support,req.body.level,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/forms/faculty/e_content',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO e_content(n,module,platform,date,department,file) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.n,req.body.module,req.body.platform,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO e_content(n,module,platform,date,department) VALUES($1,$2,$3,$4,$5)`,[req.body.n,req.body.module,req.body.platform,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/faculty/e_content/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE e_content SET module=$1,platform=$2,date=$3,file=$4 WHERE id=$5`,[req.body.module,req.body.platform,req.body.date,req.file.filename,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE e_content SET module=$1,platform=$2,date=$3 WHERE id=$4`,[req.body.module,req.body.platform,req.body.date,req.body.id],
+                function (err, result) {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
     }catch(err){
         console.log(err)
     }
@@ -3434,13 +3195,91 @@ router.put('/forms/faculty/e_content/delete/:id/', async(req,res) => {
 
 // Stundets
 
-router.post('/forms/student/publications', async(req,res) => {
-    const {user_id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date} = req.body
+router.post('/forms/student/placements',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `INSERT INTO placements(n,roll_no,company_placed,annual_package,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.roll_no,req.body.company_placed,req.body.annual_package,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );        
+        }
+        else{
+            pool.query(
+                `INSERT INTO placements(n,roll_no,company_placed,annual_package,date,department) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.n,req.body.roll_no,req.body.company_placed,req.body.annual_package,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            ); 
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/student/placements/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE placements SET n=$1,roll_no=$2,company_placed=$3,annual_package=$4,date=$5,file=$6 WHERE id=$7`,[req.body.n,req.body.roll_no,req.body.company_placed,req.body.annual_package,req.body.date,req.file.filename,req.body.id],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE placements SET n=$1,roll_no=$2,company_placed=$3,annual_package=$4,date=$5 WHERE id=$6`,[req.body.n,req.body.roll_no,req.body.company_placed,req.body.annual_package,req.body.date,req.body.id],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/student/:table/edit/:id', async(req,res) => {
     try{
         pool.query(
-            `INSERT INTO publications(user_id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[user_id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date],
-            (err, result) => {
-                res.send({sp : "Saved"})
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
+            function (err, result) {
+                console.log(result.rows)
+                if(result){
+                res.json(result.rows)
+                }
+                console.log(err)
+            }
+        );
+
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.put('/forms/student/:table/delete/:id/', async(req,res) => {
+    try{
+        pool.query(
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
+            function (err, result) {
+                if(result){
+                res.json(result.rows)
+                }
+                console.log(err)
             }
         );
     }catch(err){
@@ -3448,25 +3287,69 @@ router.post('/forms/student/publications', async(req,res) => {
     }
 })
 
-router.post('/forms/student/publications/edit', async(req,res) => {
-    const {id,department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date} = req.body
+router.post('/forms/student/s_publications',upload.single('image'), async(req,res) => {
     try{
-        pool.query(
-            `UPDATE publications set department=$1,namej=$2,roll_no=$3,title=$4,journal=$5,issn=$6,volume_no=$7,sci=$8,link=$9,impact=$10,level=$11,date=$12  WHERE id=$13)`,[department,namej,roll_no,title,journal,issn,volume_no,sci,link,impact,level,date,id],
-            (err, result) => {
-                res.send({sp : "Saved"})
-            }
-        );
+        console.log(req.body.njourrnal)
+        if(req.file){
+            pool.query(
+                `INSERT INTO s_publications(n,roll_no,title,n_journal,issn,volume,sci,impact,level,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,[req.body.n,req.body.roll_no,req.body.title,req.body.njournal,req.body.issn,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.body.department,req.file.filename],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `INSERT INTO s_publications(n,roll_no,title,n_journal,issn,volume,sci,impact,level,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.roll_no,req.body.title,req.body.njournal,req.body.issn,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.body.department],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
     }catch(err){
         console.log(err)
     }
 })
 
-router.get('/forms/student/publications/edit/:id', async(req,res) => {
-    const {id} = req.params.id
+router.put('/forms/student/s_publications/edit',upload.single('image'), async(req,res) => {
+    try{
+        if(req.file){
+            pool.query(
+                `UPDATE s_publications set n=$1,roll_no=$2,title=$3,n_journal=$4,issn=$5,volume=$6,sci=$7,impact=$8,level=$9,date=$10,file=$11 WHERE id=$12`,[req.body.n,req.body.roll_no,req.body.title,req.body.njournal,req.body.issn,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.file.filename,req.body.id],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+        else{
+            pool.query(
+                `UPDATE s_publications set n=$1,roll_no=$2,title=$3,n_journal=$4,issn=$5,volume=$6,sci=$7,impact=$8,level=$9,date=$10  WHERE id=$11`,[req.body.n,req.body.roll_no,req.body.title,req.body.njournal,req.body.issn,req.body.volume,req.body.sci,req.body.impact,req.body.level,req.body.date,req.body.id],
+                (err, result) => {
+                    if(result){
+                    res.json(result.rows)
+                    }
+                    console.log(err)
+                }
+            );
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/forms/student/:table/edit/:id', async(req,res) => {
     try{
         pool.query(
-            `SELECT * FROM publications WHERE id = ${req.params.id}`,
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
             function (err, result) {
                 console.log(result.rows)
                 res.json(result.rows)
@@ -3478,11 +3361,10 @@ router.get('/forms/student/publications/edit/:id', async(req,res) => {
     }
 })
 
-router.put('/forms/student/publications/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
+router.put('/forms/student/:table/delete/:id/', async(req,res) => {
     try{
         pool.query(
-            `DELETE FROM publications WHERE id = ${req.params.id} `,
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
             function (err, result) {
                 res.send({sp : "Delete"})
             }
@@ -3513,36 +3395,6 @@ router.post('/forms/student/achievements/edit', async(req,res) => {
             `UPDATE achievements set department=$1,name=$2,roll_no=$3,achievement=$4,event=$5,date=$6,venue=$7,level=$8  WHERE id=$10)`,[department,name,roll_no,achievement,event,date,venue,level,id],
             (err, result) => {
                 res.send({sp : "Saved"})
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/student/achievements/edit/:id', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `SELECT * FROM achievements WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                res.json(result.rows)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/achievements/delete/:id/', async(req,res) => {
-    const {id} = req.params.id
-    try{
-        pool.query(
-            `DELETE FROM achievements WHERE id = ${req.params.id} `,
-            function (err, result) {
-                res.send({sp : "Delete"})
             }
         );
     }catch(err){

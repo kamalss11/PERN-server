@@ -65,7 +65,7 @@ const research_projects = `
         "amount_received" decimal(10,5),
         "date_sanctioned" VARCHAR(100),
         "funding_agency" VARCHAR(100),
-        "date" DATE,
+        "date" VARCHAR(100),
         "file" VARCHAR(100),
         "department" VARCHAR(100),
 	    PRIMARY KEY ("id")
@@ -82,8 +82,9 @@ CREATE TABLE IF NOT EXISTS "patents"(
     "royalty_received" decimal(10,5),
     "providing_agency" VARCHAR(100),
     "country" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     "department" VARCHAR(100),
+    "file" VARCHAR(100),
     PRIMARY KEY ("id")
 );`;
 
@@ -98,9 +99,10 @@ CREATE TABLE IF NOT EXISTS "awards_for_innovation"(
     "awarding_agency" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" DATE,
-    PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "date" VARCHAR(100),
+    "department" VARCHAR(100),
+    file VARCHAR(100),
+    PRIMARY KEY ("id")
 );`;
 
 const degree = `
@@ -112,8 +114,9 @@ CREATE TABLE IF NOT EXISTS "degree"(
     "title" VARCHAR(100),
     "external" VARCHAR(100),
     "venue" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     "department" VARCHAR(100),
+    "file" VARCHAR(100),
     PRIMARY KEY ("id")
 );`;
 
@@ -125,9 +128,10 @@ CREATE TABLE IF NOT EXISTS "fellowship"(
     "date_sanctioned" VARCHAR(100),
     "funding_agency" VARCHAR(100),
     "sanctioned_amount" decimal(10,5),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100) 
 );`;
 
 const collab_activ = `
@@ -135,12 +139,13 @@ CREATE TABLE IF NOT EXISTS "collab_activ"(
     "id" SERIAL,
     "activity" VARCHAR(100),
     "n" VARCHAR(100),
-    "pasrticipant" VARCHAR(100),
+    "participant" VARCHAR(100),
     "financial_support" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    file VARCHAR(100)
 );`;
 
 const linkages = `
@@ -150,9 +155,10 @@ CREATE TABLE IF NOT EXISTS "linkages"(
     "title" VARCHAR(100),
     "partnering_agency" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    file VARCHAR(100)
 );`;
 
 const mou = `
@@ -165,9 +171,10 @@ CREATE TABLE IF NOT EXISTS "mou"(
     "participants" VARCHAR(100),
     "purpose" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const conference = `
@@ -183,9 +190,10 @@ CREATE TABLE IF NOT EXISTS "conference"(
     "outcome" VARCHAR(100),
     "level" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const guest_lectures = `
@@ -199,9 +207,10 @@ CREATE TABLE IF NOT EXISTS "guest_lectures"(
     "objective" VARCHAR(100),
     "outcome" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    file VARCHAR(100)
 );`;
 
 const extension_activities = `
@@ -212,9 +221,10 @@ CREATE TABLE IF NOT EXISTS "extension_activities"(
     "collaborations" VARCHAR(100),
     "venue" VARCHAR(100),
     "total" VARCHAR(100),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const industrial_visits = `
@@ -222,24 +232,26 @@ CREATE TABLE IF NOT EXISTS "industrial_visits"(
     "id" SERIAL,
     "n" VARCHAR(100),
     "classes" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     "address" VARCHAR(100),
     "total" VARCHAR(100),
     "outcome" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const evs = `
 CREATE TABLE IF NOT EXISTS "evs"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     "place" VARCHAR(100),
     "total" VARCHAR(100),
     "activity" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const departmental_activities = `
@@ -252,9 +264,10 @@ CREATE TABLE IF NOT EXISTS "departmental_activities"(
     "total" VARCHAR(100),
     "venue" VARCHAR(100),
     "filled" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const projects_services = `
@@ -266,9 +279,10 @@ CREATE TABLE IF NOT EXISTS "projects_services"(
     "revenue_generated" VARCHAR(100),
     "date_sanction" VARCHAR(100),
     "sponsor" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const honours = `
@@ -279,22 +293,22 @@ CREATE TABLE IF NOT EXISTS "honours"(
     "details" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const exams = `
 CREATE TABLE IF NOT EXISTS "exams"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "award_honour" VARCHAR(100),
-    "details" VARCHAR(100),
-    "venue" VARCHAR(100),
-    "level" VARCHAR(100),
-    "date" DATE,
+    "exam" VARCHAR(100),
+    "exam_rollno" VARCHAR(100),
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const books_published = `
@@ -305,22 +319,26 @@ CREATE TABLE IF NOT EXISTS "books_published"(
     "publisher" VARCHAR(100),
     "level" VARCHAR(100),
     "isbn_no" VARCHAR(100),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const chapters_contributed = `
 CREATE TABLE IF NOT EXISTS "chapters_contributed"(
     "id" SERIAL,
     "n" VARCHAR(100),
-    "con" VARCHAR(100),
-    "publication" VARCHAR(100),
+    "title" VARCHAR(100),
+    "chapter" VARCHAR(100),
+    "editor" VARCHAR(100),
+    "publisher" VARCHAR(100),
     "level" VARCHAR(100),
     "isbn_no" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const conference_proceeding = `
@@ -328,13 +346,13 @@ CREATE TABLE IF NOT EXISTS "conference_proceeding"(
     "id" SERIAL,
     "n" VARCHAR(100),
     "con" VARCHAR(100),
-    "title" VARCHAR(100),
-    "financial_support" decimal(10,5),
-    "venue" VARCHAR(100),
+    "publication" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" DATE,
+    "isbn_no" VARCHAR(100),
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const paper_presentation = `
@@ -346,9 +364,10 @@ CREATE TABLE IF NOT EXISTS "paper_presentation"(
     "financial_support" decimal(10,5),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const journal_publications = `
@@ -362,9 +381,10 @@ CREATE TABLE IF NOT EXISTS "journal_publications"(
     "sci" VARCHAR(100),
     "impact" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const fconference = `
@@ -377,9 +397,10 @@ CREATE TABLE IF NOT EXISTS "fconference"(
     "level" VARCHAR(100),
     "financial_support" decimal(10,5),
     "programme_outcome" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const resource_person = `
@@ -391,9 +412,10 @@ CREATE TABLE IF NOT EXISTS "resource_person"(
     "event" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const financial_support = `
@@ -402,9 +424,10 @@ CREATE TABLE IF NOT EXISTS "financial_support"(
     "n" VARCHAR(100),
     "f" VARCHAR(100),
     "amount_support" decimal(10,5),
-    "date" DATE,        
+    "date" VARCHAR(100),        
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const development_programmes = `
@@ -416,9 +439,10 @@ CREATE TABLE IF NOT EXISTS "development_programmes"(
     "venue" VARCHAR(100),
     "financial_support" decimal(10,5),
     "level" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const online_courses = `
@@ -428,11 +452,12 @@ CREATE TABLE IF NOT EXISTS "online_courses"(
     "training" VARCHAR(100),
     "title" VARCHAR(100),
     "duration" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     "financial_support" decimal(10,5),
     "level" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const e_content = `
@@ -441,10 +466,13 @@ CREATE TABLE IF NOT EXISTS "e_content"(
     "n" VARCHAR(100),
     "module" VARCHAR(100),
     "platform" VARCHAR(100),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
+
+// Students
 
 const placements = `
 CREATE TABLE IF NOT EXISTS "placements"(
@@ -453,9 +481,10 @@ CREATE TABLE IF NOT EXISTS "placements"(
     "roll_no" VARCHAR(100),
     "company_placed" VARCHAR(100),
     "annual_package" decimal(10,5),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_publications = `
@@ -470,9 +499,10 @@ CREATE TABLE IF NOT EXISTS "s_publications"(
     "sci" VARCHAR(100),
     "impact" VARCHAR(100),
     "level" VARCHAR(100),  
-    "date" DATE,  
+    "date" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_paper_presentation = `
@@ -483,7 +513,7 @@ CREATE TABLE IF NOT EXISTS "s_paper_presentation"(
     "con" VARCHAR(100),
     "title" VARCHAR(100),
     "financial_support" decimal(10,5),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
@@ -500,7 +530,7 @@ CREATE TABLE IF NOT EXISTS "s_conference"(
     "sponsoring_agency" VARCHAR(100),
     "poster" VARCHAR(100),
     "award" VARCHAR(100),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
@@ -517,7 +547,7 @@ CREATE TABLE IF NOT EXISTS "s_competition"(
     "n_con" VARCHAR(100),
     "award" VARCHAR(100),
     "sponsoring_agency" VARCHAR(100),
-    "date" DATE,    
+    "date" VARCHAR(100),    
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
@@ -532,7 +562,7 @@ CREATE TABLE IF NOT EXISTS "s_training"(
     "training" VARCHAR(100),
     "company" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
     "department" VARCHAR(100)
 );`;
@@ -546,7 +576,7 @@ CREATE TABLE IF NOT EXISTS "s_projectwork"(
     "company" VARCHAR(100),
     "certificate" VARCHAR(100),
     "period" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     PRIMARY KEY ("id"),
     "department" VARCHAR(100)
 );`;
@@ -558,7 +588,7 @@ CREATE TABLE IF NOT EXISTS "s_exams"(
     "roll_no" VARCHAR(100),
     "exam_qualified" VARCHAR(100),
     "e_roll" VARCHAR(100),
-    "date" DATE, 
+    "date" VARCHAR(100), 
     PRIMARY KEY ("id"),
     "department" VARCHAR(100)
 );`;
@@ -572,7 +602,7 @@ CREATE TABLE IF NOT EXISTS "s_onlinecourses"(
     "n_course" VARCHAR(100),
     "duration" VARCHAR(100),
     "financial_support" decimal(10,5),
-    "date" DATE,
+    "date" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
     "department" VARCHAR(100)
@@ -585,7 +615,7 @@ CREATE TABLE IF NOT EXISTS "s_achievements"(
     "roll_no" VARCHAR(100),
     "prize" VARCHAR(100),
     "event" VARCHAR(100),
-    "date" DATE,
+    "date" VARCHAR(100),
     "venue" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
@@ -785,11 +815,11 @@ execute(user).then(result => {
 //     }
 // });
 
-// execute(s_publications).then(result => {
-//     if (result) {
-//         console.log('Table created s_publications');
-//     }
-// });
+execute(s_publications).then(result => {
+    if (result) {
+        console.log('Table created s_publications');
+    }
+});
 
 // execute(s_conference).then(result => {
 //     if (result) {
