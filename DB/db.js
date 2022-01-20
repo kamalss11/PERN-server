@@ -13,7 +13,7 @@ const Pool = require('pg').Pool
 
 const pool = new Pool({
     host: 'localhost',
-    port: '5432',
+    port: '4000',
     user: 'postgres',
     password: 'kamal',
     database: 'iqac'
@@ -628,17 +628,17 @@ execute(user).then(result => {
     }
 });
 
-// execute(research_projects).then(result => {
-//     if (result) {
-//         console.log('Table created rp');
-//     }
-// });
+execute(research_projects).then(result => {
+    if (result) {
+        console.log('Table created rp');
+    }
+});
 
-// execute(reset_password).then(result => {
-//     if (result) {
-//         console.log('Table created rp');
-//     }
-// });
+execute(reset_password).then(result => {
+    if (result) {
+        console.log('Table created rp');
+    }
+});
 
 // execute(alter).then(result => {
 //     if (result) {
@@ -737,35 +737,35 @@ execute(user).then(result => {
 //     }
 // });
 
-// execute(exams).then(result => {
-//     if (result) {
-//         console.log('Table created exams');
-//     }
-// });
+execute(exams).then(result => {
+    if (result) {
+        console.log('Table created exams');
+    }
+});
 
-// execute(books_published).then(result => {
-//     if (result) {
-//         console.log('Table created books_published');
-//     }
-// });
+execute(books_published).then(result => {
+    if (result) {
+        console.log('Table created books_published');
+    }
+});
 
-// execute(chapters_contributed).then(result => {
-//     if (result) {
-//         console.log('Table created chapters_contributed');
-//     }
-// });
+execute(chapters_contributed).then(result => {
+    if (result) {
+        console.log('Table created chapters_contributed');
+    }
+});
 
-// execute(conference_proceeding).then(result => {
-//     if (result) {
-//         console.log('Table created conference_proceeding');
-//     }
-// });
+execute(conference_proceeding).then(result => {
+    if (result) {
+        console.log('Table created conference_proceeding');
+    }
+});
 
-// execute(paper_presentation).then(result => {
-//     if (result) {
-//         console.log('Table created paper_presentation');
-//     }
-// });
+execute(paper_presentation).then(result => {
+    if (result) {
+        console.log('Table created paper_presentation');
+    }
+});
 
 // execute(journal_publications).then(result => {
 //     if (result) {
@@ -815,11 +815,11 @@ execute(user).then(result => {
 //     }
 // });
 
-execute(s_publications).then(result => {
-    if (result) {
-        console.log('Table created s_publications');
-    }
-});
+// execute(s_publications).then(result => {
+//     if (result) {
+//         console.log('Table created s_publications');
+//     }
+// });
 
 // execute(s_conference).then(result => {
 //     if (result) {
@@ -845,28 +845,28 @@ execute(s_publications).then(result => {
 //     }
 // });
 
-execute(s_projectwork).then(result => {
-    if (result) {
-        console.log('Table created s_projectwork');
-    }
-});
+// execute(s_projectwork).then(result => {
+//     if (result) {
+//         console.log('Table created s_projectwork');
+//     }
+// });
 
-execute(s_exams).then(result => {
-    if (result) {
-        console.log('Table created s_exams');
-    }
-});
+// execute(s_exams).then(result => {
+//     if (result) {
+//         console.log('Table created s_exams');
+//     }
+// });
 
-execute(s_onlinecourses).then(result => {
-    if (result) {
-        console.log('Table created s_onlinecourses');
-    }
-});
+// execute(s_onlinecourses).then(result => {
+//     if (result) {
+//         console.log('Table created s_onlinecourses');
+//     }
+// });
 
-execute(s_achievements).then(result => {
-    if (result) {
-        console.log('Table created s_achievements');
-    }
-});
+// execute(s_achievements).then(result => {
+//     if (result) {
+//         console.log('Table created s_achievements');
+//     }
+// });
 
 module.exports = pool
