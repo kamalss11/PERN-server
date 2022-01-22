@@ -517,7 +517,8 @@ CREATE TABLE IF NOT EXISTS "s_paper_presentation"(
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_conference = `
@@ -534,7 +535,8 @@ CREATE TABLE IF NOT EXISTS "s_conference"(
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_competition = `
@@ -551,7 +553,8 @@ CREATE TABLE IF NOT EXISTS "s_competition"(
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_training = `
@@ -564,7 +567,8 @@ CREATE TABLE IF NOT EXISTS "s_training"(
     "period" VARCHAR(100),
     "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_projectwork = `
@@ -578,7 +582,8 @@ CREATE TABLE IF NOT EXISTS "s_projectwork"(
     "period" VARCHAR(100),
     "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_exams = `
@@ -590,7 +595,8 @@ CREATE TABLE IF NOT EXISTS "s_exams"(
     "e_roll" VARCHAR(100),
     "date" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_onlinecourses = `
@@ -605,7 +611,8 @@ CREATE TABLE IF NOT EXISTS "s_onlinecourses"(
     "date" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 const s_achievements = `
@@ -619,7 +626,8 @@ CREATE TABLE IF NOT EXISTS "s_achievements"(
     "venue" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100)
+    "department" VARCHAR(100),
+    "file" VARCHAR(100)
 );`;
 
 execute(user).then(result => {
