@@ -122,7 +122,7 @@ router.post('/forget_password',async (req,res)=>{
             tkn = buffer.toString("hex")
 
             res.cookie("reset_password",tkn,{
-                expires : new Date(Date.now() + 600000),
+                expires : new Date(Date.now() + 300000),
                 httpOnly : true
             })
             console.log('Reset Token - ' + tkn)
@@ -174,16 +174,14 @@ router.post('/forget_password',async (req,res)=>{
                     from: 'ikamaloffc@gmail.com',
                     to: req.body.email,
                     subject: 'ResetPassword',
-                    html: `<p>Click this <a href=http://localhost:3000/reset_password/${tkn}>Link</a> to reset your password</p>
-                    <p>Link will valid only for 10 minutes.</p>
-                    <p style='text-align:left'>Thanks & Regards</p>`
+                    html: `<p>Click this <a href=http://localhost:3000/reset_password/${tkn}>Link</a> to reset your password </p> + `
                 }
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
                         console.log(error + '3115')
                     } else {
                         console.log('Email sent: ' + info.response)
-                        return res.status(201).json({s: 'Check your mail'})
+                        return res.status(201).json({msg: 'Check your mail'})
                     }
                 })
             }
@@ -204,17 +202,25 @@ router.put('/reset_password',async (req,res)=>{
                 console.log(result.rows[0])
                 console.log(result.rows[0].token,req.cookies.reset_password)
                 if(result.rows.length > 0){
-                    if(req.cookies.reset_password){
-                        pool.query(
-                            `UPDATE users set password = $1 WHERE email = $2`,[pss,email],(err,result)=>{
-                                res.clearCookie('reset_password',{path: '/'})
-                                res.status(201).json({dd : 'Password Changed'})
-                            }
-                        )
+                    if(req.cookies.reset_password === result.rows[0].token){
+                        let exp = result.rows[0].expiresat
+                        let exresult = exp - Date.now()
+                        console.log(Date.now() , exp)
+                        console.log(exresult)
+
+                        if(exresult < 0){
+                            res.status(400).json({error : 'Token Expires'})
+                        }
+                        else{
+                            pool.query(
+                                `UPDATE users set password = $1 WHERE email = $2`,[pss,email],(err,result)=>{
+                                    res.clearCookie('reset_password',{path: '/'})
+                                    res.status(201).json({dd : 'Password Changed'})
+                                }
+                            )
+                        }
                     }
-                    else{
-                        res.status(400).json({error : 'Token Expires'})
-                    }
+                    console.log('wt ?')
                 }
                 else{
                     res.status(400).send({error : 'No Token Found'})
@@ -3340,467 +3346,57 @@ router.put('/forms/student/s_publications/edit',upload.single('image'), async(re
     }
 })
 
-router.post('/forms/student/s_paper_presentation',upload.single('image'), async(req,res) => {
+router.get('/forms/student/:table/edit/:id', async(req,res) => {
     try{
-        console.log(req.body.njourrnal)
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_paper_presentation(n,roll_no,con,title,financial_support,date,venue,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_paper_presentation(n,roll_no,con,title,financial_support,date,venue,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
+        pool.query(
+            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
+            function (err, result) {
+                console.log(result.rows)
+                res.json(result.rows)
+            }
+        );
+
     }catch(err){
         console.log(err)
     }
 })
 
-router.put('/forms/student/s_paper_presentation/edit',upload.single('image'), async(req,res) => {
+router.put('/forms/student/:table/delete/:id/', async(req,res) => {
     try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_paper_presentation set n=$1,roll_no=$2,con=$3,title=$4,financial_support=$5,date=$6,venue=$7,level=$8,file=$9 WHERE id=$10`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.file.filename,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_paper_presentation set n=$1,roll_no=$2,con=$3,title=$4,financial_support=$5,date=$6,venue=$7,level=$8 WHERE id=$9`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
+        pool.query(
+            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
+            function (err, result) {
+                res.send({sp : "Delete"})
+            }
+        );
     }catch(err){
         console.log(err)
     }
 })
 
-router.post('/forms/student/s_conference',upload.single('image'), async(req,res) => {
+router.post('/forms/student/achievements', async(req,res) => {
+    const {user_id,department,name,roll_no,achievement,event,date,venue,level} = req.body
     try{
-        console.log(req.body.njourrnal)
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_conference(n,roll_no,con,n_con,sponsoring_agency,poster,award,date,venue,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_conference(n,roll_no,con,n_con,sponsoring_agency,poster,award,date,venue,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
+        pool.query(
+            `INSERT INTO achievements (user_id,department,name,roll_no,achievement,event,date,venue,level) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[user_id,department,name,roll_no,achievement,event,date,venue,level],
+            (err, result) => {
+                res.send({sp : "Saved"})
+            }
+        );
     }catch(err){
         console.log(err)
     }
 })
 
-router.put('/forms/student/s_conference/edit',upload.single('image'), async(req,res) => {
+router.post('/forms/student/achievements/edit', async(req,res) => {
+    const {id,department,name,roll_no,achievement,event,date,venue,level} = req.body
     try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_conference set n=$1,roll_no=$2,con=$3,title=$4,financial_support=$5,date=$6,venue=$7,level=$8,file=$9 WHERE id=$10`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.file.filename,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_conference set n=$1,roll_no=$2,con=$3,title=$4,financial_support=$5,date=$6,venue=$7,level=$8 WHERE id=$9`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/student/s_competition',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_competition(n_event,n,roll_no,con,n_con,award,sponsoring_agency,date,venue,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,[req.body.n_event,req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.award,req.body.sponsoring_agency,req.body.date,req.body.venue,req.body.level,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_competition(n_event,n,roll_no,con,n_con,award,sponsoring_agency,date,venue,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n_event,req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.award,req.body.sponsoring_agency,req.body.date,req.body.venue,req.body.level,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/s_competition/edit',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_competition set n=$1,roll_no=$2,con=$3,n_con=$4,award=$5,sponsoring_agency=$6,date=$7,venue=$8,level=$9,file=$10,n_event=$11 WHERE id=$12`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.award,req.body.sponsoring_agency,req.body.date,req.body.venue,req.body.level,req.file.filename,req.body.n_event,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_competition set n=$1,roll_no=$2,con=$3,n_con=$4,award=$5,sponsoring_agency=$6,date=$7,venue=$8,level=$9,n_event=$10 WHERE id=$11`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.award,req.body.sponsoring_agency,req.body.date,req.body.venue,req.body.level,req.body.n_event,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/student/s_training',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_training(n,roll_no,training,company,period,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.date,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_training(n,roll_no,training,company,period,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.date,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/s_training/edit',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_training set n=$1,roll_no=$2,training=$3,company=$4,period=$5,date=$6,file=$7 WHERE id=$8`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.period,req.body.date,req.file.filename,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_training set n=$1,roll_no=$2,training=$3,company=$4,period=$5,date=$6 WHERE id=$7`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.period,req.body.date,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/student/s_projectwork',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_projectwork(n,roll_no,guide,company,certificate,period,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.roll_no,req.body.guide,req.body.company,req.body.certificate,req.body.period,req.body.date,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_projectwork(n,roll_no,guide,company,certificate,period,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.roll_no,req.body.guide,req.body.company,req.body.certificate,req.body.period,req.body.date,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/s_projectwork/edit',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_projectwork set n=$1,roll_no=$2,guide=$3,company=$4,certificate=$5,period=$6,date=$7,file=$8 WHERE id=$9`,[req.body.n,req.body.roll_no,req.body.guide,req.body.company,req.body.certificate,req.body.period,req.body.date,req.file.filename,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_projectwork set n=$1,roll_no=$2,guide=$3,company=$4,certificate=$5,period=$6,date=$7 WHERE id=$8`,[req.body.n,req.body.roll_no,req.body.guide,req.body.company,req.body.certificate,req.body.period,req.body.date,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/student/s_exams',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_exams(n,roll_no,exam_qualified,e_roll,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.roll_no,req.body.exam_qualified,req.body.e_roll,req.body.date,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_exams(n,roll_no,exam_qualified,e_roll,date,department) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.n,req.body.roll_no,req.body.exam_qualified,req.body.e_roll,req.body.date,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/s_exams/edit',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_exams set n=$1,roll_no=$2,exam_qualified=$3,e_roll=$4,date=$5,file=$6 WHERE id=$7`,[req.body.n,req.body.roll_no,req.body.exam_qualified,req.body.e_roll,req.body.date,req.file.filename,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_exams set n=$1,roll_no=$2,exam_qualified=$3,e_roll=$4,date=$5 WHERE id=$6`,[req.body.n,req.body.roll_no,req.body.exam_qualified,req.body.e_roll,req.body.date,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/student/s_onlinecourses',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_onlinecourses(n,roll_no,portal,n_course,duration,financial_support,date,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.roll_no,req.body.portal,req.body.n_course,req.body.duration,req.body.financial_support,req.body.date,req.body.level,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_onlinecourses(n,roll_no,portal,n_course,duration,financial_support,date,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.roll_no,req.body.portal,req.body.n_course,req.body.duration,req.body.financial_support,req.body.date,req.body.level,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/s_onlinecourses/edit',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_onlinecourses set n=$1,roll_no=$2,portal=$3,n_course=$4,duration=$5,financial_support=$6,date=$7,file=$8 WHERE id=$9`,[req.body.n,req.body.roll_no,req.body.portal,req.body.n_course,req.body.duration,req.body.financial_support,req.body.date,req.body.level,req.file.filename,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_onlinecourses set n=$1,roll_no=$2,portal=$3,n_course=$4,duration=$5,financial_support=$6,date=$7 WHERE id=$8`,[req.body.n,req.body.roll_no,req.body.portal,req.body.n_course,req.body.duration,req.body.financial_support,req.body.date,req.body.level,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.post('/forms/student/s_achievements',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `INSERT INTO s_achievements(n,roll_no,prize,event,date,venue,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.roll_no,req.body.prize,req.body.event,req.body.date,req.body.venue,req.body.level,req.body.department,req.file.filename],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `INSERT INTO s_achievements(n,roll_no,prize,event,date,venue,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.roll_no,req.body.prize,req.body.event,req.body.date,req.body.venue,req.body.level,req.body.department],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/s_achievements/edit',upload.single('image'), async(req,res) => {
-    try{
-        if(req.file){
-            pool.query(
-                `UPDATE s_achievements set n=$1,roll_no=$2,prize=$3,event=$4,date=$5,venue=$6,level=$7,file=$8 WHERE id=$9`,[req.body.n,req.body.roll_no,req.body.prize,req.body.event,req.body.date,req.body.venue,req.body.level,req.file.filename,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
-        else{
-            pool.query(
-                `UPDATE s_achievements set n=$1,roll_no=$2,prize=$3,event=$4,date=$5,venue=$6,level=$7 WHERE id=$8`,[req.body.n,req.body.roll_no,req.body.prize,req.body.event,req.body.date,req.body.venue,req.body.level,req.body.id],
-                (err, result) => {
-                    if(result){
-                    res.json(result.rows)
-                    }
-                    console.log(err)
-                }
-            );
-        }
+        pool.query(
+            `UPDATE achievements set department=$1,name=$2,roll_no=$3,achievement=$4,event=$5,date=$6,venue=$7,level=$8  WHERE id=$10)`,[department,name,roll_no,achievement,event,date,venue,level,id],
+            (err, result) => {
+                res.send({sp : "Saved"})
+            }
+        );
     }catch(err){
         console.log(err)
     }

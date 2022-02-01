@@ -13,7 +13,7 @@ const Pool = require('pg').Pool
 
 const pool = new Pool({
     host: 'localhost',
-    port: '4000',
+    port: '5432',
     user: 'postgres',
     password: 'kamal',
     database: 'iqac'
@@ -517,8 +517,7 @@ CREATE TABLE IF NOT EXISTS "s_paper_presentation"(
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 const s_conference = `
@@ -535,8 +534,7 @@ CREATE TABLE IF NOT EXISTS "s_conference"(
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 const s_competition = `
@@ -553,8 +551,7 @@ CREATE TABLE IF NOT EXISTS "s_competition"(
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 const s_training = `
@@ -567,8 +564,7 @@ CREATE TABLE IF NOT EXISTS "s_training"(
     "period" VARCHAR(100),
     "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 const s_projectwork = `
@@ -582,8 +578,7 @@ CREATE TABLE IF NOT EXISTS "s_projectwork"(
     "period" VARCHAR(100),
     "date" VARCHAR(100),
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 const s_exams = `
@@ -595,8 +590,7 @@ CREATE TABLE IF NOT EXISTS "s_exams"(
     "e_roll" VARCHAR(100),
     "date" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 const s_onlinecourses = `
@@ -611,8 +605,7 @@ CREATE TABLE IF NOT EXISTS "s_onlinecourses"(
     "date" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 const s_achievements = `
@@ -626,8 +619,7 @@ CREATE TABLE IF NOT EXISTS "s_achievements"(
     "venue" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
-    "department" VARCHAR(100),
-    "file" VARCHAR(100)
+    "department" VARCHAR(100)
 );`;
 
 execute(user).then(result => {
@@ -636,17 +628,17 @@ execute(user).then(result => {
     }
 });
 
-execute(research_projects).then(result => {
-    if (result) {
-        console.log('Table created rp');
-    }
-});
+// execute(research_projects).then(result => {
+//     if (result) {
+//         console.log('Table created rp');
+//     }
+// });
 
-execute(reset_password).then(result => {
-    if (result) {
-        console.log('Table created rp');
-    }
-});
+// execute(reset_password).then(result => {
+//     if (result) {
+//         console.log('Table created rp');
+//     }
+// });
 
 // execute(alter).then(result => {
 //     if (result) {
@@ -745,35 +737,35 @@ execute(reset_password).then(result => {
 //     }
 // });
 
-execute(exams).then(result => {
-    if (result) {
-        console.log('Table created exams');
-    }
-});
+// execute(exams).then(result => {
+//     if (result) {
+//         console.log('Table created exams');
+//     }
+// });
 
-execute(books_published).then(result => {
-    if (result) {
-        console.log('Table created books_published');
-    }
-});
+// execute(books_published).then(result => {
+//     if (result) {
+//         console.log('Table created books_published');
+//     }
+// });
 
-execute(chapters_contributed).then(result => {
-    if (result) {
-        console.log('Table created chapters_contributed');
-    }
-});
+// execute(chapters_contributed).then(result => {
+//     if (result) {
+//         console.log('Table created chapters_contributed');
+//     }
+// });
 
-execute(conference_proceeding).then(result => {
-    if (result) {
-        console.log('Table created conference_proceeding');
-    }
-});
+// execute(conference_proceeding).then(result => {
+//     if (result) {
+//         console.log('Table created conference_proceeding');
+//     }
+// });
 
-execute(paper_presentation).then(result => {
-    if (result) {
-        console.log('Table created paper_presentation');
-    }
-});
+// execute(paper_presentation).then(result => {
+//     if (result) {
+//         console.log('Table created paper_presentation');
+//     }
+// });
 
 // execute(journal_publications).then(result => {
 //     if (result) {
@@ -823,11 +815,11 @@ execute(paper_presentation).then(result => {
 //     }
 // });
 
-// execute(s_publications).then(result => {
-//     if (result) {
-//         console.log('Table created s_publications');
-//     }
-// });
+execute(s_publications).then(result => {
+    if (result) {
+        console.log('Table created s_publications');
+    }
+});
 
 // execute(s_conference).then(result => {
 //     if (result) {
@@ -853,28 +845,28 @@ execute(paper_presentation).then(result => {
 //     }
 // });
 
-// execute(s_projectwork).then(result => {
-//     if (result) {
-//         console.log('Table created s_projectwork');
-//     }
-// });
+execute(s_projectwork).then(result => {
+    if (result) {
+        console.log('Table created s_projectwork');
+    }
+});
 
-// execute(s_exams).then(result => {
-//     if (result) {
-//         console.log('Table created s_exams');
-//     }
-// });
+execute(s_exams).then(result => {
+    if (result) {
+        console.log('Table created s_exams');
+    }
+});
 
-// execute(s_onlinecourses).then(result => {
-//     if (result) {
-//         console.log('Table created s_onlinecourses');
-//     }
-// });
+execute(s_onlinecourses).then(result => {
+    if (result) {
+        console.log('Table created s_onlinecourses');
+    }
+});
 
-// execute(s_achievements).then(result => {
-//     if (result) {
-//         console.log('Table created s_achievements');
-//     }
-// });
+execute(s_achievements).then(result => {
+    if (result) {
+        console.log('Table created s_achievements');
+    }
+});
 
 module.exports = pool
