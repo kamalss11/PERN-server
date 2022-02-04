@@ -13,7 +13,7 @@ const smtpTransport = require('nodemailer-smtp-transport')
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 const storage = multer.diskStorage({
-    destination: '../client/public/Uploads/',
+    destination: '../PERN-Client-main/public/Uploads/',
     filename:(req, file, cb) => {
         return cb(null, Date.now()+file.originalname);
     }
@@ -25,7 +25,6 @@ router.use(cors())
 router.use(express.json())
 
 const pool = require('../Db/db')
-const e = require('express')
 
 router.post('/', async (req,res) => {
     const {name,email,password,cpassword,department,roll} = req.body
@@ -113,85 +112,104 @@ router.post('/forget_password',async (req,res)=>{
     const {email} = req.body
     try{
         console.log(email)
-        let tkn,e
-
-        crypto.randomBytes(32, (err, buffer) => {
-            if (err) {
-                console.log(err)
-            }        
-            tkn = buffer.toString("hex")
-
-            res.cookie("reset_password",tkn,{
-                expires : new Date(Date.now() + 600000),
-                httpOnly : true
-            })
-            console.log('Reset Token - ' + tkn)
-        })
+        var tkn,e
             
         pool.query(
             `SELECT email FROM users WHERE email = '${email}'`, 
             (err, result) => {
                 console.log(result.rows)
                 if(result.rows.length == 0){
-                    return res.status(201).json({msg : 'No Account found with this mail'})
+                    return res.status(422).send({msg : 'No Account found with this mail'})
                 }
                 // return res.status(422).json({ data: "Mail" })
-            }
-        );
-
-        pool.query(
-            `SELECT email FROM reset_password WHERE email = '${email}'`,
-            async (err, result) => {
-                if (err) {
-                    console.log(err)
-                }
-
-                let create = Date.now()
-                let expire = Date.now() + 300000
-                if (result.rows != '') {
+                else{
+                    crypto.randomBytes(32, (err, buffer) => {
+                        if (err) {
+                            console.log(err)
+                        }        
+                        tkn = buffer.toString("hex")
+            
+                        res.cookie("reset_password",tkn,{
+                            expires : new Date(Date.now() + 600000),
+                            httpOnly : true
+                        })
+                        console.log('Reset Token - ' + tkn)
+                    })
+            
                     pool.query(
-                        `UPDATE reset_password set createdat=$1,expiresat=$2,token=$3 WHERE email = $4`, [create, expire, tkn, email],(err,result)=>{
-                            console.log(result.rows[0])
+                        `SELECT email FROM reset_password WHERE email = '${email}'`,
+                        async (err, result) => {
+                            if (err) {
+                                console.log(err)
+                            }
+                            if (result.rows != '') {
+                                pool.query(
+                                    `UPDATE reset_password set token=$1 WHERE email = $2`, [tkn, email],(err,result)=>{
+                                        // console.log(result.rows)
+                                    }
+                                )
+                            }
+                            else {
+                                pool.query(
+                                    `INSERT INTO reset_password (email,token) VALUES($1,$2)`, [email,tkn],(err,result)=>{
+                                        // console.log(result.rows)
+                                    }
+                                )
+                            }
+                            res.cookie("r_email",email,{
+                                httpOnly: true
+                            })
+
+                            // create reusable transporter object using the default SMTP transport
+                            var transporter = nodemailer.createTransport(smtpTransport({
+                                service: 'gmail',
+                                auth: {
+                                    user: 'kamalesh1132002@gmail.com',
+                                    pass: 'kamalesh5050'
+                                }
+                            }))
+                            var mailOptions = {
+                                from: 'ikamaloffc@gmail.com',
+                                to: req.body.email,
+                                subject: 'ResetPassword',
+                                html: `<p>Click this <a href=http://localhost:3000/reset_password/${tkn}>Link</a> to reset your password</p>
+                                <p>Link will valid only for 10 minutes.</p>
+                                <p style='text-align:left'>Thanks & Regards</p>`
+                            }
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    console.log(error + '3115')
+                                } else {
+                                    console.log('Email sent: ' + info.response)
+                                    return res.status(422).send({s: 'Check your mail'})
+                                }
+                            })
                         }
-                    )
+                    );
                 }
-                else {
-                    pool.query(
-                        `INSERT INTO reset_password (email,createdat,expiresat,token) VALUES($1,$2,$3,$4)`, [email, create, expire, tkn],(err,result)=>{
-                            console.log(result.rows[0])
-                        }
-                    )
-                }
-                // create reusable transporter object using the default SMTP transport
-                var transporter = nodemailer.createTransport(smtpTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: 'kamalesh1132002@gmail.com',
-                        pass: 'kamalesh5050'
-                    }
-                }))
-                var mailOptions = {
-                    from: 'ikamaloffc@gmail.com',
-                    to: req.body.email,
-                    subject: 'ResetPassword',
-                    html: `<p>Click this <a href=http://localhost:3000/reset_password/${tkn}>Link</a> to reset your password</p>
-                    <p>Link will valid only for 10 minutes.</p>
-                    <p style='text-align:left'>Thanks & Regards</p>`
-                }
-                transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        console.log(error + '3115')
-                    } else {
-                        console.log('Email sent: ' + info.response)
-                        return res.status(201).json({s: 'Check your mail'})
-                    }
-                })
             }
         );
 
 
     }catch(err){
         console.log(err,"169")
+    }
+})
+
+router.get('/reset_password',async (req,res)=>{
+    try{
+        console.log(req.cookies.r_email)
+        pool.query(`SELECT *FROM reset_password WHERE email = '${req.cookies.r_email}'`,async (err, result) => {
+                if (result.rows != '') {
+                    return res.send({ rp: result.rows })
+                }
+                else {
+                    return res.status(422).send({ error: 'Check your mail' })
+                }
+            })
+    }
+    catch(err){
+        console.log(err)
     }
 })
 
@@ -213,7 +231,7 @@ router.put('/reset_password',async (req,res)=>{
                         )
                     }
                     else{
-                        res.status(400).json({error : 'Token Expires'})
+                        res.status(400).json({error : 'Link Expires'})
                     }
                 }
                 else{
@@ -1348,7 +1366,7 @@ router.get('/dashboard',async(req,res) => {
     }            
     else{
         console.log('No')
-        return res.status(422).json({error: "No Token"})
+        return res.status(422).send({error: "No Token"})
     }     
 
     if(verifyToken){
@@ -1373,7 +1391,7 @@ router.get('/dashboard',async(req,res) => {
     }
     else{
         console.log('No')
-        return res.status(422).json({error: "Token Expires"})
+        return res.status(422).send({error: "Token Expires"})
     }
 
     
@@ -1395,18 +1413,19 @@ router.get('/dashboard/profile',(req,res) => {
 
 router.put('/dashboard/editprofile/:id',async (req,res) => {
     try{
-        var {name,password,cpassword,ppassword,hashpassword,department} = req.body
+        var {name,password,cpassword,ppassword,hashpassword,department,email} = req.body
         if(!name && !password && !cpassword  && !department){
             return res.status(400).json({error: "Fill the data"})
         }
 
         else if(name && !password){
             pool.query(
-                `UPDATE users set name = $1 WHERE user_id = $2`,[name,req.params.id],
+                `UPDATE users set name = $1,email = $2 WHERE user_id = $3`,[name,email,req.params.id],
                 (err, result) => {
                     res.send(result.rows)
                 }
             );
+
         }
 
         else if(password && cpassword && ppassword && hashpassword && !name){
@@ -1466,7 +1485,7 @@ router.put('/forms/research/research_projects/edit',upload.single('image'), asyn
     try{
         if(req.file){
             pool.query(
-                `UPDATE research_projects SET title=$1, no=$2, amount_sanctioned=$3, fileno=$4, amount_received=$5, date_sanctioned=$6, funding_agency=$7, date=$8,file=$9 WHERE id=$10`,[req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename,req.body.id],
+                `UPDATE research_projects SET title=$1, no=$2, amount_sanctioned=$3, fileno=$4, amount_received=$5, date_sanctioned=$6, funding_agency=$7, date=$8,file=$9,n=$10 WHERE id=$11`,[req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.file.filename,req.body.n,req.body.id],
                 function (err, result) {
                     if(result){
                         res.send({sp : "Saved"})}
@@ -1477,7 +1496,7 @@ router.put('/forms/research/research_projects/edit',upload.single('image'), asyn
         else{
             console.log(req.body.date,req.body.id)
             pool.query(
-                `UPDATE research_projects SET title=$1, no=$2, amount_sanctioned=$3, fileno=$4, amount_received=$5, date_sanctioned=$6, funding_agency=$7, date=$8 WHERE id=$9`,[req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.body.id],
+                `UPDATE research_projects SET title=$1, no=$2, amount_sanctioned=$3, fileno=$4, amount_received=$5, date_sanctioned=$6, funding_agency=$7, date=$8, n=$9 WHERE id=$10`,[req.body.title,req.body.no,req.body.amount_sanctioned,req.body.fileno,req.body.amount_received,req.body.date_sanctioned,req.body.funding_agency,req.body.date,req.body.n,req.body.id],
                 function (err, result) {
                     if(result){
                         res.send({sp : "Saved"})}
@@ -1491,7 +1510,7 @@ router.put('/forms/research/research_projects/edit',upload.single('image'), asyn
     }
 })
 
-router.get('/forms/research/:table/edit/:id', async(req,res) => {
+router.get('/forms/:table/edit/:id', async(req,res) => {
     const {id} = req.params.id
     try{
         pool.query(
@@ -1509,7 +1528,7 @@ router.get('/forms/research/:table/edit/:id', async(req,res) => {
     }
 })
 
-router.put('/forms/research/:table/delete/:id', async(req,res) => {
+router.put('/forms/:table/delete/:id', async(req,res) => {
     console.log(req.params.id)
     try{
         pool.query(
@@ -1640,7 +1659,7 @@ router.put('/forms/research/awards_for_innovation/edit',upload.single('image'), 
 
 router.post('/forms/research/deg',upload.single('image'), async(req,res) => {
     try{
-        if(req.file.filename){
+        if(req.file){
             pool.query(
                 `INSERT INTO degree (n,deg,guide_name,title,external,venue,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.deg,req.body.guide_name,req.body.title,req.body.external,req.body.venue,req.body.date,req.body.department,req.file.filename],
                 (err, result) => {   
@@ -1652,7 +1671,7 @@ router.post('/forms/research/deg',upload.single('image'), async(req,res) => {
         }
         else{
             pool.query(
-                `INSERT INTO degree (n,deg,guide_name,title,external,venue,date) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.deg,req.body.guide_name,req.body.title,req.body.external,req.body.venue,req.body.date],
+                `INSERT INTO degree (n,deg,guide_name,title,external,venue,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.deg,req.body.guide_name,req.body.title,req.body.external,req.body.venue,req.body.date,req.body.department],
                 (err, result) => {   
                     if(result){
                     res.send({sp : "Saved"})}
@@ -1759,8 +1778,9 @@ router.post('/forms/collaborations/collaborative_activities',upload.single('imag
             );
         }
         else{
+            console.log(req.body)
             pool.query(
-                `INSERT INTO collab_activ (activity,n,participant,financial_support,period,date) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.activity,req.body.n,req.body.participant,req.body.financial_support,req.body.period,req.body.date],
+                `INSERT INTO collab_activ (activity,n,participant,financial_support,period,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.activity,req.body.n,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.body.department],
                 (err, result) => {
                     if(result){
                     res.send({sp : "Saved"})}
@@ -1774,10 +1794,11 @@ router.post('/forms/collaborations/collaborative_activities',upload.single('imag
 })
 
 router.put('/forms/collaborations/collaborative_activities/edit',upload.single('image'), async(req,res) => {
+    console.log(req.body)
     try{
         if(req.file){
             pool.query(
-                `UPDATE collab_activ SET activity=$1,participant=$2,financial_support=$3,period=$4,date=$5,department=$6,file=$7 WHERE id=$8`,[req.body.activity,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.body.department,req.file.filename,req.body.id],
+                `UPDATE collab_activ SET activity=$1,participant=$2,financial_support=$3,period=$4,date=$5,file=$6 WHERE id=$7`,[req.body.activity,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.file.filename,req.body.id],
                 function (err, result) {
                     if(result){
                     res.send({sp : "Saved"})}
@@ -1787,7 +1808,7 @@ router.put('/forms/collaborations/collaborative_activities/edit',upload.single('
         }
         else{
             pool.query(
-                `UPDATE collab_activ SET activity=$1,participant=$2,financial_support=$3,period=$4,date=$5,department=$6 WHERE id=$7`,[req.body.activity,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.body.department,req.body.id],
+                `UPDATE collab_activ SET activity=$1,participant=$2,financial_support=$3,period=$4,date=$5 WHERE id=$6`,[req.body.activity,req.body.participant,req.body.financial_support,req.body.period,req.body.date,req.body.id],
                 function (err, result) {
                     if(result){
                     res.send({sp : "Saved"})}
@@ -1795,38 +1816,6 @@ router.put('/forms/collaborations/collaborative_activities/edit',upload.single('
                 }
             );
         }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/collaborations/:table/edit/:id', async(req,res) => {
-    try{
-        pool.query(
-            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
-            function (err, result) {
-                if(result){
-                res.json(result.rows)
-                }
-            console.log(err)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/collaborations/:table/delete/:id/', async(req,res) => {
-    try{
-        pool.query(
-            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
-            function (err, res) {
-                if(result){
-                res.send({sp : "Saved"})}
-                console.log(err)
-            }
-        );
     }catch(err){
         console.log(err)
     }
@@ -1846,7 +1835,7 @@ router.post('/forms/collaborations/linkages',upload.single('image'), async(req,r
         }
         else{
             pool.query(
-                `INSERT INTO linkages (n,title,partnering_agency,period,date) VALUES($1,$2,$3,$4,$5)`,[req.body.n,req.body.title,req.body.partnering_agency,req.body.period,req.body.date],
+                `INSERT INTO linkages (n,title,partnering_agency,period,date,department) VALUES($1,$2,$3,$4,$5,$6)`,[req.body.n,req.body.title,req.body.partnering_agency,req.body.period,req.body.date,req.body.department],
                 (err, result) => {
                     if(result){
                     res.send({sp : "Saved"})}
@@ -1989,40 +1978,6 @@ router.put('/forms/events/conference/edit',upload.single('image'), async(req,res
                 }
             );
         }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/events/:table/edit/:id', async(req,res) => {
-    try{
-        pool.query(
-            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
-            function (err, result) {
-                if(result){
-                res.json(result.rows)
-                }
-            console.log(err)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/events/:table/delete/:id/', async(req,res) => {
-    try{
-        pool.query(
-            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
-            function (err, result) {
-                if(result){
-                res.json(result.rows)
-                }
-            console.log(err)
-            }
-        );
-
     }catch(err){
         console.log(err)
     }
@@ -2377,40 +2332,6 @@ router.put('/forms/consultancy/projects_services/edit',upload.single('image'), a
     }
 })
 
-router.get('/forms/consultancy/:table/edit/:id', async(req,res) => {
-    try{
-        pool.query(
-            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                if(result){
-                res.json(result.rows)
-                }
-                console.log(err)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/consultancy/:table/delete/:id/', async(req,res) => {
-    try{
-        pool.query(
-            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
-            function (err, res) {
-                if(result){
-                res.json(result.rows)
-                }
-                console.log(err)
-            }
-        );
-    }catch(err){
-        console.log(err)
-    }
-})
-
 router.post('/forms/faculty/honours',upload.single('image'), async(req,res) => {
     try{
         if(req.file){
@@ -2464,39 +2385,6 @@ router.put('/forms/faculty/honours/edit',upload.single('image'), async(req,res) 
                 }
             );
         } 
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/faculty/:table/edit/:id', async(req,res) => {
-    try{
-        pool.query(
-            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
-            function (err, result) {
-                if(result){
-                res.json(result.rows)
-                }
-                console.log(err)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/faculty/:table/delete/:id/', async(req,res) => {
-    try{
-        pool.query(
-            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
-            function (err, result) {
-                if(result){
-                res.json(result.rows)
-                }
-                console.log(err)
-            }
-        );
     }catch(err){
         console.log(err)
     }
@@ -3253,40 +3141,6 @@ router.put('/forms/student/placements/edit',upload.single('image'), async(req,re
                 }
             );
         }
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.get('/forms/student/:table/edit/:id', async(req,res) => {
-    try{
-        pool.query(
-            `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`,
-            function (err, result) {
-                console.log(result.rows)
-                if(result){
-                res.json(result.rows)
-                }
-                console.log(err)
-            }
-        );
-
-    }catch(err){
-        console.log(err)
-    }
-})
-
-router.put('/forms/student/:table/delete/:id/', async(req,res) => {
-    try{
-        pool.query(
-            `DELETE FROM ${req.params.table} WHERE id = ${req.params.id} `,
-            function (err, result) {
-                if(result){
-                res.json(result.rows)
-                }
-                console.log(err)
-            }
-        );
     }catch(err){
         console.log(err)
     }

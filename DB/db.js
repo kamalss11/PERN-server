@@ -13,7 +13,7 @@ const Pool = require('pg').Pool
 
 const pool = new Pool({
     host: 'localhost',
-    port: '4000',
+    port: '5432',
     user: 'postgres',
     password: 'kamal',
     database: 'iqac'
@@ -49,8 +49,6 @@ const user = `
 const reset_password = `
     CREATE TABLE IF NOT EXISTS "reset_password"(
 	    "email" VARCHAR(25) NOT NULL,
-        "createdat" VARCHAR(100) NOT NULL,
-        "expiresat" VARCHAR(100) NOT NULL,
         "token" VARCHAR(100) NOT NULL
     );`;  
 
