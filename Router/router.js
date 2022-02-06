@@ -1419,13 +1419,22 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
         }
 
         else if(name && !password){
-            pool.query(
-                `UPDATE users set name = $1,email = $2 WHERE user_id = $3`,[name,email,req.params.id],
-                (err, result) => {
-                    res.send(result.rows)
-                }
-            );
-
+            if(req.cookies.r_email === email){
+                pool.query(
+                    `UPDATE users set name = $1,email = $2 WHERE user_id = $3`,[name,email,req.params.id],
+                    (err, result) => {
+                        res.send(result.rows)
+                    }
+                );
+            }
+            else{
+                pool.query(
+                    `UPDATE users set name = $1 WHERE user_id = $2`,[name,req.params.id],
+                    (err, result) => {
+                        res.send(result.rows)
+                    }
+                );
+            }
         }
 
         else if(password && cpassword && ppassword && hashpassword && !name){
