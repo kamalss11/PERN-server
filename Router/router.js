@@ -90,7 +90,10 @@ router.post('/signin', async(req,res) => {
                     let passmatch = await bcrypt.compare(password,result.rows[0].password)
                     console.log(passmatch)
 
-                    if(passmatch){
+                    if(passmatch){        
+                        res.cookie("email",email,{
+                            httpOnly: true
+                        })
                         return res.send({login : result.rows})
                     }
                     else{
@@ -1419,9 +1422,10 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
         }
 
         else if(name && !password){
-            if(req.cookies.r_email === email){
+            if(req.cookies.email === email){
+                console.log(email)
                 pool.query(
-                    `UPDATE users set name = $1,email = $2 WHERE user_id = $3`,[name,email,req.params.id],
+                    `UPDATE users SET name = $1 WHERE user_id = $2`,[name,req.params.id],
                     (err, result) => {
                         res.send(result.rows)
                     }
@@ -1429,11 +1433,15 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
             }
             else{
                 pool.query(
-                    `UPDATE users set name = $1 WHERE user_id = $2`,[name,req.params.id],
+                    `UPDATE users SET name = $1,email = $2 WHERE user_id = $3`,[name,email,req.params.id],
                     (err, result) => {
                         res.send(result.rows)
                     }
                 );
+        
+                res.cookie("email",email,{
+                    httpOnly: true
+                })
             }
         }
 
@@ -1441,17 +1449,17 @@ router.put('/dashboard/editprofile/:id',async (req,res) => {
             const ps = await bcrypt.hash(password,10)
 
             let pscmp = await bcrypt.compare(ppassword,hashpassword)
-
+            console.log(pscmp)
             if(pscmp){
                 pool.query(
-                    `UPDATE users set password = $1 WHERE user_id = $2`,[ps,req.params.id],
+                    `UPDATE users SET password = $1 WHERE user_id = $2`,[ps,req.params.id],
                     (err, result) => {
                         res.send(result.rows)
                     }
                 );
             }
             else{
-                res.send({error : "Password was wrong"})
+                res.status(422).send({error : "Password was wrong"})
             }
         }
     }
