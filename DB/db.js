@@ -1,14 +1,3 @@
-//const mongoose = require('mongoose')
-//
-//const DB = process.env.DATABASE
-//
-//mongoose.connect(DB,{
-//}).then(()=>{
-//    console.log("Connection Successful")
-//}).catch((err)=>{
-//    console.log(err)
-//})
-
 const Pool = require('pg').Pool
 
 const pool = new Pool({
@@ -29,11 +18,6 @@ const execute = async (query) => {
         return false;
     }
 };
-
-// const add = `ALTER TABLE users
-// ADD COLUMN department VARCHAR(100) NOT NULL,
-// ADD COLUMN roll VARCHAR(100) NOT NULL`;
-// const alter = `alter table users alter column admission DATE;`
 
 const user = `
     CREATE TABLE IF NOT EXISTS "users"(

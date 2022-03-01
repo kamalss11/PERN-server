@@ -44,13 +44,14 @@ router.post('/', async (req,res) => {
                 if(result.rows != ''){
                     return res.status(422).json({error: "Mail already exists"})
                 }
-            }
-        );
-
-        pool.query(
-            `INSERT INTO users (name,email,password,department,roll) VALUES($1,$2,$3,$4,$5)`,[name,email,pss,department,roll],
-            (err, result) => {
-                return res.status(201).json({message: "User Registered Successfully"})
+                else{
+                    pool.query(
+                        `INSERT INTO users (name,email,password,department,roll) VALUES($1,$2,$3,$4,$5)`,[name,email,pss,department,roll],
+                        (err, result) => {
+                            return res.status(201).json({message: "User Registered Successfully"})
+                        }
+                    );
+                }
             }
         );
     }catch(err){
