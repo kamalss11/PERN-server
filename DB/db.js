@@ -435,7 +435,7 @@ CREATE TABLE IF NOT EXISTS "online_courses"(
     "title" VARCHAR(100),
     "duration" VARCHAR(100),
     "date" VARCHAR(100),
-    "financial_support" decimal(10,5),
+    "financial_support" decimal(10,3),
     "level" VARCHAR(100),
     PRIMARY KEY ("id"),
     "department" VARCHAR(100),
@@ -462,7 +462,7 @@ CREATE TABLE IF NOT EXISTS "placements"(
     "n" VARCHAR(100),
     "roll_no" VARCHAR(100),
     "company_placed" VARCHAR(100),
-    "annual_package" decimal(10,5),
+    "annual_package" decimal(10,2),
     "date" VARCHAR(100),    
     PRIMARY KEY ("id"),
     "department" VARCHAR(100),
@@ -494,7 +494,7 @@ CREATE TABLE IF NOT EXISTS "s_paper_presentation"(
     "roll_no" VARCHAR(100),
     "con" VARCHAR(100),
     "title" VARCHAR(100),
-    "financial_support" decimal(10,5),
+    "financial_support" decimal(10,2),
     "date" VARCHAR(100),    
     "venue" VARCHAR(100),  
     "level" VARCHAR(100),  
@@ -588,7 +588,7 @@ CREATE TABLE IF NOT EXISTS "s_onlinecourses"(
     "portal" VARCHAR(100),
     "n_course" VARCHAR(100),
     "duration" VARCHAR(100),
-    "financial_support" decimal(10,5),
+    "financial_support" decimal(10,2),
     "date" VARCHAR(100),
     "level" VARCHAR(100), 
     PRIMARY KEY ("id"),
@@ -726,35 +726,35 @@ execute(reset_password).then(result => {
 //     }
 // });
 
-execute(exams).then(result => {
-    if (result) {
-        console.log('Table created exams');
-    }
-});
+// execute(exams).then(result => {
+//     if (result) {
+//         console.log('Table created exams');
+//     }
+// });
 
-execute(books_published).then(result => {
-    if (result) {
-        console.log('Table created books_published');
-    }
-});
+// execute(books_published).then(result => {
+//     if (result) {
+//         console.log('Table created books_published');
+//     }
+// });
 
-execute(chapters_contributed).then(result => {
-    if (result) {
-        console.log('Table created chapters_contributed');
-    }
-});
+// execute(chapters_contributed).then(result => {
+//     if (result) {
+//         console.log('Table created chapters_contributed');
+//     }
+// });
 
-execute(conference_proceeding).then(result => {
-    if (result) {
-        console.log('Table created conference_proceeding');
-    }
-});
+// execute(conference_proceeding).then(result => {
+//     if (result) {
+//         console.log('Table created conference_proceeding');
+//     }
+// });
 
-execute(paper_presentation).then(result => {
-    if (result) {
-        console.log('Table created paper_presentation');
-    }
-});
+// execute(paper_presentation).then(result => {
+//     if (result) {
+//         console.log('Table created paper_presentation');
+//     }
+// });
 
 // execute(journal_publications).then(result => {
 //     if (result) {
@@ -786,11 +786,11 @@ execute(paper_presentation).then(result => {
 //     }
 // });
 
-// execute(online_courses).then(result => {
-//     if (result) {
-//         console.log('Table created online_courses');
-//     }
-// });
+execute(online_courses).then(result => {
+    if (result) {
+        console.log('Table created online_courses');
+    }
+});
 
 // execute(e_content).then(result => {
 //     if (result) {
@@ -798,15 +798,21 @@ execute(paper_presentation).then(result => {
 //     }
 // });
 
-// execute(placements).then(result => {
-//     if (result) {
-//         console.log('Table created placements');
-//     }
-// });
+execute(placements).then(result => {
+    if (result) {
+        console.log('Table created placements');
+    }
+});
 
 // execute(s_publications).then(result => {
 //     if (result) {
 //         console.log('Table created s_publications');
+//     }
+// });
+
+// execute(s_paper_presentation).then(result => {
+//     if (result) {
+//         console.log('Table created s_paper_presentation');
 //     }
 // });
 
@@ -819,12 +825,6 @@ execute(paper_presentation).then(result => {
 // execute(s_competition).then(result => {
 //     if (result) {
 //         console.log('Table created s_competition');
-//     }
-// });
-
-// execute(s_paper_presentation).then(result => {
-//     if (result) {
-//         console.log('Table created s_paper_presentation');
 //     }
 // });
 
@@ -852,10 +852,10 @@ execute(paper_presentation).then(result => {
 //     }
 // });
 
-// execute(s_achievements).then(result => {
-//     if (result) {
-//         console.log('Table created s_achievements');
-//     }
-// });
+execute(s_achievements).then(result => {
+    if (result) {
+        console.log('Table created s_achievements');
+    }
+});
 
 module.exports = pool

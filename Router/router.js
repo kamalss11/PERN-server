@@ -536,7 +536,7 @@ router.get('/super_admin/departments/staffs/:dprt', async(req,res) => {
 router.get('/super_admin/departments/students/:dprt', async(req,res) => {
     console.log(req.params.prd)
 
-    let placements,publications,paper_presentation,conference,competition,training,projectwork,exams,online_courses,achievements
+    let placements,publications,paper_presentation,s_conference,competition,training,projectwork,exams,online_courses,achievements
         
     try{
         pool.query(
@@ -579,10 +579,10 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
             `SELECT * FROM s_conference WHERE department = '${req.params.dprt}'`,
             (err, result) => {
                 if(result.rows != ''){
-                    conference = result.rows 
+                    s_conference = result.rows 
                 }          
                 else{
-                    console.log("no values")
+                    console.log("no values 586")
                 }           
             }
         );
@@ -591,10 +591,10 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
             `SELECT * FROM s_competition WHERE department = '${req.params.dprt}'`,
             (err, result) => {
                 if(result.rows != ''){
-                    fellowship = result.rows 
+                    competition = result.rows 
                 }          
                 else{
-                    console.log("no values")
+                    console.log("no values 598")
                 }             
             }
         );
@@ -603,10 +603,10 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
             `SELECT * FROM s_training WHERE department = '${req.params.dprt}'`,
             (err, result) => {
                 if(result.rows != ''){
-                    collab_activ = result.rows 
+                    training = result.rows 
                 }          
                 else{
-                    console.log("no values")
+                    console.log("no values 609")
                 }            
             }
         );
@@ -615,7 +615,7 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
             `SELECT * FROM s_projectwork WHERE department = '${req.params.dprt}'`,
             (err, result) => {
                 if(result.rows != ''){
-                    linkages = result.rows 
+                    projectwork = result.rows 
                 }          
                 else{
                     console.log("no values")
@@ -627,7 +627,7 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
             `SELECT * FROM s_exams WHERE department = '${req.params.dprt}'`,
             (err, result) => {
                 if(result.rows != ''){
-                    mou = result.rows 
+                    exams = result.rows 
                 }          
                 else{
                     console.log("no values")
@@ -639,7 +639,7 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
             `SELECT * FROM s_onlinecourses WHERE department = '${req.params.dprt}'`,
             (err, result) => {
                 if(result.rows != ''){
-                    conference = result.rows 
+                    online_courses = result.rows 
                 }          
                 else{
                     console.log("no values")
@@ -651,7 +651,7 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
             `SELECT * FROM s_achievements WHERE department = '${req.params.dprt}'`,
             (err, result) => {
                 if(result.rows != ''){
-                    guest_lectures = result.rows 
+                    achievements = result.rows 
                 }          
                 else{
                     console.log("no values")
@@ -670,7 +670,7 @@ router.get('/super_admin/departments/students/:dprt', async(req,res) => {
                         placements : placements,
                         publications : publications,
                         paper_presentation : paper_presentation,
-                        conference : conference,
+                        conference : s_conference,
                         competition : competition,
                         training : training,
                         projectwork : projectwork,
@@ -1907,7 +1907,7 @@ router.post('/forms/collaborations/mou',upload.single('image'), async(req,res) =
         }
         else{
             pool.query(
-                `INSERT INTO mou (n,organization,date_signed,period,participants,purpose,total,date) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.organization,req.body.date_signed,req.body.period,req.body.participants,req.body.purpose,req.body.total,req.body.date],
+                `INSERT INTO mou (n,organization,date_signed,period,participants,purpose,total,date,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[req.body.n,req.body.organization,req.body.date_signed,req.body.period,req.body.participants,req.body.purpose,req.body.total,req.body.date,req.body.department],
                 (err, result) => {
                     if(result){
                     res.send({sp : "Saved"})}
@@ -3108,6 +3108,7 @@ router.put('/forms/faculty/e_content/edit',upload.single('image'), async(req,res
 
 router.post('/forms/student/placements',upload.single('image'), async(req,res) => {
     try{
+        console.log(req.body)
         if(req.file){
             pool.query(
                 `INSERT INTO placements(n,roll_no,company_placed,annual_package,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.roll_no,req.body.company_placed,req.body.annual_package,req.body.date,req.body.department,req.file.filename],
@@ -3287,7 +3288,7 @@ router.post('/forms/student/s_conference',upload.single('image'), async(req,res)
         console.log(req.body.njourrnal)
         if(req.file){
             pool.query(
-                `INSERT INTO s_conference(n,roll_no,con,n_con,sponsoring_agency,poster,award,date,venue,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.body.department,req.file.filename],
+                `INSERT INTO s_conference(n,roll_no,con,n_con,sponsoring_agency,poster,award,date,venue,level,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.body.department,req.file.filename],
                 (err, result) => {
                     if(result){
                     res.json(result.rows)
@@ -3298,7 +3299,7 @@ router.post('/forms/student/s_conference',upload.single('image'), async(req,res)
         }
         else{
             pool.query(
-                `INSERT INTO s_conference(n,roll_no,con,n_con,sponsoring_agency,poster,award,date,venue,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.body.department],
+                `INSERT INTO s_conference(n,roll_no,con,n_con,sponsoring_agency,poster,award,date,venue,level,department) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.body.department],
                 (err, result) => {
                     if(result){
                     res.json(result.rows)
@@ -3316,7 +3317,7 @@ router.put('/forms/student/s_conference/edit',upload.single('image'), async(req,
     try{
         if(req.file){
             pool.query(
-                `UPDATE s_conference set n=$1,roll_no=$2,con=$3,title=$4,financial_support=$5,date=$6,venue=$7,level=$8,file=$9 WHERE id=$10`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.file.filename,req.body.id],
+                `UPDATE s_conference set n=$1,roll_no=$2,con=$3,n_con=$4,sponsoring_agency=$5,poster=$6,award=$7,date=$8,venue=$9,level=$10,file=$11 WHERE id=$12`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.file.filename,req.body.id],
                 (err, result) => {
                     if(result){
                     res.json(result.rows)
@@ -3327,7 +3328,7 @@ router.put('/forms/student/s_conference/edit',upload.single('image'), async(req,
         }
         else{
             pool.query(
-                `UPDATE s_conference set n=$1,roll_no=$2,con=$3,title=$4,financial_support=$5,date=$6,venue=$7,level=$8 WHERE id=$9`,[req.body.n,req.body.roll_no,req.body.con,req.body.title,req.body.financial_support,req.body.date,req.body.venue,req.body.level,req.body.id],
+                `UPDATE s_conference set n=$1,roll_no=$2,con=$3,n_con=$4,sponsoring_agency=$5,poster=$6,award=$7,date=$8,venue=$9,level=$10 WHERE id=$11`,[req.body.n,req.body.roll_no,req.body.con,req.body.n_con,req.body.sponsoring_agency,req.body.poster,req.body.award,req.body.date,req.body.venue,req.body.level,req.body.id],
                 (err, result) => {
                     if(result){
                     res.json(result.rows)
@@ -3403,7 +3404,7 @@ router.post('/forms/student/s_training',upload.single('image'), async(req,res) =
     try{
         if(req.file){
             pool.query(
-                `INSERT INTO s_training(n,roll_no,training,company,period,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.date,req.body.department,req.file.filename],
+                `INSERT INTO s_training(n,roll_no,training,company,period,date,department,file) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.period,req.body.date,req.body.department,req.file.filename],
                 (err, result) => {
                     if(result){
                     res.json(result.rows)
@@ -3414,7 +3415,7 @@ router.post('/forms/student/s_training',upload.single('image'), async(req,res) =
         }
         else{
             pool.query(
-                `INSERT INTO s_training(n,roll_no,training,company,period,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.date,req.body.department],
+                `INSERT INTO s_training(n,roll_no,training,company,period,date,department) VALUES($1,$2,$3,$4,$5,$6,$7)`,[req.body.n,req.body.roll_no,req.body.training,req.body.company,req.body.period,req.body.date,req.body.department],
                 (err, result) => {
                     if(result){
                     res.json(result.rows)
