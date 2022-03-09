@@ -4,8 +4,8 @@ const pool = new Pool({
     host: 'localhost',
     port: '5432',
     user: 'postgres',
-    password: 'kamal',
-    database: 'iqac'
+    password: 'mnk',
+    database: 'IQAC'
 })
 
 const execute = async (query) => {
@@ -611,23 +611,23 @@ CREATE TABLE IF NOT EXISTS "s_achievements"(
     "file" VARCHAR(100)
 );`;
 
-execute(user).then(result => {
-    if (result) {
-        console.log('Table created user');
-    }
-});
+// execute(user).then(result => {
+//     if (result) {
+//         console.log('Table created user');
+//     }
+// });
 
-execute(research_projects).then(result => {
-    if (result) {
-        console.log('Table created rp');
-    }
-});
+// execute(research_projects).then(result => {
+//     if (result) {
+//         console.log('Table created rp');
+//     }
+// });
 
-execute(reset_password).then(result => {
-    if (result) {
-        console.log('Table created rp');
-    }
-});
+// execute(reset_password).then(result => {
+//     if (result) {
+//         console.log('Table created rp');
+//     }
+// });
 
 // execute(alter).then(result => {
 //     if (result) {
@@ -786,11 +786,11 @@ execute(reset_password).then(result => {
 //     }
 // });
 
-execute(online_courses).then(result => {
-    if (result) {
-        console.log('Table created online_courses');
-    }
-});
+// execute(online_courses).then(result => {
+//     if (result) {
+//         console.log('Table created online_courses');
+//     }
+// });
 
 // execute(e_content).then(result => {
 //     if (result) {
@@ -798,11 +798,11 @@ execute(online_courses).then(result => {
 //     }
 // });
 
-execute(placements).then(result => {
-    if (result) {
-        console.log('Table created placements');
-    }
-});
+// execute(placements).then(result => {
+//     if (result) {
+//         console.log('Table created placements');
+//     }
+// });
 
 // execute(s_publications).then(result => {
 //     if (result) {
@@ -822,35 +822,35 @@ execute(placements).then(result => {
 //     }
 // });
 
-// execute(s_competition).then(result => {
-//     if (result) {
-//         console.log('Table created s_competition');
-//     }
-// });
+execute(s_competition).then(result => {
+    if (result) {
+        console.log('Table created s_competition');
+    }
+});
 
-// execute(s_training).then(result => {
-//     if (result) {
-//         console.log('Table created s_training');
-//     }
-// });
+execute(s_training).then(result => {
+    if (result) {
+        console.log('Table created s_training');
+    }
+});
 
-// execute(s_projectwork).then(result => {
-//     if (result) {
-//         console.log('Table created s_projectwork');
-//     }
-// });
+execute(s_projectwork).then(result => {
+    if (result) {
+        console.log('Table created s_projectwork');
+    }
+});
 
-// execute(s_exams).then(result => {
-//     if (result) {
-//         console.log('Table created s_exams');
-//     }
-// });
+execute(s_exams).then(result => {
+    if (result) {
+        console.log('Table created s_exams');
+    }
+});
 
-// execute(s_onlinecourses).then(result => {
-//     if (result) {
-//         console.log('Table created s_onlinecourses');
-//     }
-// });
+execute(s_onlinecourses).then(result => {
+    if (result) {
+        console.log('Table created s_onlinecourses');
+    }
+});
 
 execute(s_achievements).then(result => {
     if (result) {
